@@ -47,15 +47,7 @@ export function HeroSection() {
             <span className="text-sm font-medium text-white/90">Development Phase • First Launch 2026</span>
           </motion.div>
           
-          {/* Main headline */}
-          <motion.h1
-            className="font-futuristic font-bold text-5xl md:text-7xl lg:text-8xl mb-6 text-white leading-tight"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
-          >
-            BUILDING THE
-          </motion.h1>
+          
           
           <motion.h1
             className="font-futuristic font-bold text-5xl md:text-7xl lg:text-8xl mb-8 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent leading-tight"
@@ -75,7 +67,7 @@ export function HeroSection() {
           >
            Igniting humanity’s interplanetary evolution through deep-tech innovation.
           </motion.p>
-          
+         <center> 
           {/* Stats */}
           <motion.div
             className="grid grid-cols-3 gap-8 mb-12 max-w-2xl mx-auto"
@@ -83,7 +75,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.8 }}
           >
-            <center>
+        
             <div className="text-center">
               <div className="font-futuristic text-3xl md:text-4xl text-cyan-400 mb-1">2025</div>
               <div className="text-sm text-gray-400 uppercase tracking-wider">Founded</div>
@@ -93,9 +85,9 @@ export function HeroSection() {
               <div className="font-futuristic text-3xl md:text-4xl text-cyan-400 mb-1">15+</div>
               <div className="text-sm text-gray-400 uppercase tracking-wider">Engineers</div>
             </div>
-              </center>
+             
           </motion.div>
-          
+          </center>
           {/* CTA Buttons */}
           <motion.div
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
