@@ -4,34 +4,35 @@ import { motion } from 'motion/react';
 import { Linkedin, Twitter, Mail, Award, Users, Rocket } from 'lucide-react';
 
 /* =========================
-   Auto-import images (Vite)
+   Image imports - Direct approach
    ========================= */
-const imageMap = import.meta.glob("../images/**/*.{png,jpg,jpeg,webp,svg}", {
-  eager: true,
-  import: "default",
-}) as Record<string, string>;
+// Import your local images directly
+import avikamImage from '../images/a(1).png';
+import chaitanyaImage from '../images/chaitanya.png';
+// Add other local images as needed
 
-/** Resolve avatar string to a real URL from src/images/** (or pass through external URLs) */
+/** Resolve avatar string to a real URL */
 function resolveAvatar(src: string): string {
   if (!src) return "";
-  // pass-through external URLs
+  
+  // Handle external URLs
   if (/^https?:\/\//i.test(src)) return src;
-
-  // normalize: allow "avikam.png", "team/avikam.png", "images/avikam.png"
-  const clean = src.replace(/^(\.\/|\/)?/, ""); // strip leading "./" or "/"
-
-  // candidate keys that may exist in the glob map
-  const candidates = [
-    `../images/${clean}`,           // usual case (e.g., "team/avikam.png")
-    `../${clean}`,                  // handles when user writes "images/avikam.png"
-    // fallback: match by filename anywhere under images/
-    ...Object.keys(imageMap).filter((k) => k.endsWith("/" + clean)),
-  ];
-
-  for (const key of candidates) {
-    if (imageMap[key]) return imageMap[key];
+  
+  // Handle local images - map known local images
+  const localImageMap: Record<string, string> = {
+    'images/a(1).png': avikamImage,
+    'images/chaitanya.png': chaitanyaImage,
+    // Add mappings for other local images
+  };
+  
+  // Try to find the image in our map
+  const normalizedSrc = src.replace(/^(\.\/|\/)?/, "");
+  if (localImageMap[normalizedSrc]) {
+    return localImageMap[normalizedSrc];
   }
-  return "";
+  
+  // Fallback to original src if not found
+  return src;
 }
 
 /* =========================
@@ -44,7 +45,7 @@ type TeamMember = {
   department: "Leadership" | "Engineering" | "Research & Development" | "Operations";
   bio: string;
   achievements: string[];
-  avatar: string; // filename in src/images/** or an https URL
+  avatar: string;
   social: Social;
 };
 
@@ -55,7 +56,6 @@ const teamMembers: TeamMember[] = [
     department: "Leadership",
     bio: "Young scientist and visionary founder of Xploreon, leading the mission to pioneer reusable space technologies and global satellite services.",
     achievements: ["Founder of Xploreon", "Recognized Young Scientist at ISRO", "Semifinalist – Thiel Fellowship"],
-    // Recommend renaming to clean name later (e.g., team/avikam.png)
     avatar: "images/a(1).png",
     social: { linkedin: "#", twitter: "#", email: "physicsbyavikam@gmail.com" }
   },
@@ -171,7 +171,7 @@ const teamMembers: TeamMember[] = [
     name: "Mansi Pradyuman Shah",
     role: "Market Researcher",
     department: "Operations",
-    bio: "Responsible for analyzing global space-tech market trends and supporting Xploreon’s growth strategy.",
+    bio: "Responsible for analyzing global space-tech market trends and supporting Xploreon's growth strategy.",
     achievements: ["Market Analysis", "Growth Strategy", "Space-tech Research"],
     avatar: "https://xploreon.space/team/mansi.jpg",
     social: { linkedin: "#", twitter: "#", email: "mansi.shah@xploreon.space" }
@@ -290,6 +290,11 @@ export default function TeamSection() {
                   alt={member.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   loading="lazy"
+                  onError={(e) => {
+                    // Fallback to a placeholder if image fails to load
+                    const target = e.target as HTMLImageElement;
+                    target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=1e293b&color=0891b2&size=400`;
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-deep-space via-transparent to-transparent opacity-80" />
                 <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
