@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Menu, X, Rocket } from 'lucide-react';
+import logo from '../images/x.webp';  // adjust path based on where your logo is
 
 const navItems = [
   { name: 'Home', href: '/' },
@@ -52,18 +53,20 @@ export function Navigation() {
               transition={{ duration: 0.2 }}
             >
               <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-2xl shadow-cyan-500/25">
-                  <Rocket className="w-7 h-7 text-white" />
-                </div>
+                <div className="relative">
+  <div className="w-12 h-12 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-2xl shadow-cyan-500/25">
+    <img src={logo} alt="Xploreon Logo" className="w-8 h-8 object-contain" />
+  </div>
+  <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300 blur-sm"></div>
+</div>
+
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300 blur-sm"></div>
               </div>
               <div>
                 <h1 className="font-futuristic tracking-wider text-white group-hover:text-cyan-400 transition-colors duration-300">
                   XPLOREON
                 </h1>
-                <p className="text-xs text-gray-400 uppercase tracking-widest font-medium">
-                  Space Innovation
-                </p>
+                
               </div>
             </motion.div>
           </Link>
