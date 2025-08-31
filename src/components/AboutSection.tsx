@@ -6,33 +6,33 @@ import { ImageWithFallback } from './figma/ImageWithFallback';
 const features = [
   {
     icon: <Satellite className="w-8 h-8" />,
-    title: "Reusable Technology",
-    description: "Revolutionary satellite systems designed for multiple missions, reducing costs and environmental impact."
+    title: "Reusable Spacecraft",
+    description: "Xplovis-1, our 5–8 kg reusable CubeSat, is designed for atmospheric and Earth observation missions with a 30-day trial period."
   },
   {
     icon: <Cpu className="w-8 h-8" />,
-    title: "AI Integration", 
-    description: "Advanced artificial intelligence for autonomous navigation, mission planning, and real-time decision making."
+    title: "AI Integration",
+    description: "AI-powered navigation, real-time anomaly detection, and autonomous decision-making for spacecraft control."
   },
   {
     icon: <Zap className="w-8 h-8" />,
-    title: "Advanced Propulsion",
-    description: "Next-generation propulsion systems enabling efficient orbital maneuvers and extended mission lifespans."
+    title: "Sustainable Propulsion",
+    description: "Developing eco-friendly fuels and recovery systems aimed at carbon-neutral launches and debris reduction."
   },
   {
     icon: <Target className="w-8 h-8" />,
     title: "Precision Engineering",
-    description: "Cutting-edge manufacturing processes ensuring reliability and performance in the harshest environments."
+    description: "CAD-driven design and rapid prototyping to ensure safety, performance, and reusability in harsh space conditions."
   },
   {
     icon: <Globe className="w-8 h-8" />,
-    title: "Global Coverage",
-    description: "Comprehensive satellite networks providing worldwide connectivity and monitoring capabilities."
+    title: "Global Services",
+    description: "Future launch offerings tailored to small nations and research organizations, making space access truly global."
   },
   {
     icon: <Rocket className="w-8 h-8" />,
     title: "Innovation First",
-    description: "Continuous research and development pushing the boundaries of what's possible in space technology."
+    description: "Partnering with IIT Roorkee’s TIDES incubator and ISRO mentors to pioneer next-gen reusable launch systems."
   }
 ];
 
@@ -57,23 +57,25 @@ export function AboutSection() {
               PIONEERING
               <br />
               <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                THE FUTURE
+                REUSABLE SPACEFLIGHT
               </span>
             </h1>
             
             <p className="text-xl text-gray-300 leading-relaxed mb-8">
-              At Xploreon, we're not just building satellites—we're architecting the infrastructure 
-              for humanity's multi-planetary future. Our reusable launch systems and advanced 
-              satellite technologies are making space more accessible than ever before.
+              Founded by <span className="text-cyan-400">Avikam Deol</span>, a Young Scientist at ISRO, 
+              Xploreon is building the future of affordable and sustainable space access. 
+              From reusable rockets to AI-powered CubeSats, we are on a mission to 
+              make Low Earth Orbit accessible to startups, researchers, and even nations 
+              without existing launch capabilities.
             </p>
             
             <div className="grid grid-cols-2 gap-8">
               <div>
-                <div className="font-futuristic text-3xl text-cyan-400 mb-2">2015</div>
+                <div className="font-futuristic text-3xl text-cyan-400 mb-2">2024</div>
                 <div className="text-sm text-gray-400 uppercase tracking-wider">Founded</div>
               </div>
               <div>
-                <div className="font-futuristic text-3xl text-cyan-400 mb-2">500+</div>
+                <div className="font-futuristic text-3xl text-cyan-400 mb-2">13+</div>
                 <div className="text-sm text-gray-400 uppercase tracking-wider">Team Members</div>
               </div>
             </div>
@@ -88,8 +90,8 @@ export function AboutSection() {
           >
             <div className="relative overflow-hidden rounded-2xl">
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1712512162392-d523620fbaa2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzYXRlbGxpdGUlMjBlYXJ0aCUyMG9yYml0JTIwc3BhY2UlMjB0ZWNobm9sb2d5fGVufDF8fHx8MTc1NjYwNjQyOXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                alt="Satellite in Earth orbit"
+                src="https://images.unsplash.com/photo-1712512162392-d523620fbaa2?ixlib=rb-4.0.3&w=1080&q=80"
+                alt="Xploreon satellite in Earth orbit"
                 className="w-full h-[500px] object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
@@ -108,9 +110,9 @@ export function AboutSection() {
           >
             <h3 className="font-futuristic text-2xl text-cyan-400 mb-4">OUR MISSION</h3>
             <p className="text-gray-300 leading-relaxed">
-              To democratize access to space by developing revolutionary reusable satellite systems 
-              that reduce costs, minimize environmental impact, and accelerate scientific discovery. 
-              We're building the infrastructure for a sustainable space economy.
+              To develop reusable, sustainable spacecraft and launch systems that democratize access to 
+              space. By reducing costs and increasing reliability, we aim to empower researchers, 
+              governments, and organizations worldwide to participate in space exploration.
             </p>
           </motion.div>
           
@@ -123,9 +125,9 @@ export function AboutSection() {
           >
             <h3 className="font-futuristic text-2xl text-cyan-400 mb-4">OUR VISION</h3>
             <p className="text-gray-300 leading-relaxed">
-              A future where space missions are as routine as air travel, enabling unprecedented 
-              scientific breakthroughs, global connectivity, and the expansion of human civilization 
-              beyond Earth. Space technology should serve all of humanity.
+              To establish Xploreon as a global leader in reusable spaceflight — offering launch 
+              services to small countries, building AI-driven spacecraft, and advancing 
+              humanity’s reach into orbit and beyond, while staying committed to sustainability.
             </p>
           </motion.div>
         </div>
@@ -143,7 +145,7 @@ export function AboutSection() {
               OUR CAPABILITIES
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              Advanced technologies that enable the next generation of space missions
+              The technologies and expertise powering our next-generation missions
             </p>
           </motion.div>
           
@@ -159,9 +161,7 @@ export function AboutSection() {
               >
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-400/20 to-blue-500/20 flex items-center justify-center border border-cyan-400/30">
-                    <div className="text-cyan-400">
-                      {feature.icon}
-                    </div>
+                    <div className="text-cyan-400">{feature.icon}</div>
                   </div>
                   
                   <div className="flex-1">
@@ -187,10 +187,10 @@ export function AboutSection() {
           viewport={{ once: true }}
         >
           {[
-            { number: "50+", label: "Successful Missions", prefix: "" },
-            { number: "15", label: "Countries Served", prefix: "" },
-            { number: "99.2", label: "Success Rate", prefix: "", suffix: "%" },
-            { number: "2025", label: "Next Major Launch", prefix: "" }
+            { number: "1st", label: "Reusable CubeSat Mission", prefix: "" },
+            { number: "13+", label: "Engineers & Researchers", prefix: "" },
+            { number: "5–8kg", label: "LEO Satellite Payload", prefix: "" },
+            { number: "2026", label: "First Orbital Launch Target", prefix: "" }
           ].map((stat, index) => (
             <div key={index} className="text-center p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
               <div className="font-futuristic text-3xl lg:text-4xl mb-2 text-cyan-400">
