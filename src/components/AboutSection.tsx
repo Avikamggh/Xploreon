@@ -1,73 +1,207 @@
+import React from 'react';
+import { motion } from 'motion/react';
+import { Satellite, Cpu, Zap, Target, Globe, Rocket } from 'lucide-react';
+import { ImageWithFallback } from './figma/ImageWithFallback';
 
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+const features = [
+  {
+    icon: <Satellite className="w-8 h-8" />,
+    title: "Reusable Technology",
+    description: "Revolutionary satellite systems designed for multiple missions, reducing costs and environmental impact."
+  },
+  {
+    icon: <Cpu className="w-8 h-8" />,
+    title: "AI Integration", 
+    description: "Advanced artificial intelligence for autonomous navigation, mission planning, and real-time decision making."
+  },
+  {
+    icon: <Zap className="w-8 h-8" />,
+    title: "Advanced Propulsion",
+    description: "Next-generation propulsion systems enabling efficient orbital maneuvers and extended mission lifespans."
+  },
+  {
+    icon: <Target className="w-8 h-8" />,
+    title: "Precision Engineering",
+    description: "Cutting-edge manufacturing processes ensuring reliability and performance in the harshest environments."
+  },
+  {
+    icon: <Globe className="w-8 h-8" />,
+    title: "Global Coverage",
+    description: "Comprehensive satellite networks providing worldwide connectivity and monitoring capabilities."
+  },
+  {
+    icon: <Rocket className="w-8 h-8" />,
+    title: "Innovation First",
+    description: "Continuous research and development pushing the boundaries of what's possible in space technology."
+  }
+];
 
-export default function AboutSection() {
+export function AboutSection() {
   return (
-    <section id="about" className="py-20">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="grid md:grid-cols-2 gap-8 items-start">
-          <div>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight">About Xploreon</h2>
-            <p className="mt-4 text-muted-foreground text-lg leading-relaxed">
-              Xploreon is an Indian space‑tech company building agile, reusable, small‑satellite systems
-              aimed at rapid experimentation in Low Earth Orbit (LEO). Our first mission, <span className="font-semibold">Xplovis‑1</span>,
-              targets a 30‑day LEO demo with Earth‑return capability. We’re designing a controllable 5–8 kg
-              spacecraft with reaction wheels, solar power, on‑board compute, and a ground station stack
-              to enable real‑time experiments and safe recovery.
-            </p>
-            <p className="mt-4 text-muted-foreground text-lg leading-relaxed">
-              Xploreon is led by <span className="font-semibold">Avikam Deol</span> (Founder & CEO) and supported by mentors at
-              academic incubators including the <span className="font-semibold">TIDES Business Incubator at IIT Roorkee</span>.
-              We are assembling a hands‑on team of aerospace engineers, software developers, and makers
-              who believe in fast iteration and transparent engineering.
-            </p>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base">Mission Focus</CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  Reusable CubeSat‑class platform; rapid prototyping; safe Earth return.
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base">Near‑Term Goals</CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  Hardware bring‑up, avionics stack, environmental testing, range & launch integration.
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base">Where We Operate</CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  India‑based with collaborators across universities and industry.
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base">Contact</CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  <a href="mailto:physicsbyavikam@gmail.com" className="underline underline-offset-4">
-                    physicsbyavikam@gmail.com
-                  </a>{" "}
-                  • <a href="https://xploreon.space" target="_blank" className="underline underline-offset-4">xploreon.space</a>
-                </CardContent>
-              </Card>
+    <section className="py-20 relative overflow-hidden bg-gradient-to-b from-space-black to-deep-space">      
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+        {/* Hero section */}
+        <div className="grid lg:grid-cols-2 gap-16 items-center mb-32">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-400/10 border border-cyan-400/20 mb-6">
+              <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
+              <span className="text-sm font-medium text-cyan-400 uppercase tracking-wider">About Us</span>
             </div>
-          </div>
-          <div>
-            <img
-              src="https://images.unsplash.com/photo-1517976487492-5765e4f35571?q=80&w=1200"
-              alt="Xploreon spacecraft concept"
-              className="w-full rounded-2xl shadow-lg"
-              loading="lazy"
-            />
+            
+            <h1 className="font-futuristic text-4xl md:text-6xl lg:text-7xl mb-8 text-white leading-tight">
+              PIONEERING
+              <br />
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                THE FUTURE
+              </span>
+            </h1>
+            
+            <p className="text-xl text-gray-300 leading-relaxed mb-8">
+              At Xploreon, we're not just building satellites—we're architecting the infrastructure 
+              for humanity's multi-planetary future. Our reusable launch systems and advanced 
+              satellite technologies are making space more accessible than ever before.
+            </p>
+            
+            <div className="grid grid-cols-2 gap-8">
+              <div>
+                <div className="font-futuristic text-3xl text-cyan-400 mb-2">2015</div>
+                <div className="text-sm text-gray-400 uppercase tracking-wider">Founded</div>
+              </div>
+              <div>
+                <div className="font-futuristic text-3xl text-cyan-400 mb-2">500+</div>
+                <div className="text-sm text-gray-400 uppercase tracking-wider">Team Members</div>
+              </div>
+            </div>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="relative"
+          >
+            <div className="relative overflow-hidden rounded-2xl">
+              <ImageWithFallback
+                src="https://images.unsplash.com/photo-1712512162392-d523620fbaa2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzYXRlbGxpdGUlMjBlYXJ0aCUyMG9yYml0JTIwc3BhY2UlMjB0ZWNobm9sb2d5fGVufDF8fHx8MTc1NjYwNjQyOXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+                alt="Satellite in Earth orbit"
+                className="w-full h-[500px] object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+            </div>
+          </motion.div>
+        </div>
+        
+        {/* Mission & Vision */}
+        <div className="grid lg:grid-cols-2 gap-16 mb-32">
+          <motion.div
+            className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="font-futuristic text-2xl text-cyan-400 mb-4">OUR MISSION</h3>
+            <p className="text-gray-300 leading-relaxed">
+              To democratize access to space by developing revolutionary reusable satellite systems 
+              that reduce costs, minimize environmental impact, and accelerate scientific discovery. 
+              We're building the infrastructure for a sustainable space economy.
+            </p>
+          </motion.div>
+          
+          <motion.div
+            className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="font-futuristic text-2xl text-cyan-400 mb-4">OUR VISION</h3>
+            <p className="text-gray-300 leading-relaxed">
+              A future where space missions are as routine as air travel, enabling unprecedented 
+              scientific breakthroughs, global connectivity, and the expansion of human civilization 
+              beyond Earth. Space technology should serve all of humanity.
+            </p>
+          </motion.div>
+        </div>
+        
+        {/* Capabilities grid */}
+        <div className="mb-32">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="font-futuristic text-3xl md:text-4xl mb-4 text-white">
+              OUR CAPABILITIES
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Advanced technologies that enable the next generation of space missions
+            </p>
+          </motion.div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <motion.div
+                key={index}
+                className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-cyan-400/30 transition-all duration-300 group"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-400/20 to-blue-500/20 flex items-center justify-center border border-cyan-400/30">
+                    <div className="text-cyan-400">
+                      {feature.icon}
+                    </div>
+                  </div>
+                  
+                  <div className="flex-1">
+                    <h4 className="font-futuristic text-lg mb-2 text-white group-hover:text-cyan-400 transition-colors">
+                      {feature.title}
+                    </h4>
+                    <p className="text-sm text-gray-400 leading-relaxed">
+                      {feature.description}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
+        
+        {/* Stats section */}
+        <motion.div
+          className="grid grid-cols-2 lg:grid-cols-4 gap-8"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          {[
+            { number: "50+", label: "Successful Missions", prefix: "" },
+            { number: "15", label: "Countries Served", prefix: "" },
+            { number: "99.2", label: "Success Rate", prefix: "", suffix: "%" },
+            { number: "2025", label: "Next Major Launch", prefix: "" }
+          ].map((stat, index) => (
+            <div key={index} className="text-center p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+              <div className="font-futuristic text-3xl lg:text-4xl mb-2 text-cyan-400">
+                {stat.prefix}{stat.number}{stat.suffix}
+              </div>
+              <div className="text-gray-400 uppercase tracking-wider text-xs">
+                {stat.label}
+              </div>
+            </div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

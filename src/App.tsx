@@ -1,10 +1,3 @@
-import Footer from './components/Footer';
-import ContactSection from './components/ContactSection';
-import NewsSection from './components/NewsSection';
-import TechSection from './components/TechSection';
-import TeamSection from './components/TeamSection';
-import MissionTracker from './components/MissionTracker';
-import AboutSection from './components/AboutSection';
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navigation } from './components/Navigation';
