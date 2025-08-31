@@ -3,27 +3,6 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Linkedin, Twitter, Mail, Award, Users, Rocket } from 'lucide-react';
 
-/** Resolve avatar string to a real URL */
-function resolveAvatar(src: string): string {
-  if (!src) return "";
-  
-  // Handle external URLs
-  if (/^https?:\/\//i.test(src)) return src;
-  
-  // For local images, construct the path from the public directory
-  // Remove leading dots/slashes and construct proper path
-  const cleanSrc = src.replace(/^(\.\/|\/)?/, "");
-  
-  try {
-    // Try to construct the URL from the src/images directory
-    // This assumes your images are in src/images and will be served from /src/images
-    return `/src/images/${cleanSrc.replace('images/', '')}`;
-  } catch (error) {
-    console.warn(`Could not resolve image: ${src}`);
-    return "";
-  }
-}
-
 /* =========================
    Types & Data
    ========================= */
@@ -180,7 +159,7 @@ const departments = [
 /* =========================
    Component (DEFAULT EXPORT)
    ========================= */
-export default function TeamSection() {
+const TeamSection: React.FC = () => {
   const [selectedDepartment, setSelectedDepartment] = React.useState("All");
 
   const filteredMembers =
@@ -275,12 +254,11 @@ export default function TeamSection() {
             >
               <div className="relative h-64 overflow-hidden">
                 <img
-                  src={resolveAvatar(member.avatar)}
+                  src={member.avatar}
                   alt={member.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   loading="lazy"
                   onError={(e) => {
-                    // Fallback to a placeholder if image fails to load
                     const target = e.target as HTMLImageElement;
                     target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=1e293b&color=0891b2&size=400`;
                   }}
@@ -323,4 +301,6 @@ export default function TeamSection() {
       </div>
     </section>
   );
-}
+};
+
+export default TeamSection;
