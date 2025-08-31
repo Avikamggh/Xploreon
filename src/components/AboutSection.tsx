@@ -71,11 +71,11 @@ export function AboutSection() {
             
             <div className="grid grid-cols-2 gap-8">
               <div>
-                <div className="font-futuristic text-3xl text-cyan-400 mb-2">2024</div>
+                <div className="font-futuristic text-3xl text-cyan-400 mb-2">2025</div>
                 <div className="text-sm text-gray-400 uppercase tracking-wider">Founded</div>
               </div>
               <div>
-                <div className="font-futuristic text-3xl text-cyan-400 mb-2">13+</div>
+                <div className="font-futuristic text-3xl text-cyan-400 mb-2">15+</div>
                 <div className="text-sm text-gray-400 uppercase tracking-wider">Team Members</div>
               </div>
             </div>
