@@ -1,23 +1,7 @@
-// src/components/TeamSection.tsx
-import React from 'react';
-import { motion } from 'motion/react';
+import React, { useState } from 'react';
 import { Linkedin, Twitter, Mail, Award, Users, Rocket } from 'lucide-react';
 
-/* =========================
-   Types & Data
-   ========================= */
-type Social = { linkedin: string; twitter: string; email: string };
-type TeamMember = {
-  name: string;
-  role: string;
-  department: "Leadership" | "Engineering" | "Research & Development" | "Operations";
-  bio: string;
-  achievements: string[];
-  avatar: string;
-  social: Social;
-};
-
-const teamMembers: TeamMember[] = [
+const teamMembers = [
   {
     name: "Avikam Deol",
     role: "Founder & CEO",
@@ -146,74 +130,54 @@ const teamMembers: TeamMember[] = [
   }
 ];
 
-/* =========================
-   Derived counters
-   ========================= */
 const departments = [
-  { name: "Leadership", icon: <Award className="w-5 h-5" />, count: teamMembers.filter(m => m.department === "Leadership").length },
-  { name: "Engineering", icon: <Rocket className="w-5 h-5" />, count: teamMembers.filter(m => m.department === "Engineering").length },
-  { name: "Research & Development", icon: <Users className="w-5 h-5" />, count: teamMembers.filter(m => m.department === "Research & Development").length },
-  { name: "Operations", icon: <Users className="w-5 h-5" />, count: teamMembers.filter(m => m.department === "Operations").length }
+  { name: "Leadership", icon: Award, count: teamMembers.filter(m => m.department === "Leadership").length },
+  { name: "Engineering", icon: Rocket, count: teamMembers.filter(m => m.department === "Engineering").length },
+  { name: "Research & Development", icon: Users, count: teamMembers.filter(m => m.department === "Research & Development").length },
+  { name: "Operations", icon: Users, count: teamMembers.filter(m => m.department === "Operations").length }
 ];
 
-/* =========================
-   Component (DEFAULT EXPORT)
-   ========================= */
-const TeamSection: React.FC = () => {
-  const [selectedDepartment, setSelectedDepartment] = React.useState("All");
+export default function TeamSection() {
+  const [selectedDepartment, setSelectedDepartment] = useState("All");
 
-  const filteredMembers =
-    selectedDepartment === "All"
-      ? teamMembers
-      : teamMembers.filter((member) => member.department === selectedDepartment);
+  const filteredMembers = selectedDepartment === "All" 
+    ? teamMembers 
+    : teamMembers.filter(member => member.department === selectedDepartment);
 
   return (
-    <section className="py-24 relative overflow-hidden">
-      {/* Background animation */}
-      <div className="absolute inset-0 bg-gradient-to-br from-space-black via-deep-space to-nebula-blue/20">
-        <div className="absolute inset-0">
-          {[...Array(30)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-cyan-400 rounded-full opacity-30"
-              style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%` }}
-              animate={{ y: [0, -20, 0], opacity: [0.3, 1, 0.3] }}
-              transition={{ duration: 3 + Math.random() * 2, repeat: Infinity, delay: Math.random() * 2 }}
-            />
-          ))}
-        </div>
+    <section className="py-24 relative overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
+      <div className="absolute inset-0">
+        {[...Array(30)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-cyan-400 rounded-full opacity-30 animate-pulse"
+            style={{ 
+              left: `${Math.random() * 100}%`, 
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 2}s`
+            }}
+          />
+        ))}
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
-        {/* Section header */}
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="font-futuristic text-5xl md:text-6xl mb-6 neon-text">Our Stellar Team</h2>
+        <div className="text-center mb-16">
+          <h2 className="text-5xl md:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+            Our Stellar Team
+          </h2>
           <div className="w-32 h-1 bg-gradient-to-r from-cyan-400 to-blue-500 mx-auto mb-8" />
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Meet the brilliant minds pioneering the future of space exploration and satellite technology at Xploreon.
           </p>
-        </motion.div>
+        </div>
 
-        {/* Department filter */}
-        <motion.div
-          className="flex flex-wrap justify-center gap-4 mb-12"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true }}
-        >
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
           <button
             onClick={() => setSelectedDepartment("All")}
             className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
               selectedDepartment === "All"
-                ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white neon-glow'
-                : 'glass text-gray-300 hover:text-cyan-400 hover:neon-border'
+                ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/50'
+                : 'bg-white/10 backdrop-blur-sm text-gray-300 hover:text-cyan-400 border border-white/20'
             }`}
           >
             <div className="flex items-center space-x-2">
@@ -222,35 +186,32 @@ const TeamSection: React.FC = () => {
             </div>
           </button>
 
-          {departments.map((dept) => (
-            <button
-              key={dept.name}
-              onClick={() => setSelectedDepartment(dept.name)}
-              className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                selectedDepartment === dept.name
-                  ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white neon-glow'
-                  : 'glass text-gray-300 hover:text-cyan-400 hover:neon-border'
-              }`}
-            >
-              <div className="flex items-center space-x-2">
-                {dept.icon}
-                <span>{dept.name} ({dept.count})</span>
-              </div>
-            </button>
-          ))}
-        </motion.div>
+          {departments.map((dept) => {
+            const IconComponent = dept.icon;
+            return (
+              <button
+                key={dept.name}
+                onClick={() => setSelectedDepartment(dept.name)}
+                className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
+                  selectedDepartment === dept.name
+                    ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/50'
+                    : 'bg-white/10 backdrop-blur-sm text-gray-300 hover:text-cyan-400 border border-white/20'
+                }`}
+              >
+                <div className="flex items-center space-x-2">
+                  <IconComponent className="w-4 h-4" />
+                  <span>{dept.name} ({dept.count})</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
 
-        {/* Team grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredMembers.map((member, index) => (
-            <motion.div
+            <div
               key={member.name}
-              className="glass-card rounded-3xl overflow-hidden hover:neon-glow transition-all duration-500 group cursor-pointer"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ scale: 1.03 }}
+              className="bg-white/5 backdrop-blur-sm rounded-3xl overflow-hidden border border-white/10 hover:border-cyan-400/50 hover:shadow-lg hover:shadow-cyan-500/20 transition-all duration-500 group cursor-pointer transform hover:scale-105"
             >
               <div className="relative h-64 overflow-hidden">
                 <img
@@ -259,34 +220,39 @@ const TeamSection: React.FC = () => {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   loading="lazy"
                   onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=1e293b&color=0891b2&size=400`;
+                    e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=1e293b&color=0891b2&size=400`;
                   }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-deep-space via-transparent to-transparent opacity-80" />
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-80" />
                 <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="flex space-x-2">
-                    <a href={member.social.linkedin} className="w-10 h-10 glass rounded-full flex items-center justify-center hover:neon-glow transition-all duration-300" aria-label="LinkedIn">
+                    <a href={member.social.linkedin} className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-cyan-500/20 transition-all duration-300" aria-label="LinkedIn">
                       <Linkedin className="w-4 h-4 text-cyan-400" />
                     </a>
-                    <a href={member.social.twitter} className="w-10 h-10 glass rounded-full flex items-center justify-center hover:neon-glow transition-all duration-300" aria-label="Twitter">
+                    <a href={member.social.twitter} className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-cyan-500/20 transition-all duration-300" aria-label="Twitter">
                       <Twitter className="w-4 h-4 text-cyan-400" />
                     </a>
-                    <a href={`mailto:${member.social.email}`} className="w-10 h-10 glass rounded-full flex items-center justify-center hover:neon-glow transition-all duration-300" aria-label="Email">
+                    <a href={`mailto:${member.social.email}`} className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-cyan-500/20 transition-all duration-300" aria-label="Email">
                       <Mail className="w-4 h-4 text-cyan-400" />
                     </a>
                   </div>
                 </div>
                 <div className="absolute bottom-4 left-4">
-                  <span className="glass px-3 py-1 rounded-full text-xs font-medium text-cyan-400">{member.department}</span>
+                  <span className="bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-cyan-400 border border-cyan-400/30">
+                    {member.department}
+                  </span>
                 </div>
               </div>
               <div className="p-8">
-                <h3 className="font-futuristic text-2xl mb-2 text-white group-hover:text-cyan-400 transition-colors">{member.name}</h3>
+                <h3 className="text-2xl font-bold mb-2 text-white group-hover:text-cyan-400 transition-colors">
+                  {member.name}
+                </h3>
                 <p className="text-cyan-400 text-lg mb-4 font-medium">{member.role}</p>
                 <p className="text-gray-300 text-sm leading-relaxed mb-6">{member.bio}</p>
                 <div className="space-y-2">
-                  <h4 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Key Achievements</h4>
+                  <h4 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">
+                    Key Achievements
+                  </h4>
                   {member.achievements.map((achievement, i) => (
                     <div key={i} className="flex items-center text-sm">
                       <div className="w-2 h-2 bg-cyan-400 rounded-full mr-3 opacity-60" />
@@ -295,12 +261,10 @@ const TeamSection: React.FC = () => {
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
     </section>
   );
-};
-
-export default TeamSection;
+}
