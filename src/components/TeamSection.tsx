@@ -11,7 +11,7 @@ const teamMembers = [
     department: "Leadership",
     bio: "Young scientist and visionary founder of Xploreon, leading the mission to pioneer reusable space technologies and global satellite services.",
     achievements: ["Founder of Xploreon", "Recognized Young Scientist at ISRO", "Semifinalist – Thiel Fellowship"],
-    avatar: "https://xploreon.space/team/avikam.jpg",
+    avatar: "public/images/a(1).png",
     social: {
       linkedin: "#",
       twitter: "#",
@@ -24,7 +24,7 @@ const teamMembers = [
     department: "Leadership",
     bio: "Director at Xploreon, leading spacecraft system architecture, propulsion systems, and AI-powered space technology research.",
     achievements: ["System Architect for Spacecraft", "Advanced Propulsion Specialist", "AI Research in Space Systems"],
-    avatar: "https://xploreon.space/team/chaitanya.jpg",
+    avatar: "public/images/chaitanya.png",
     social: {
       linkedin: "#",
       twitter: "#",
