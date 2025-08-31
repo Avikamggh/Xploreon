@@ -4,3 +4,5 @@
 
 /* Import your theme & utilities */
 @import "./styles/globals.css";
+
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
