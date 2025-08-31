@@ -63,7 +63,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4 }}
           >
-            FUTURE OF SPACE
+            Welcome To Xploreon
           </motion.h1>
           
           {/* Subtitle */}
@@ -73,7 +73,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.6 }}
           >
-            Developing revolutionary reusable rocket technology to make satellite deployment more affordable, reliable, and sustainable for the next generation of space missions.
+           Igniting humanity’s interplanetary evolution through deep-tech innovation.
           </motion.p>
           
           {/* Stats */}
@@ -83,6 +83,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.8 }}
           >
+            <center>
             <div className="text-center">
               <div className="font-futuristic text-3xl md:text-4xl text-cyan-400 mb-1">2025</div>
               <div className="text-sm text-gray-400 uppercase tracking-wider">Founded</div>
@@ -92,6 +93,7 @@ export function HeroSection() {
               <div className="font-futuristic text-3xl md:text-4xl text-cyan-400 mb-1">15+</div>
               <div className="text-sm text-gray-400 uppercase tracking-wider">Engineers</div>
             </div>
+              </center>
           </motion.div>
           
           {/* CTA Buttons */}
@@ -101,21 +103,15 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1 }}
           >
-            <Button
+            <center><Button
               size="lg"
               className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white px-8 py-4 font-medium transition-all duration-300 group border-0 shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40"
             >
               Our Vision & Technology
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
+            </center>
             
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-white/30 text-white hover:bg-white/10 px-8 py-4 backdrop-blur-sm transition-all duration-300"
-            >
-              Development Updates
-            </Button>
           </motion.div>
         </div>
         
