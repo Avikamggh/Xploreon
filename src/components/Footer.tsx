@@ -1,14 +1,15 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Rocket, Mail, Phone, MapPin, Twitter, Linkedin, Youtube, Instagram } from 'lucide-react';
+import logo from "../images/x.webp"; // adjust path to your image
 
 const footerSections = [
   {
     title: "Company",
     links: [
-      { name: "About Us", href: "#about" },
-      { name: "Our Mission", href: "#about" },
-      { name: "Leadership", href: "#team" },
+      { name: "About Us", href: "/about" },
+      { name: "Our Mission", href: "/mission" },
+      { name: "Leadership", href: "/team" },
       { name: "Careers", href: "#contact" },
       { name: "Press", href: "#news" }
     ]
@@ -29,8 +30,8 @@ const footerSections = [
       { name: "Satellite Deployment", href: "#contact" },
       { name: "Mission Planning", href: "#contact" },
       { name: "Technology Licensing", href: "#contact" },
-      { name: "Consulting", href: "#contact" },
-      { name: "Support", href: "#contact" }
+      { name: "Consulting", href: "/contact" },
+      { name: "Support", href: "/contact" }
     ]
   }
 ];
@@ -67,9 +68,11 @@ export function Footer() {
             viewport={{ once: true }}
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <Rocket className="w-6 h-6 text-white" />
-              </div>
+              <img
+    src={logo}
+    alt="Xploreon Logo"
+    className="w-10 h-10 object-contain rounded-lg"
+  />
               <div>
                 <h3 className="font-futuristic tracking-wider text-white">
                   XPLOREON
