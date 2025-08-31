@@ -8,13 +8,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+  "@radix-ui/react-slot": "^1.1.2",
+  "class-variance-authority": "^0.7.1",
+  "clsx": "^2.1.1",
+  "tailwind-merge": "^2.5.2",
   "lucide-react": "^0.469.0",
   "motion": "^11.11.6",
   "react": "^18.3.1",
   "react-dom": "^18.3.1",
-  "react-router-dom": "^6.23.1",
-  "@radix-ui/react-slot": "^1.1.2"
+  "react-router-dom": "^6.23.1"
 },
+
   "devDependencies": {
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
