@@ -10,7 +10,7 @@ export function HeroSection() {
       {/* Background */}
       <div className="absolute inset-0">
         <ImageWithFallback
-          src="xploreon.webp"
+          src="trail/xploreon.webp"
           alt="Rocket launch from Earth"
           className="w-full h-full object-cover"
         />
