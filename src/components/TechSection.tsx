@@ -1,39 +1,53 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Cpu, Zap, Brain, Shield, Radio, Gauge } from 'lucide-react';
+import { Zap, Brain, Shield, Rocket, Satellite, Recycle, Gauge } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
 const techFeatures = [
   {
     icon: <Zap className="w-12 h-12" />,
-    title: "Reusable Rocket Engine",
-    description: "Developing next-generation rocket engines designed for multiple flights with minimal refurbishment between launches.",
-    specs: ["Target: 10+ reuses", "50% cost reduction", "Rapid turnaround"],
-    image: "https://images.unsplash.com/photo-1597120081843-631bddc57076?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzcGFjZSUyMHNhdGVsbGl0ZSUyMG9yYml0fGVufDF8fHx8MTc1NjYwNTMyNHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+    title: "Reusable Launch Vehicle",
+    description: "Xploreon is engineering a reusable small launch vehicle capable of carrying CubeSats and microsatellites into Low Earth Orbit (LEO). The design emphasizes reusability and low refurbishment costs.",
+    specs: ["Target: 5–10 reuses", "Low Earth Orbit payload: 5–8 kg", "Cost-efficient design"],
+    image: "https://images.unsplash.com/photo-1523983303491-36c348b2ef11?ixlib=rb-4.0.3&w=1080&q=80"
+  },
+  {
+    icon: <Satellite className="w-12 h-12" />,
+    title: "Xplovis-1 Satellite",
+    description: "Our first spacecraft — Xplovis-1 — is a reusable satellite designed for atmospheric research and Earth observation. It can be remotely controlled like a toy and safely returned to Earth.",
+    specs: ["Mass: 5–8 kg", "30-day trial mission", "Remote-controlled return"],
+    image: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?ixlib=rb-4.0.3&w=1080&q=80"
   },
   {
     icon: <Brain className="w-12 h-12" />,
-    title: "Autonomous Flight Systems",
-    description: "Advanced guidance and control algorithms for precision landing and autonomous mission operations.",
-    specs: ["AI-powered navigation", "Real-time adaptation", "Fault detection"],
-    image: "https://images.unsplash.com/photo-1622234365860-c8ae2e35b56c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhc3Ryb25hdXQlMjBzcGFjZSUyMHRlY2hub2xvZ3l8ZW58MXx8fHwxNzU2NjA1MzMyfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+    title: "AI-Driven Flight Systems",
+    description: "We integrate AI for autonomous navigation, anomaly detection, and adaptive mission planning. These systems reduce human intervention and maximize mission safety.",
+    specs: ["Trajectory optimization", "Fault detection", "Autonomous decision-making"],
+    image: "https://images.unsplash.com/photo-1622234365860-c8ae2e35b56c?ixlib=rb-4.0.3&w=1080&q=80"
   },
   {
     icon: <Shield className="w-12 h-12" />,
-    title: "Advanced Recovery System",
-    description: "Innovative propulsive landing technology enabling precise vehicle recovery and refurbishment for future missions.",
-    specs: ["Vertical landing", "Grid fin control", "Engine throttling"],
-    image: "https://images.unsplash.com/photo-1672011123326-444f4b0b7180?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzcGFjZSUyMHN0YXRpb24lMjBlYXJ0aCUyMG9yYml0fGVufDF8fHx8MTc1NjYwNTMzNnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+    title: "Advanced Recovery Technology",
+    description: "Our reusable spacecraft will employ precision landing and recovery systems, ensuring safe return for refurbishment and redeployment.",
+    specs: ["Controlled descent", "Propulsive landing", "Rapid turnaround"],
+    image: "https://images.unsplash.com/photo-1672011123326-444f4b0b7180?ixlib=rb-4.0.3&w=1080&q=80"
+  },
+  {
+    icon: <Recycle className="w-12 h-12" />,
+    title: "Sustainable Propulsion",
+    description: "Xploreon is committed to sustainability with carbon-neutral goals. We are exploring eco-friendly fuels and debris mitigation strategies to ensure responsible space access.",
+    specs: ["Carbon-neutral operations", "Eco-friendly fuels", "Debris reduction"],
+    image: "https://images.unsplash.com/photo-1580428180121-cf6631fd988c?ixlib=rb-4.0.3&w=1080&q=80"
   }
 ];
 
 const innovations = [
-  { title: "Engine Design", progress: 78 },
-  { title: "Fuel System", progress: 85 },
-  { title: "Landing System", progress: 42 },
-  { title: "Flight Software", progress: 91 },
-  { title: "Recovery Operations", progress: 35 },
-  { title: "Vehicle Integration", progress: 58 }
+  { title: "Reusable Vehicle Design", progress: 72 },
+  { title: "Xplovis-1 Satellite Systems", progress: 80 },
+  { title: "AI Flight Software", progress: 65 },
+  { title: "Recovery & Landing", progress: 40 },
+  { title: "Eco-Friendly Propulsion", progress: 35 },
+  { title: "Mission Operations Control", progress: 70 }
 ];
 
 export function TechSection() {
@@ -54,27 +68,27 @@ export function TechSection() {
             </div>
             
             <h1 className="font-futuristic text-4xl md:text-6xl lg:text-7xl mb-8 text-white leading-tight">
-              NEXT-GEN
+              INNOVATING
               <br />
               <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                PROPULSION
+                REUSABLE SPACEFLIGHT
               </span>
             </h1>
             
             <p className="text-xl text-gray-300 leading-relaxed mb-8">
-              We're developing revolutionary reusable rocket technology that will combine cutting-edge engineering 
-              with sustainable design principles to dramatically reduce launch costs and 
-              environmental impact.
+              Xploreon is building the next era of space technology with reusable rockets, 
+              AI-powered satellites, and sustainable propulsion systems — making access to 
+              space affordable, safe, and environmentally responsible.
             </p>
             
             <div className="grid grid-cols-2 gap-8">
               <div>
-                <div className="font-futuristic text-3xl text-cyan-400 mb-2">50%</div>
-                <div className="text-sm text-gray-400 uppercase tracking-wider">Target Cost Reduction</div>
+                <div className="font-futuristic text-3xl text-cyan-400 mb-2">70%</div>
+                <div className="text-sm text-gray-400 uppercase tracking-wider">Tech Development Complete</div>
               </div>
               <div>
                 <div className="font-futuristic text-3xl text-cyan-400 mb-2">2026</div>
-                <div className="text-sm text-gray-400 uppercase tracking-wider">First Flight Target</div>
+                <div className="text-sm text-gray-400 uppercase tracking-wider">First Orbital Mission Target</div>
               </div>
             </div>
           </motion.div>
@@ -88,8 +102,8 @@ export function TechSection() {
           >
             <div className="relative overflow-hidden rounded-2xl">
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1719947695481-7978aba9d864?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjByb2NrZXQlMjBlbmdpbmUlMjB0ZWNobm9sb2d5JTIwY2xvc2V1cHxlbnwxfHx8fDE3NTY2MDY0ODV8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                alt="Modern rocket engine technology"
+                src="https://images.unsplash.com/photo-1719947695481-7978aba9d864?ixlib=rb-4.0.3&w=1080&q=80"
+                alt="Xploreon Rocket Technology"
                 className="w-full h-[500px] object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
@@ -110,7 +124,7 @@ export function TechSection() {
               CORE TECHNOLOGIES IN DEVELOPMENT
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              Key innovations we're developing to enable affordable and sustainable space access
+              Key innovations we're developing to enable affordable, sustainable, and reusable space access.
             </p>
           </motion.div>
           
@@ -135,9 +149,7 @@ export function TechSection() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                     <div className="absolute top-6 left-6 w-12 h-12 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center border border-white/20">
-                      <div className="text-cyan-400 scale-75">
-                        {tech.icon}
-                      </div>
+                      <div className="text-cyan-400 scale-75">{tech.icon}</div>
                     </div>
                   </div>
                 </div>
@@ -183,7 +195,7 @@ export function TechSection() {
               DEVELOPMENT PROGRESS
             </h3>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              Current status of our key engineering projects and milestones
+              Current status of Xploreon’s key engineering milestones for reusable rockets and satellite systems.
             </p>
           </div>
           
