@@ -13,6 +13,22 @@ type Article = {
   source: string;
 };
 
+// fallback images (royalty-free space pics)
+const fallbackImages = [
+  "https://images.unsplash.com/photo-1580428180121-cf6631fd988c?ixlib=rb-4.0.3&w=1080&q=80",
+  "https://images.unsplash.com/photo-1447433819943-74a20887a81e?ixlib=rb-4.0.3&w=1080&q=80",
+  "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-4.0.3&w=1080&q=80",
+  "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?ixlib=rb-4.0.3&w=1080&q=80",
+];
+
+function getValidImage(img: string, idx: number) {
+  if (!img || img.includes("nasa-logo")) {
+    // pick a fallback image based on index (to avoid duplicates)
+    return fallbackImages[idx % fallbackImages.length];
+  }
+  return img;
+}
+
 export function NewsSection() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [visibleCount, setVisibleCount] = useState(6);
@@ -21,7 +37,7 @@ export function NewsSection() {
   useEffect(() => {
     async function fetchNews() {
       try {
-        // Fetch from Spaceflight News
+        // Fetch Spaceflight News
         const sfRes = await fetch("https://api.spaceflightnewsapi.net/v4/articles/?limit=20");
         const sfData = await sfRes.json();
         const sfArticles: Article[] = sfData.results.map((a: any) => ({
@@ -34,7 +50,7 @@ export function NewsSection() {
           source: a.news_site,
         }));
 
-        // Fetch Launch Library (Upcoming launches)
+        // Fetch Launch Library
         const launchRes = await fetch("https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=10");
         const launchData = await launchRes.json();
         const launchArticles: Article[] = launchData.results.map((l: any) => ({
@@ -42,12 +58,12 @@ export function NewsSection() {
           title: `Upcoming Launch: ${l.name}`,
           summary: l.mission?.description || "Upcoming space mission.",
           url: l.url,
-          image_url: l.image || "https://www.nasa.gov/sites/default/files/thumbnails/image/nasa-logo-web-rgb.png",
+          image_url: l.image || "",
           published_at: l.net,
           source: "Launch Library",
         }));
 
-        // Fetch NASA RSS feed (converted via rss2json)
+        // Fetch NASA RSS (via rss2json)
         const nasaRes = await fetch(
           "https://api.rss2json.com/v1/api.json?rss_url=https://www.nasa.gov/rss/dyn/breaking_news.rss"
         );
@@ -57,12 +73,12 @@ export function NewsSection() {
           title: n.title,
           summary: n.description || "NASA breaking news update.",
           url: n.link,
-          image_url: n.enclosure?.link || "https://www.nasa.gov/sites/default/files/thumbnails/image/nasa-logo-web-rgb.png",
+          image_url: n.enclosure?.link || "",
           published_at: n.pubDate,
           source: "NASA",
         }));
 
-        // Merge and sort by date (latest first)
+        // Merge and sort
         const allArticles = [...sfArticles, ...launchArticles, ...nasaArticles].sort(
           (a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
         );
@@ -84,7 +100,6 @@ export function NewsSection() {
 
   return (
     <section className="py-24 relative overflow-hidden">
-      {/* Background */}
       <div className="absolute inset-0 gradient-cosmic opacity-30" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
@@ -123,7 +138,7 @@ export function NewsSection() {
                 >
                   <div className="relative h-48 overflow-hidden">
                     <ImageWithFallback
-                      src={article.image_url}
+                      src={getValidImage(article.image_url, index)}
                       alt={article.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
@@ -163,7 +178,7 @@ export function NewsSection() {
               ))}
             </div>
 
-            {/* Load More Button */}
+            {/* Load More */}
             {visibleCount < articles.length && (
               <div className="text-center mt-12">
                 <button
