@@ -99,17 +99,7 @@ export function Navigation() {
           </div>
 
           {/* CTA Button (Desktop) */}
-          <div className="hidden lg:block">
-            <Link to="/contact">
-              <motion.button
-                className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white rounded-lg font-medium transition-all duration-300 shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 border border-cyan-400/30"
-                whileHover={{ scale: 1.02, y: -1 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Get Started
-              </motion.button>
-            </Link>
-          </div>
+         
 
           {/* Mobile Menu Toggle */}
           <div className="lg:hidden">
