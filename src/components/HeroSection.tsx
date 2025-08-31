@@ -2,15 +2,17 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Rocket, ArrowRight } from 'lucide-react';
 import { Button } from './ui/button';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+import bg from '../image/xploreon.webp';
+
+
+
 
 export function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
-        <img src="image/xploreon.webp"
-          alt="Rocket launch from Earth"
+        <img src={bg} alt="Rocket launch"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"></div>
