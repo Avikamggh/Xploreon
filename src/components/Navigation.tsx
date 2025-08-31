@@ -31,7 +31,7 @@ export function Navigation() {
   return (
     <motion.nav
       className={`fixed top-0 w-full z-50 transition-all duration-500 
-        backdrop-blur-md border-b border-black/10 
+        backdrop-blur-md border-b border-black/30 
         ${scrolled ? 'bg-white/20 py-3' : 'bg-white/10 py-5'}
       `}
       initial={{ y: -100, opacity: 0 }}
