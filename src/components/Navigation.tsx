@@ -34,7 +34,7 @@ export function Navigation() {
         'fixed top-0 w-full z-50 transition-all duration-500',
         // light glass with blur; not black
         scrolled
-          ? 'backdrop-blur-md bg-white/10 border-b border-white/10 py-3'
+          ? 'backdrop-blur-md bg-white/10'
           : 'backdrop-blur-md bg-white/5 py-6'
       ].join(' ')}
       initial={{ y: -100, opacity: 0 }}
