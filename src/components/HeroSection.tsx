@@ -83,13 +83,10 @@ export function HeroSection() {
             transition={{ duration: 1, delay: 0.8 }}
           >
             <div className="text-center">
-              <div className="font-futuristic text-3xl md:text-4xl text-cyan-400 mb-1">2024</div>
+              <div className="font-futuristic text-3xl md:text-4xl text-cyan-400 mb-1">2025</div>
               <div className="text-sm text-gray-400 uppercase tracking-wider">Founded</div>
             </div>
-            <div className="text-center">
-              <div className="font-futuristic text-3xl md:text-4xl text-cyan-400 mb-1">50%</div>
-              <div className="text-sm text-gray-400 uppercase tracking-wider">Cost Reduction</div>
-            </div>
+            
             <div className="text-center">
               <div className="font-futuristic text-3xl md:text-4xl text-cyan-400 mb-1">15+</div>
               <div className="text-sm text-gray-400 uppercase tracking-wider">Engineers</div>
