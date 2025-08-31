@@ -55,7 +55,7 @@ export function Navigation() {
               <div className="relative">
                 <div className="relative">
   
-    <img src={logo} alt="Xploreon Logo" className="w-8 h-8 object-contain" />
+    <img src={logo} alt="Xploreon Logo" className="w-auto h-12 object-contain" />
   </div>
   <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300 blur-sm"></div>
 
