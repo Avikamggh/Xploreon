@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Linkedin, Twitter, Mail, Award, Users, Rocket } from 'lucide-react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
-
+import chaitanya from "../images/chaitanya.png";
+import avikam from "../images/chaitanya.png";
 // Xploreon Team Members
 const teamMembers = [
   {
@@ -11,11 +11,11 @@ const teamMembers = [
     department: "Leadership",
     bio: "Young scientist and visionary founder of Xploreon, leading the mission to pioneer reusable space technologies and global satellite services.",
     achievements: ["Founder of Xploreon", "Recognized Young Scientist at ISRO", "Semifinalist – Thiel Fellowship"],
-    avatar: "https://xploreon.space/team/avikam.jpg",
+    avatar: "images/a(1).png",
     social: {
       linkedin: "#",
       twitter: "#",
-      email: "avikam.deol@xploreon.space"
+      email: "physicsbyavikam@gmail.com"
     }
   },
   {
@@ -24,7 +24,7 @@ const teamMembers = [
     department: "Leadership",
     bio: "Director at Xploreon, leading spacecraft system architecture, propulsion systems, and AI-powered space technology research.",
     achievements: ["System Architect for Spacecraft", "Advanced Propulsion Specialist", "AI Research in Space Systems"],
-    avatar: "https://xploreon.space/team/chaitanya.jpg",
+    avatar: "images/chaitanya.png",
     social: {
       linkedin: "#",
       twitter: "#",
