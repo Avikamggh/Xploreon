@@ -11,7 +11,7 @@ const teamMembers = [
     department: "Leadership",
     bio: "Young scientist and visionary founder of Xploreon, leading the mission to pioneer reusable space technologies and global satellite services.",
     achievements: ["Founder of Xploreon", "Recognized Young Scientist at ISRO", "Semifinalist – Thiel Fellowship"],
-    avatar: "public/images/a(1).png",
+    avatar: "public/images/avikam.png",
     social: {
       linkedin: "#",
       twitter: "#",
