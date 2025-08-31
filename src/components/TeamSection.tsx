@@ -35,17 +35,27 @@ function resolveAvatar(src: string): string {
 }
 
 /* =========================
-   Data
+   Types & Data
    ========================= */
-const teamMembers = [
+type Social = { linkedin: string; twitter: string; email: string };
+type TeamMember = {
+  name: string;
+  role: string;
+  department: "Leadership" | "Engineering" | "Research & Development" | "Operations";
+  bio: string;
+  achievements: string[];
+  avatar: string; // filename in src/images/** or an https URL
+  social: Social;
+};
+
+const teamMembers: TeamMember[] = [
   {
     name: "Avikam Deol",
     role: "Founder & CEO",
     department: "Leadership",
     bio: "Young scientist and visionary founder of Xploreon, leading the mission to pioneer reusable space technologies and global satellite services.",
     achievements: ["Founder of Xploreon", "Recognized Young Scientist at ISRO", "Semifinalist – Thiel Fellowship"],
-    // If this file exists at src/images/images/a(1).png OR src/images/a(1).png the resolver will find it.
-    // Recommend renaming to team/avikam.png later for cleanliness.
+    // Recommend renaming to clean name later (e.g., team/avikam.png)
     avatar: "images/a(1).png",
     social: { linkedin: "#", twitter: "#", email: "physicsbyavikam@gmail.com" }
   },
@@ -166,8 +176,11 @@ const teamMembers = [
     avatar: "https://xploreon.space/team/mansi.jpg",
     social: { linkedin: "#", twitter: "#", email: "mansi.shah@xploreon.space" }
   }
-] as const;
+];
 
+/* =========================
+   Derived counters
+   ========================= */
 const departments = [
   { name: "Leadership", icon: <Award className="w-5 h-5" />, count: teamMembers.filter(m => m.department === "Leadership").length },
   { name: "Engineering", icon: <Rocket className="w-5 h-5" />, count: teamMembers.filter(m => m.department === "Engineering").length },
@@ -176,7 +189,7 @@ const departments = [
 ];
 
 /* =========================
-   Component
+   Component (DEFAULT EXPORT)
    ========================= */
 export default function TeamSection() {
   const [selectedDepartment, setSelectedDepartment] = React.useState("All");
@@ -278,7 +291,7 @@ export default function TeamSection() {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-deep-space via-transparent to-transparent opacity-80"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-deep-space via-transparent to-transparent opacity-80" />
                 <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="flex space-x-2">
                     <a href={member.social.linkedin} className="w-10 h-10 glass rounded-full flex items-center justify-center hover:neon-glow transition-all duration-300" aria-label="LinkedIn">
@@ -304,7 +317,7 @@ export default function TeamSection() {
                   <h4 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Key Achievements</h4>
                   {member.achievements.map((achievement, i) => (
                     <div key={i} className="flex items-center text-sm">
-                      <div className="w-2 h-2 bg-cyan-400 rounded-full mr-3 opacity-60"></div>
+                      <div className="w-2 h-2 bg-cyan-400 rounded-full mr-3 opacity-60" />
                       <span className="text-gray-300">{achievement}</span>
                     </div>
                   ))}
