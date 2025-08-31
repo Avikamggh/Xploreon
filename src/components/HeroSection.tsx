@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Rocket, ArrowRight } from 'lucide-react';
 import { Button } from './ui/button';
-import bg from '../image/xploreon.webp';
+import bg from '../images/xploreon.webp';
 
 
 
