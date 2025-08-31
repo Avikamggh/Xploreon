@@ -3,14 +3,6 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Linkedin, Twitter, Mail, Award, Users, Rocket } from 'lucide-react';
 
-/* =========================
-   Image imports - Direct approach
-   ========================= */
-// Import your local images directly
-import avikamImage from '../images/a(1).png';
-import chaitanyaImage from '../images/chaitanya.png';
-// Add other local images as needed
-
 /** Resolve avatar string to a real URL */
 function resolveAvatar(src: string): string {
   if (!src) return "";
@@ -18,21 +10,18 @@ function resolveAvatar(src: string): string {
   // Handle external URLs
   if (/^https?:\/\//i.test(src)) return src;
   
-  // Handle local images - map known local images
-  const localImageMap: Record<string, string> = {
-    'images/a(1).png': avikamImage,
-    'images/chaitanya.png': chaitanyaImage,
-    // Add mappings for other local images
-  };
+  // For local images, construct the path from the public directory
+  // Remove leading dots/slashes and construct proper path
+  const cleanSrc = src.replace(/^(\.\/|\/)?/, "");
   
-  // Try to find the image in our map
-  const normalizedSrc = src.replace(/^(\.\/|\/)?/, "");
-  if (localImageMap[normalizedSrc]) {
-    return localImageMap[normalizedSrc];
+  try {
+    // Try to construct the URL from the src/images directory
+    // This assumes your images are in src/images and will be served from /src/images
+    return `/src/images/${cleanSrc.replace('images/', '')}`;
+  } catch (error) {
+    console.warn(`Could not resolve image: ${src}`);
+    return "";
   }
-  
-  // Fallback to original src if not found
-  return src;
 }
 
 /* =========================
@@ -56,7 +45,7 @@ const teamMembers: TeamMember[] = [
     department: "Leadership",
     bio: "Young scientist and visionary founder of Xploreon, leading the mission to pioneer reusable space technologies and global satellite services.",
     achievements: ["Founder of Xploreon", "Recognized Young Scientist at ISRO", "Semifinalist – Thiel Fellowship"],
-    avatar: "images/a(1).png",
+    avatar: "https://ui-avatars.com/api/?name=Avikam+Deol&background=1e293b&color=0891b2&size=400",
     social: { linkedin: "#", twitter: "#", email: "physicsbyavikam@gmail.com" }
   },
   {
@@ -65,7 +54,7 @@ const teamMembers: TeamMember[] = [
     department: "Leadership",
     bio: "Director at Xploreon, leading spacecraft system architecture, propulsion systems, and AI-powered space technology research.",
     achievements: ["System Architect for Spacecraft", "Advanced Propulsion Specialist", "AI Research in Space Systems"],
-    avatar: "images/chaitanya.png",
+    avatar: "https://ui-avatars.com/api/?name=Chaitanya+Srivastava&background=1e293b&color=0891b2&size=400",
     social: { linkedin: "#", twitter: "#", email: "chaitanya.srivastava@xploreon.space" }
   },
   {
