@@ -36,10 +36,10 @@ const footerSections = [
 ];
 
 const socialLinks = [
-  { icon: <Twitter className="w-5 h-5" />, href: "#", name: "Twitter" },
-  { icon: <Linkedin className="w-5 h-5" />, href: "#", name: "LinkedIn" },
-  { icon: <Youtube className="w-5 h-5" />, href: "#", name: "YouTube" },
-  { icon: <Instagram className="w-5 h-5" />, href: "#", name: "Instagram" }
+  { icon: <Twitter className="w-5 h-5" />, href: "https://x.com/XploreonXn", name: "Twitter" },
+  { icon: <Linkedin className="w-5 h-5" />, href: "https://in.linkedin.com/company/xploreon?trk=public_profile_topcard-current-company", name: "LinkedIn" },
+  { icon: <Youtube className="w-5 h-5" />, href: "https://www.youtube.com/@Xploreonspace", name: "YouTube" },
+  { icon: <Instagram className="w-5 h-5" />, href: "https://www.instagram.com/xploreon_/?__pwa=1", name: "Instagram" }
 ];
 
 export function Footer() {
