@@ -1,8 +1,36 @@
+// Auto-import every image under src/images (and subfolders)
+const imageMap = import.meta.glob("../images/**/*.{png,jpg,jpeg,webp,svg}", {
+  eager: true,
+  import: "default",
+}) as Record<string, string>;
+
+// Resolve "avatar" strings (filename or relative path) to the imported URL
+function resolveAvatar(src: string): string {
+  // pass through external URLs
+  if (/^https?:\/\//i.test(src)) return src;
+
+  // normalize (allow "avikam.png", "team/avikam.png", "images/avikam.png")
+  const clean = src.replace(/^(\.\/|\/)?/, ""); // remove leading "./" or "/"
+
+  // possible keys in the glob map
+  const candidates = [
+    `../images/${clean}`,
+    `../${clean}`,
+    // last-resort: find by filename anywhere under images/
+    ...Object.keys(imageMap).filter((k) => k.endsWith("/" + clean)),
+  ];
+
+  for (const key of candidates) {
+    if (imageMap[key]) return imageMap[key];
+  }
+  // not found -> empty string (your ImageWithFallback should handle this)
+  return "";
+}
+
 import React from 'react';
 import { motion } from 'motion/react';
 import { Linkedin, Twitter, Mail, Award, Users, Rocket } from 'lucide-react';
-import chaitanya from "../images/chaitanya.png";
-import avikam from "../images/chaitanya.png";
+
 // Xploreon Team Members
 const teamMembers = [
   {
