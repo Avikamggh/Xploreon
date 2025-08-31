@@ -31,7 +31,7 @@ export function Navigation() {
   return (
     <motion.nav
       className={[
-        'fixed top-0 w-full z-50 transition-all duration-500',
+        'fixed top-0 w-full z-50 transition-all duration-500 bg-transparent',
         // light glass with blur; not black
         scrolled
           ? 'backdrop-blur-md bg-white/10'
