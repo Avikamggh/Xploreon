@@ -1,33 +1,39 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "./index.css";
-
-/**
- * NOTE: Drop your existing folders into src/:
- *   - pages/, components/, hooks/, styles/
- * And ensure the following imports resolve.
- */
-import { HomePage } from "./pages/HomePage";
-import { AboutPage } from "./pages/AboutPage";
-import { MissionsPage } from "./pages/MissionsPage";
-import { NewsPage } from "./pages/NewsPage";
-import { TechnologyPage } from "./pages/TechnologyPage";
-import { TeamPage } from "./pages/TeamPage";
-import { ContactPage } from "./pages/ContactPage";
-import { NotFoundPage } from "./pages/NotFoundPage";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Navigation } from './components/Navigation';
+import { Footer } from './components/Footer';
+import { ScrollToTop } from './components/ScrollToTop';
+import { HomePage } from './pages/HomePage';
+import { AboutPage } from './pages/AboutPage';
+import { TechnologyPage } from './pages/TechnologyPage';
+import { MissionsPage } from './pages/MissionsPage';
+import { NewsPage } from './pages/NewsPage';
+import { TeamPage } from './pages/TeamPage';
+import { ContactPage } from './pages/ContactPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/missions" element={<MissionsPage />} />
-        <Route path="/news" element={<NewsPage />} />
-        <Route path="/technology" element={<TechnologyPage />} />
-        <Route path="/team" element={<TeamPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </BrowserRouter>
+    <Router>
+      <ScrollToTop />
+      <div className="min-h-screen bg-space-black text-white">
+        <Navigation />
+        
+        <main className="pt-20">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/technology" element={<TechnologyPage />} />
+            <Route path="/missions" element={<MissionsPage />} />
+            <Route path="/news" element={<NewsPage />} />
+            <Route path="/team" element={<TeamPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </main>
+        
+        <Footer />
+      </div>
+    </Router>
   );
 }
