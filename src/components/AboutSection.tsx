@@ -188,7 +188,7 @@ export function AboutSection() {
         >
           {[
             { number: "1st", label: "Reusable CubeSat Mission", prefix: "" },
-            { number: "13+", label: "Engineers & Researchers", prefix: "" },
+            { number: "15+", label: "Engineers & Researchers", prefix: "" },
             { number: "5–8kg", label: "LEO Satellite Payload", prefix: "" },
             { number: "2026", label: "First Orbital Launch Target", prefix: "" }
           ].map((stat, index) => (
