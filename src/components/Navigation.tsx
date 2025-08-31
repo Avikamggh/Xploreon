@@ -30,17 +30,20 @@ export function Navigation() {
 
   return (
     <motion.nav
-      className="fixed top-0 w-full z-50 transition-all duration-500 bg-transparent py-4 sm:py-6"
+      className={`fixed top-0 w-full z-50 transition-all duration-500 
+        backdrop-blur-md border-b border-white/10 
+        ${scrolled ? 'bg-white/20 py-3' : 'bg-white/10 py-5'}
+      `}
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6 }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-4">
-          {/* Logo + wordmark (wordmark now visible on small too) */}
+          {/* Logo + wordmark */}
           <Link to="/" className="flex items-center gap-3">
             <img src={logo} alt="Xploreon Logo" className="h-12 sm:h-14 w-auto object-contain" />
-            <span className="block font-futuristic tracking-wider text-white/90 hover:text-cyan-300 transition-colors text-base sm:text-lg">
+            <span className="block font-futuristic tracking-wider text-white hover:text-cyan-300 transition-colors text-base sm:text-lg">
               XPLOREON
             </span>
           </Link>
@@ -56,7 +59,7 @@ export function Navigation() {
                       'px-4 py-2 text-sm uppercase tracking-wider font-medium rounded-lg relative transition-colors',
                       active
                         ? 'text-cyan-300 bg-cyan-300/10'
-                        : 'text-gray-100/80 hover:text-white hover:bg-white/10'
+                        : 'text-gray-100/85 hover:text-white hover:bg-white/10'
                     ].join(' ')}
                     initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -76,10 +79,10 @@ export function Navigation() {
             })}
           </div>
 
-          {/* Mobile toggle (transparent button) */}
+          {/* Mobile toggle */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden w-10 h-10 rounded-md flex items-center justify-center border border-white/20 bg-transparent"
+            className="lg:hidden w-10 h-10 rounded-md flex items-center justify-center border border-white/20 bg-white/10 backdrop-blur-md"
             aria-label="Toggle menu"
           >
             {isOpen ? <X className="w-6 h-6 text-cyan-300" /> : <Menu className="w-6 h-6 text-cyan-300" />}
