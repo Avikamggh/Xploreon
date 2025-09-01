@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Calendar, ArrowRight, Globe } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import Starfield from "./Starfield"; // ⭐ add stars everywhere
 
 type Article = {
   id: string;
@@ -13,21 +14,13 @@ type Article = {
   source: string;
 };
 
-// fallback images (royalty-free space pics)
+// fallback images (used only when absolutely needed)
 const fallbackImages = [
   "https://images.unsplash.com/photo-1580428180121-cf6631fd988c?ixlib=rb-4.0.3&w=1080&q=80",
   "https://images.unsplash.com/photo-1447433819943-74a20887a81e?ixlib=rb-4.0.3&w=1080&q=80",
   "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-4.0.3&w=1080&q=80",
   "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?ixlib=rb-4.0.3&w=1080&q=80",
 ];
-
-function getValidImage(img: string, idx: number) {
-  if (!img || img.includes("nasa-logo")) {
-    // pick a fallback image based on index (to avoid duplicates)
-    return fallbackImages[idx % fallbackImages.length];
-  }
-  return img;
-}
 
 export function NewsSection() {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -37,53 +30,105 @@ export function NewsSection() {
   useEffect(() => {
     async function fetchNews() {
       try {
-        // Fetch Spaceflight News
+        const all: Article[] = [];
+
+        // 1. Spaceflight News
         const sfRes = await fetch("https://api.spaceflightnewsapi.net/v4/articles/?limit=20");
         const sfData = await sfRes.json();
-        const sfArticles: Article[] = sfData.results.map((a: any) => ({
-          id: `sf-${a.id}`,
-          title: a.title,
-          summary: a.summary,
-          url: a.url,
-          image_url: a.image_url,
-          published_at: a.published_at,
-          source: a.news_site,
-        }));
+        all.push(
+          ...sfData.results.map((a: any) => ({
+            id: `sf-${a.id}`,
+            title: a.title,
+            summary: a.summary,
+            url: a.url,
+            image_url: a.image_url,
+            published_at: a.published_at,
+            source: a.news_site,
+          }))
+        );
 
-        // Fetch Launch Library
+        // 2. Launch Library
         const launchRes = await fetch("https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=10");
         const launchData = await launchRes.json();
-        const launchArticles: Article[] = launchData.results.map((l: any) => ({
-          id: `ll-${l.id}`,
-          title: `Upcoming Launch: ${l.name}`,
-          summary: l.mission?.description || "Upcoming space mission.",
-          url: l.url,
-          image_url: l.image || "",
-          published_at: l.net,
-          source: "Launch Library",
-        }));
+        all.push(
+          ...launchData.results.map((l: any) => ({
+            id: `ll-${l.id}`,
+            title: `Upcoming Launch: ${l.name}`,
+            summary: l.mission?.description || "Upcoming space mission.",
+            url: l.url,
+            image_url: l.image || "",
+            published_at: l.net,
+            source: "Launch Library",
+          }))
+        );
 
-        // Fetch NASA RSS (via rss2json)
+        // 3. NASA RSS
         const nasaRes = await fetch(
           "https://api.rss2json.com/v1/api.json?rss_url=https://www.nasa.gov/rss/dyn/breaking_news.rss"
         );
         const nasaData = await nasaRes.json();
-        const nasaArticles: Article[] = nasaData.items.slice(0, 10).map((n: any, i: number) => ({
-          id: `nasa-${i}`,
-          title: n.title,
-          summary: n.description || "NASA breaking news update.",
-          url: n.link,
-          image_url: n.enclosure?.link || "",
-          published_at: n.pubDate,
-          source: "NASA",
-        }));
-
-        // Merge and sort
-        const allArticles = [...sfArticles, ...launchArticles, ...nasaArticles].sort(
-          (a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
+        all.push(
+          ...nasaData.items.slice(0, 10).map((n: any, i: number) => ({
+            id: `nasa-${i}`,
+            title: n.title,
+            summary: n.description || "NASA breaking news update.",
+            url: n.link,
+            image_url: n.enclosure?.link || "",
+            published_at: n.pubDate,
+            source: "NASA",
+          }))
         );
 
-        setArticles(allArticles);
+        // 4. Phys.org Physics RSS
+        const physRes = await fetch(
+          "https://api.rss2json.com/v1/api.json?rss_url=https://phys.org/rss-feed/physics-news/"
+        );
+        const physData = await physRes.json();
+        all.push(
+          ...physData.items.slice(0, 10).map((p: any, i: number) => ({
+            id: `phys-${i}`,
+            title: p.title,
+            summary: p.description || "Physics news update.",
+            url: p.link,
+            image_url: p.enclosure?.link || "",
+            published_at: p.pubDate,
+            source: "Phys.org",
+          }))
+        );
+
+        // 5. Scientific American (Space RSS)
+        const saRes = await fetch(
+          "https://api.rss2json.com/v1/api.json?rss_url=https://www.scientificamerican.com/feed/space/"
+        );
+        const saData = await saRes.json();
+        all.push(
+          ...saData.items.slice(0, 10).map((s: any, i: number) => ({
+            id: `sciam-${i}`,
+            title: s.title,
+            summary: s.description || "Scientific American space update.",
+            url: s.link,
+            image_url: s.enclosure?.link || "",
+            published_at: s.pubDate,
+            source: "Scientific American",
+          }))
+        );
+
+        // ✅ Filter: no empty image + no duplicates
+        const seen = new Set();
+        const filtered = all.filter((a) => {
+          if (!a.image_url) return false; // skip missing images
+          if (seen.has(a.image_url)) return false; // skip duplicates
+          seen.add(a.image_url);
+          return true;
+        });
+
+        // Sort by date
+        const sorted = filtered.sort(
+          (a, b) =>
+            new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
+        );
+
+        setArticles(sorted);
       } catch (err) {
         console.error("Error fetching space news:", err);
       } finally {
@@ -94,12 +139,13 @@ export function NewsSection() {
     fetchNews();
   }, []);
 
-  const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + 6);
-  };
+  const handleLoadMore = () => setVisibleCount((prev) => prev + 6);
 
   return (
     <section className="py-24 relative overflow-hidden">
+      {/* ⭐ star background */}
+      <Starfield density={80} />
+
       <div className="absolute inset-0 gradient-cosmic opacity-30" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
@@ -112,11 +158,11 @@ export function NewsSection() {
           viewport={{ once: true }}
         >
           <h2 className="font-futuristic text-5xl md:text-6xl mb-6 neon-text">
-            Latest Space News
+            Latest Space & Physics News
           </h2>
           <div className="w-32 h-1 bg-gradient-to-r from-cyan-400 to-blue-500 mx-auto mb-8"></div>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Real-time updates on space exploration, rockets, satellites, and missions worldwide.
+            Real-time updates on space exploration, physics breakthroughs, rockets, and missions worldwide.
           </p>
         </motion.div>
 
@@ -138,7 +184,7 @@ export function NewsSection() {
                 >
                   <div className="relative h-48 overflow-hidden">
                     <ImageWithFallback
-                      src={getValidImage(article.image_url, index)}
+                      src={article.image_url}
                       alt={article.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
