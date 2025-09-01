@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navigation } from './components/Navigation';
 import { Footer } from './components/Footer';
 import Learning from "./components/Learning";
+import Tracker from "./components/Tracker";
 import Competitions from "./components/Competitions";  
 import { ScrollToTop } from './components/ScrollToTop';
 import { HomePage } from './pages/HomePage';
@@ -29,6 +30,7 @@ export default function App() {
             <Route path="/missions" element={<MissionsPage />} />
             <Route path="/news" element={<NewsPage />} />
             <Route path="/learning" element={<Learning />} /> 
+            <Route path="/tracker" element={<Tracker />} />
             <Route path="/competitions" element={<Competitions />} />
 
             <Route path="/team" element={<TeamPage />} />
