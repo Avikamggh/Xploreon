@@ -5,6 +5,8 @@ import { ImageWithFallback } from './figma/ImageWithFallback';
 import StarfieldInline from "./Starfield"; // adjust path if needed
 import avikamImg from "../images/avikam.png";
 import chaitanyaImg from "../images/chaitanya.png";
+import omImg from "../images/om.png";
+import pImg from "../images/p.png";
 // add the rest...
 
 
@@ -42,7 +44,7 @@ const teamMembers = [
     department: "Leadership",
     bio: "Driving innovative approaches across missions, technology, and collaboration at Xploreon.",
     achievements: ["Innovation Leadership", "Strategic R&D Direction", "Cross-team Collaboration"],
-    avatar: "https://xploreon.space/team/prayesi.jpg",
+    avatar: pImg,
     social: {
       linkedin: "#",
       twitter: "#",
@@ -55,7 +57,7 @@ const teamMembers = [
     department: "Engineering",
     bio: "Leading the development of mission-critical technology for reusable launch systems and spacecraft.",
     achievements: ["Technology Leadership", "Reusable Rocket Systems", "Mission-Critical Infrastructure"],
-    avatar: "https://xploreon.space/team/omprakash.jpg",
+    avatar: omImg,
     social: {
       linkedin: "#",
       twitter: "#",
