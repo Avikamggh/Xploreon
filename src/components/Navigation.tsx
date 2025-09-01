@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Menu, X } from 'lucide-react';
-import logo from '../images/x.webp'; // adjust path if needed
+import logo from '../public/images/x.webp'; // adjust path if needed
 
 const navItems = [
   { name: 'Home', href: '/' },
