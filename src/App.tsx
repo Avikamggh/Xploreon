@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navigation } from './components/Navigation';
 import { Footer } from './components/Footer';
-import Learning from "./components/Learning";
+
 
 import Competitions from "./components/Competitions";  
 import { ScrollToTop } from './components/ScrollToTop';
@@ -29,7 +29,7 @@ export default function App() {
             <Route path="/technology" element={<TechnologyPage />} />
             <Route path="/missions" element={<MissionsPage />} />
             <Route path="/news" element={<NewsPage />} />
-            <Route path="/learning" element={<Learning />} /> 
+            
           
             <Route path="/competitions" element={<Competitions />} />
 
