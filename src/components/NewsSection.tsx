@@ -1,3 +1,19 @@
+// A fixed pool of space images (public/royalty-free)
+const SPACE_IMAGES: string[] = [
+  "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80",
+  "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80",
+  "https://images.unsplash.com/photo-1454789548928-9efd52dc4031?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80",
+  "https://images.unsplash.com/photo-1580428180121-cf6631fd988c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80",
+  "https://images.unsplash.com/photo-1517976487492-5750f3195933?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80",
+  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80",
+  "https://images.unsplash.com/photo-1447433819943-74a20887a81e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80",
+  "https://images.unsplash.com/photo-1476610182048-b716b8518aae?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80",
+  "https://images.unsplash.com/photo-1470115636492-6d2b56f9146e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80",
+  "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80"
+];
+
+
+
 // src/components/NewsSection.tsx
 import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "motion/react";
@@ -84,7 +100,8 @@ function useHardcodedArticles(): Article[] {
     ];
 
     // Unique space images via Unsplash seed (no duplicates)
-    const spaceImg = (i: number) =>
+    const spaceImg = (i: number) => SPACE_IMAGES[i % SPACE_IMAGES.length];
+
       `https://source.unsplash.com/960x540/?space,galaxy,nebula,astronomy&sig=${i}`;
 
     const items: Article[] = Array.from({ length: 100 }).map((_, i) => {
