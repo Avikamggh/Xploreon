@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Linkedin, Twitter, Mail, Award, Users, Rocket } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import StarfieldInline from "./Starfield"; // adjust path if needed
 
 // Xploreon Team Members
 const teamMembers = [
@@ -208,6 +209,8 @@ export function TeamSection() {
   return (
     <section className="py-24 relative overflow-hidden">
       {/* Background animation */}
+            <StarfieldInline density={800} />
+
       <div className="absolute inset-0 bg-gradient-to-br from-space-black via-deep-space to-nebula-blue/20">
         <div className="absolute inset-0">
           {[...Array(30)].map((_, i) => (
