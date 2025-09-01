@@ -71,7 +71,7 @@ export function MissionTracker() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         {/* Hero section */}
         {/* ⭐ Starfield background */}
-      <StarfieldInline density={400} />
+      <StarfieldInline density={800} />
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-32">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
