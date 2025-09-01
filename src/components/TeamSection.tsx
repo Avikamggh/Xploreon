@@ -3,6 +3,10 @@ import { motion } from 'motion/react';
 import { Linkedin, Twitter, Mail, Award, Users, Rocket } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import StarfieldInline from "./Starfield"; // adjust path if needed
+import avikamImg from "../images/avikam.png";
+import chaitanyaImg from "../images/chaitanya.png";
+// add the rest...
+
 
 // Xploreon Team Members
 const teamMembers = [
@@ -12,7 +16,7 @@ const teamMembers = [
     department: "Leadership",
     bio: "Young scientist and visionary founder of Xploreon, leading the mission to pioneer reusable space technologies and global satellite services.",
     achievements: ["Founder of Xploreon", "Recognized Young Scientist at ISRO", "Semifinalist – Thiel Fellowship"],
-    avatar: "public/images/avikam.png",
+    avatar: avikamImg,
     social: {
       linkedin: "#",
       twitter: "#",
@@ -25,7 +29,7 @@ const teamMembers = [
     department: "Leadership",
     bio: "Director at Xploreon, leading spacecraft system architecture, propulsion systems, and AI-powered space technology research.",
     achievements: ["System Architect for Spacecraft", "Advanced Propulsion Specialist", "AI Research in Space Systems"],
-    avatar: "public/images/chaitanya.png",
+    avatar: chaitanyaImg,
     social: {
       linkedin: "#",
       twitter: "#",
