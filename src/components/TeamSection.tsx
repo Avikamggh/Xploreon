@@ -15,6 +15,11 @@ import mansiImg from "../images/mansi.png";
 import divanshiImg from "../images/divanshi.png";
 import hemantImg from "../images/hemant.png";
 import harshilImg from "../images/harshil.png";
+import rishitaImg from "../images/rishita.png";
+import riyaImg from "../images/riya.png";
+import uImg from "../images/u.png";
+import vishardImg from "../images/vishard.png";
+
 // add the rest...
 
 
@@ -91,7 +96,7 @@ const teamMembers = [
     department: "Engineering",
     bio: "Building advanced software systems for satellite control, telemetry, and mission data pipelines.",
     achievements: ["Mission Software Development", "Telemetry Systems", "Satellite Data Engineering"],
-    avatar: "https://xploreon.space/team/rishita.jpg",
+    avatar: rishitaImg,
     social: {
       linkedin: "#",
       twitter: "#",
@@ -130,7 +135,7 @@ const teamMembers = [
     department: "Engineering",
     bio: "Engineer working on propulsion, aerodynamics, and structural systems for reusable spacecraft.",
     achievements: ["Aerospace Engineering", "Reusable Systems", "Propulsion Specialist"],
-    avatar: "https://xploreon.space/team/vishard.jpg",
+    avatar: vishardImg,
     social: {
       linkedin: "#",
       twitter: "#",
@@ -195,7 +200,20 @@ const teamMembers = [
     department: "Research & Development",
     bio: "Mathematical modeling expert for trajectory optimization, orbital mechanics, and mission safety.",
     achievements: ["Trajectory Optimization", "Mathematical Modeling", "Orbital Mechanics"],
-    avatar: "https://xploreon.space/team/utkarsh.jpg",
+    avatar: uImg,
+    social: {
+      linkedin: "#",
+      twitter: "#",
+      email: "utkarsh.tripathi@xploreon.space"
+    }
+  },
+  {
+    name: "Riya",
+    role: "Intern",
+    department: "CI CD pipeline",
+    bio: "Mathematical modeling expert for trajectory optimization, orbital mechanics, and mission safety.",
+    achievements: ["Trajectory Optimization", "Mathematical Modeling", "Orbital Mechanics"],
+    avatar: riyaImg,
     social: {
       linkedin: "#",
       twitter: "#",
@@ -223,6 +241,8 @@ const departments = [
   { name: "Engineering", icon: <Rocket className="w-5 h-5" />, count: teamMembers.filter(m => m.department === "Engineering").length },
   { name: "Research & Development", icon: <Users className="w-5 h-5" />, count: teamMembers.filter(m => m.department === "Research & Development").length },
   { name: "Operations", icon: <Users className="w-5 h-5" />, count: teamMembers.filter(m => m.department === "Operations").length }
+  { name: "Interns", icon: <Users className="w-5 h-5" />, count: teamMembers.filter(m => m.department === "Intern").length }
+
 ];
 
 export function TeamSection() {
