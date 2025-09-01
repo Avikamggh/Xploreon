@@ -8,6 +8,9 @@ import chaitanyaImg from "../images/chaitanya.png";
 import omImg from "../images/om.png";
 import pImg from "../images/p.png";
 import priyanshImg from "../images/priyansh.png";
+import mehulImg from "../images/mehul.png";
+import nImg from "../images/n.png";
+import neilImg from "../images/neil.png";
 // add the rest...
 
 
@@ -71,7 +74,7 @@ const teamMembers = [
     department: "Engineering",
     bio: "Designing and modeling mission systems through advanced CAD for spacecraft engineering.",
     achievements: ["CAD System Designer", "Mission Systems Specialist", "Precision Modeling"],
-    avatar: "https://xploreon.space/team/narayan.jpg",
+    avatar: nImg,
     social: {
       linkedin: "#",
       twitter: "#",
@@ -97,7 +100,7 @@ const teamMembers = [
     department: "Operations",
     bio: "Overseeing development and management of infrastructure for rocket launches and mission facilities.",
     achievements: ["Launchpad Project Management", "Facilities Development", "Mission Infrastructure"],
-    avatar: "https://xploreon.space/team/mehul.jpg",
+    avatar: mehulImg,
     social: {
       linkedin: "#",
       twitter: "#",
@@ -149,7 +152,7 @@ const teamMembers = [
     department: "Engineering",
     bio: "Designing and testing aerospace systems, propulsion methods, and mission safety frameworks.",
     achievements: ["Propulsion Engineering", "Mission Testing", "Safety Systems"],
-    avatar: "https://xploreon.space/team/neel.jpg",
+    avatar: neilImg,
     social: {
       linkedin: "#",
       twitter: "#",
