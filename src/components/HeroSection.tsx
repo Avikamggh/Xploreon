@@ -3,6 +3,8 @@ import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { Button } from './ui/button';
 import bg from '../images/xploreon.webp';
+import { Link } from "react-router-dom";
+
 
 export function HeroSection() {
   return (
@@ -68,6 +70,7 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.5 }}
         >
+          <Link to="/technology">
           <Button
             size="lg"
             className="
@@ -82,18 +85,10 @@ export function HeroSection() {
             Our Vision &amp; Technology
             <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
           </Button>
+            </Link>
         </motion.div>
 
-        {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          <div className="w-6 h-10 border border-white/30 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white/60 rounded-full mt-2" />
-          </div>
-        </motion.div>
+       
       </div>
     </section>
   );
