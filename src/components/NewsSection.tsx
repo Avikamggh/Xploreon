@@ -1,24 +1,7 @@
-// A fixed pool of space images (public/royalty-free)
-const SPACE_IMAGES: string[] = [
-  "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80",
-  "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80",
-  "https://images.unsplash.com/photo-1454789548928-9efd52dc4031?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80",
-  "https://images.unsplash.com/photo-1580428180121-cf6631fd988c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80",
-  "https://images.unsplash.com/photo-1517976487492-5750f3195933?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80",
-  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80",
-  "https://images.unsplash.com/photo-1447433819943-74a20887a81e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80",
-  "https://images.unsplash.com/photo-1476610182048-b716b8518aae?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80",
-  "https://images.unsplash.com/photo-1470115636492-6d2b56f9146e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80",
-  "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80"
-];
-
-
-
 // src/components/NewsSection.tsx
 import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "motion/react";
 import { Calendar, ArrowRight, Globe } from "lucide-react";
-import { ImageWithFallback } from "./figma/ImageWithFallback"; // or replace with <img />
 
 type Article = {
   id: string;
@@ -30,15 +13,15 @@ type Article = {
   source: string;
 };
 
-/* ---------- Inline Starfield (higher density) ---------- */
-function StarfieldInline({ density = 220 }: { density?: number }) {
+/* ---------- Dense inline starfield (no extra files) ---------- */
+function StarfieldInline({ density = 260 }: { density?: number }) {
   const stars = useMemo(
     () =>
       Array.from({ length: density }).map((_, i) => ({
         key: i,
         left: `${Math.random() * 100}%`,
         top: `${Math.random() * 100}%`,
-        size: Math.random() < 0.88 ? 1 : 2, // mostly tiny, some brighter
+        size: Math.random() < 0.9 ? 1 : 2,
         delay: `${Math.random() * 5}s`,
         dur: `${3 + Math.random() * 4}s`,
       })),
@@ -73,91 +56,136 @@ function StarfieldInline({ density = 220 }: { density?: number }) {
     </>
   );
 }
-/* ------------------------------------------------------- */
+/* ------------------------------------------------------------- */
 
-/** Hard-coded 100 items (newest → oldest) with SPACE images */
-function useHardcodedArticles(): Article[] {
-  return useMemo(() => {
-    const now = new Date();
-    const sources = ["Xploreon Newsroom", "NASA", "Space.com", "ESA", "Phys.org", "Scientific American"];
-    const topics = [
-      "Lunar Habitat Prototype",
-      "Reusable Launch Systems",
-      "Mars ISRU Breakthrough",
-      "AI-Assisted Orbit Determination",
-      "Exoplanet Atmosphere Study",
-      "Space Debris Mitigation",
-      "Next-Gen Solar Sail",
-      "Cryogenic Fuel Management",
-      "Deep Space Communication",
-      "Microgravity Manufacturing",
-    ];
-    const summaries = [
-      "Key advances and implications for upcoming missions.",
-      "Engineers share early results and performance data.",
-      "What this means for sustainable exploration.",
-      "Research highlights, open questions, and roadmap.",
-    ];
-
-    // Unique space images via Unsplash seed (no duplicates)
-    const spaceImg = (i: number) => SPACE_IMAGES[i % SPACE_IMAGES.length];
-
-      `https://source.unsplash.com/960x540/?space,galaxy,nebula,astronomy&sig=${i}`;
-
-    const items: Article[] = Array.from({ length: 100 }).map((_, i) => {
-      const published = new Date(now.getTime() - i * 6 * 60 * 60 * 1000); // every 6h
-      const src = sources[i % sources.length];
-      const topic = topics[i % topics.length];
-      const n = 100 - i;
-
-      return {
-        id: `hc-${i}`,
-        title: `#${n} ${topic}`,
-        summary: summaries[i % summaries.length],
-        url:
-          src === "NASA"
-            ? "https://www.nasa.gov/"
-            : src === "ESA"
-            ? "https://www.esa.int/"
-            : "https://www.space.com/",
-        image_url: spaceImg(i), // guaranteed unique space image
-        published_at: published.toISOString(),
-        source: src,
-      };
-    });
-
-    // newest-first (already is, but keep it explicit)
-    items.sort(
-      (a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
-    );
-
-    return items;
-  }, []);
+/** Normalize image URL for dedupe (ignore query params/sizes) */
+function imageKey(url: string) {
+  try {
+    const u = new URL(url);
+    return `${u.origin}${u.pathname}`; // ignore ?query
+  } catch {
+    return url.split("?")[0];
+  }
 }
 
 export function NewsSection() {
-  const hardcoded = useHardcodedArticles(); // 100 items
   const [articles, setArticles] = useState<Article[]>([]);
   const [visibleCount, setVisibleCount] = useState(12);
   const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
-    setLoading(true);
-    const t = setTimeout(() => {
-      setArticles(hardcoded);
-      setLoading(false);
-    }, 120);
-    return () => clearTimeout(t);
-  }, [hardcoded]);
+    const ac = new AbortController();
+    const opts: RequestInit = { cache: "no-store", signal: ac.signal };
 
-  const handleLoadMore = () => setVisibleCount((prev) => Math.min(prev + 12, articles.length));
+    async function fetchJSON<T>(url: string): Promise<T> {
+      const res = await fetch(url, opts);
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText} for ${url}`);
+      return res.json() as Promise<T>;
+    }
+
+    async function run() {
+      setLoading(true);
+      setErr(null);
+      try {
+        // 1) Spaceflight News API v4 — articles, blogs, reports
+        const sfnArticlesP = fetchJSON<any>(
+          "https://api.spaceflightnewsapi.net/v4/articles/?limit=40&ordering=-published_at"
+        );
+        const sfnBlogsP = fetchJSON<any>(
+          "https://api.spaceflightnewsapi.net/v4/blogs/?limit=25&ordering=-published_at"
+        );
+        const sfnReportsP = fetchJSON<any>(
+          "https://api.spaceflightnewsapi.net/v4/reports/?limit=25&ordering=-published_at"
+        );
+
+        // 2) Launch Library — upcoming launches (many have images)
+        const llUpcomingP = fetchJSON<any>(
+          "https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=20&ordering=-net"
+        );
+
+        const [sfnArticles, sfnBlogs, sfnReports, llUpcoming] = await Promise.all([
+          sfnArticlesP,
+          sfnBlogsP,
+          sfnReportsP,
+          llUpcomingP,
+        ]);
+
+        const list: Article[] = [
+          ...(sfnArticles.results || []).map((a: any) => ({
+            id: `sfa-${a.id}`,
+            title: a.title,
+            summary: a.summary || "",
+            url: a.url,
+            image_url: a.image_url || "",
+            published_at: a.published_at,
+            source: a.news_site || "Spaceflight News",
+          })),
+          ...(sfnBlogs.results || []).map((b: any) => ({
+            id: `sfb-${b.id}`,
+            title: b.title,
+            summary: b.summary || "",
+            url: b.url,
+            image_url: b.image_url || "",
+            published_at: b.published_at,
+            source: b.news_site || "Spaceflight Blogs",
+          })),
+          ...(sfnReports.results || []).map((r: any) => ({
+            id: `sfr-${r.id}`,
+            title: r.title,
+            summary: r.summary || "",
+            url: r.url,
+            image_url: r.image_url || "",
+            published_at: r.published_at,
+            source: r.news_site || "Spaceflight Reports",
+          })),
+          ...(llUpcoming.results || []).map((l: any) => ({
+            id: `ll-${l.id}`,
+            title: `Upcoming Launch: ${l.name}`,
+            summary: l.mission?.description || "Upcoming space mission.",
+            url: l.url,
+            image_url: l.image || "",
+            published_at: l.net,
+            source: "Launch Library",
+          })),
+        ];
+
+        // Filter: must have an image & dedupe by image URL (ignoring size params)
+        const seen = new Set<string>();
+        const withImages = list.filter((a) => {
+          if (!a.image_url) return false;
+          const key = imageKey(a.image_url);
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+
+        // Sort newest-first by published_at
+        withImages.sort(
+          (a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
+        );
+
+        setArticles(withImages);
+      } catch (e: any) {
+        console.error(e);
+        setErr("Couldn’t load news right now. Please refresh in a moment.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    run();
+    return () => ac.abort();
+  }, []);
+
+  const handleLoadMore = () =>
+    setVisibleCount((prev) => Math.min(prev + 12, articles.length));
 
   return (
     <section className="py-24 relative overflow-hidden">
-      {/* 🌌 Stars with higher density */}
-      <StarfieldInline density={260} />
-
-      {/* optional gradient veil if you use it sitewide */}
+      {/* 🌌 dense stars */}
+      <StarfieldInline density={280} />
+      {/* Optional site gradient veil if you use one */}
       <div className="absolute inset-0 gradient-cosmic opacity-30" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
@@ -170,41 +198,47 @@ export function NewsSection() {
           viewport={{ once: true }}
         >
           <h2 className="font-futuristic text-5xl md:text-6xl mb-6 neon-text">
-            Latest Space & Physics News
+            Latest Space News
           </h2>
           <div className="w-32 h-1 bg-gradient-to-r from-cyan-400 to-blue-500 mx-auto mb-8" />
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Curated hard-coded feed for blazing-fast demos — 100 newest items, no network calls (except images).
+            Live feed from Spaceflight News & Launch Library. Images-only, deduped, newest first.
           </p>
         </motion.div>
 
+        {/* Body */}
         {loading ? (
           <p className="text-center text-gray-400">Loading news…</p>
+        ) : err ? (
+          <div className="text-center text-red-300">{err}</div>
         ) : (
           <>
-            {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {articles.slice(0, visibleCount).map((article, index) => (
-                <motion.div
-                  key={article.id}
-                  className="glass-card rounded-2xl overflow-hidden hover:neon-border transition-all duration-500 cursor-pointer group"
+              {articles.slice(0, visibleCount).map((a, idx) => (
+                <motion.article
+                  key={a.id}
+                  className="glass-card rounded-2xl overflow-hidden hover:neon-border transition-all duration-500 group"
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.06 }}
+                  transition={{ duration: 0.6, delay: idx * 0.05 }}
                   viewport={{ once: true }}
-                  whileHover={{ scale: 1.03 }}
                 >
-                  <div className="relative h-48 overflow-hidden">
-                    {/* Replace with <img> if you don't have ImageWithFallback */}
-                    <ImageWithFallback
-                      src={article.image_url}
-                      alt={article.title}
+                  <div className="relative h-48 overflow-hidden bg-black/30">
+                    <img
+                      src={a.image_url}
+                      alt={a.title}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      onError={(e) => {
+                        // If an upstream image 404s later, hide this card’s image area
+                        (e.currentTarget as HTMLImageElement).style.display = "none";
+                      }}
                     />
                     <div className="absolute top-4 right-4">
                       <span className="glass px-3 py-1 rounded-full text-xs font-medium text-cyan-400 flex items-center space-x-1">
                         <Globe className="w-4 h-4" />
-                        <span>{article.source}</span>
+                        <span>{a.source}</span>
                       </span>
                     </div>
                   </div>
@@ -212,32 +246,37 @@ export function NewsSection() {
                   <div className="p-6">
                     <div className="flex items-center space-x-2 mb-3 text-sm text-gray-400">
                       <Calendar className="w-4 h-4" />
-                      <span>{new Date(article.published_at).toLocaleDateString()}</span>
+                      <span>
+                        {isNaN(new Date(a.published_at).getTime())
+                          ? a.published_at
+                          : new Date(a.published_at).toLocaleDateString()}
+                      </span>
                     </div>
 
-                    <h4 className="font-futuristic text-xl mb-3 text-white leading-tight group-hover:text-cyan-400 transition-colors">
-                      {article.title}
-                    </h4>
+                    <h3 className="font-futuristic text-xl mb-3 text-white leading-tight group-hover:text-cyan-400 transition-colors">
+                      {a.title}
+                    </h3>
 
-                    <p className="text-gray-300 text-sm leading-relaxed mb-4 line-clamp-3">
-                      {article.summary}
-                    </p>
+                    {a.summary && (
+                      <p className="text-gray-300 text-sm leading-relaxed mb-4 line-clamp-3">
+                        {a.summary}
+                      </p>
+                    )}
 
                     <a
-                      href={article.url}
+                      href={a.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center space-x-2 text-cyan-400 hover:text-white transition-colors text-sm font-medium group"
+                      className="inline-flex items-center space-x-2 text-cyan-400 hover:text-white transition-colors text-sm font-medium group"
                     >
                       <span>Read More</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </a>
                   </div>
-                </motion.div>
+                </motion.article>
               ))}
             </div>
 
-            {/* Load More */}
             {visibleCount < articles.length && (
               <div className="text-center mt-12">
                 <button
