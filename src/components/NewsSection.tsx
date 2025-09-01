@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "motion/react";
 import { Calendar, ArrowRight, Globe } from "lucide-react";
-import { ImageWithFallback } from "./figma/ImageWithFallback"; // or swap to <img />
+import { ImageWithFallback } from "./figma/ImageWithFallback"; // or replace with <img />
 
 type Article = {
   id: string;
@@ -14,15 +14,15 @@ type Article = {
   source: string;
 };
 
-/* ---------- Inline Starfield (no extra files) ---------- */
-function StarfieldInline({ density = 90 }: { density?: number }) {
+/* ---------- Inline Starfield (higher density) ---------- */
+function StarfieldInline({ density = 220 }: { density?: number }) {
   const stars = useMemo(
     () =>
       Array.from({ length: density }).map((_, i) => ({
         key: i,
         left: `${Math.random() * 100}%`,
         top: `${Math.random() * 100}%`,
-        size: Math.random() < 0.85 ? 1 : 2,
+        size: Math.random() < 0.88 ? 1 : 2, // mostly tiny, some brighter
         delay: `${Math.random() * 5}s`,
         dur: `${3 + Math.random() * 4}s`,
       })),
@@ -34,10 +34,10 @@ function StarfieldInline({ density = 90 }: { density?: number }) {
       <style>{`
         @keyframes xp-star-twinkle {
           0%,100% { opacity:.25; transform:scale(1); }
-          50%     { opacity:.9;  transform:scale(1.15); }
+          50%     { opacity:.95; transform:scale(1.15); }
         }
       `}</style>
-      <div className="pointer-events-none absolute inset-0 overflow-hidden text-white/40">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden text-white/45">
         {stars.map((s) => (
           <span
             key={s.key}
@@ -59,10 +59,10 @@ function StarfieldInline({ density = 90 }: { density?: number }) {
 }
 /* ------------------------------------------------------- */
 
-/** Hard-coded 100 latest items (time-stamped newest→oldest) */
+/** Hard-coded 100 items (newest → oldest) with SPACE images */
 function useHardcodedArticles(): Article[] {
   return useMemo(() => {
-    const now = new Date(); // today
+    const now = new Date();
     const sources = ["Xploreon Newsroom", "NASA", "Space.com", "ESA", "Phys.org", "Scientific American"];
     const topics = [
       "Lunar Habitat Prototype",
@@ -83,11 +83,12 @@ function useHardcodedArticles(): Article[] {
       "Research highlights, open questions, and roadmap.",
     ];
 
-    // 100 unique seeded images (no duplicates)
-    const img = (i: number) => `https://picsum.photos/seed/space-${i}/960/540`;
+    // Unique space images via Unsplash seed (no duplicates)
+    const spaceImg = (i: number) =>
+      `https://source.unsplash.com/960x540/?space,galaxy,nebula,astronomy&sig=${i}`;
 
     const items: Article[] = Array.from({ length: 100 }).map((_, i) => {
-      const published = new Date(now.getTime() - i * 6 * 60 * 60 * 1000); // every 6 hours
+      const published = new Date(now.getTime() - i * 6 * 60 * 60 * 1000); // every 6h
       const src = sources[i % sources.length];
       const topic = topics[i % topics.length];
       const n = 100 - i;
@@ -102,43 +103,33 @@ function useHardcodedArticles(): Article[] {
             : src === "ESA"
             ? "https://www.esa.int/"
             : "https://www.space.com/",
-        image_url: img(i), // guaranteed
+        image_url: spaceImg(i), // guaranteed unique space image
         published_at: published.toISOString(),
         source: src,
       };
     });
 
-    // (Not really needed since images are unique, but keep rules intact)
-    const seen = new Set<string>();
-    const filtered = items.filter((a) => {
-      if (!a.image_url) return false;
-      if (seen.has(a.image_url)) return false;
-      seen.add(a.image_url);
-      return true;
-    });
-
-    // newest-first
-    filtered.sort(
+    // newest-first (already is, but keep it explicit)
+    items.sort(
       (a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
     );
 
-    return filtered;
+    return items;
   }, []);
 }
 
 export function NewsSection() {
   const hardcoded = useHardcodedArticles(); // 100 items
   const [articles, setArticles] = useState<Article[]>([]);
-  const [visibleCount, setVisibleCount] = useState(12); // show 12, then Load More
+  const [visibleCount, setVisibleCount] = useState(12);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // simulate async load for consistency with your UI (and future swap)
     setLoading(true);
     const t = setTimeout(() => {
       setArticles(hardcoded);
       setLoading(false);
-    }, 150);
+    }, 120);
     return () => clearTimeout(t);
   }, [hardcoded]);
 
@@ -146,10 +137,10 @@ export function NewsSection() {
 
   return (
     <section className="py-24 relative overflow-hidden">
-      {/* stars */}
-      <StarfieldInline density={90} />
+      {/* 🌌 Stars with higher density */}
+      <StarfieldInline density={260} />
 
-      {/* optional soft gradient overlay if you have this utility */}
+      {/* optional gradient veil if you use it sitewide */}
       <div className="absolute inset-0 gradient-cosmic opacity-30" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
@@ -166,7 +157,7 @@ export function NewsSection() {
           </h2>
           <div className="w-32 h-1 bg-gradient-to-r from-cyan-400 to-blue-500 mx-auto mb-8" />
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Curated hard-coded feed for blazing-fast demos — 100 newest items, no network calls.
+            Curated hard-coded feed for blazing-fast demos — 100 newest items, no network calls (except images).
           </p>
         </motion.div>
 
@@ -187,7 +178,7 @@ export function NewsSection() {
                   whileHover={{ scale: 1.03 }}
                 >
                   <div className="relative h-48 overflow-hidden">
-                    {/* If you don't have ImageWithFallback, replace with: <img src={article.image_url} alt={article.title} className="w-full h-full object-cover" /> */}
+                    {/* Replace with <img> if you don't have ImageWithFallback */}
                     <ImageWithFallback
                       src={article.image_url}
                       alt={article.title}
@@ -204,9 +195,7 @@ export function NewsSection() {
                   <div className="p-6">
                     <div className="flex items-center space-x-2 mb-3 text-sm text-gray-400">
                       <Calendar className="w-4 h-4" />
-                      <span>
-                        {new Date(article.published_at).toLocaleDateString()}
-                      </span>
+                      <span>{new Date(article.published_at).toLocaleDateString()}</span>
                     </div>
 
                     <h4 className="font-futuristic text-xl mb-3 text-white leading-tight group-hover:text-cyan-400 transition-colors">
