@@ -11,7 +11,7 @@ export function HeroSection() {
     <section className="relative min-h-[90vh] md:min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
-        <img src={bg} alt="Rocket launch" className="w-full h-full object-cover" />
+        <img src={bg} alt="Rocket launch" className="w-full h-full object-cover object-top" />
         
       </div>
 
