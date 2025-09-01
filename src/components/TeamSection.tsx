@@ -209,8 +209,8 @@ const teamMembers = [
   },
   {
     name: "Riya",
-    role: "Intern",
-    department: "CI CD pipeline",
+    role: "CI-CD Pipeline",
+    department: "Intern",
     bio: "Mathematical modeling expert for trajectory optimization, orbital mechanics, and mission safety.",
     achievements: ["Trajectory Optimization", "Mathematical Modeling", "Orbital Mechanics"],
     avatar: riyaImg,
