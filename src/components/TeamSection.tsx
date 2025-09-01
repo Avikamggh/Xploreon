@@ -3,8 +3,8 @@ import { motion } from 'motion/react';
 import { Linkedin, Twitter, Mail, Award, Users, Rocket } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import StarfieldInline from "./Starfield"; // adjust path if needed
-import avikamImg from "../images/avikam.png";
-import chaitanyaImg from "../images/chaitanya.png";
+import avikamImg from "../public/images/avikam.png";
+import chaitanyaImg from "../public/images/chaitanya.png";
 // add the rest...
 
 
