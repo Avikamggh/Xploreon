@@ -12,3 +12,13 @@ html, body, #root { height: 100%; }
 
 .bg-background { background-color: hsl(var(--background)); }
 .text-foreground { color: hsl(var(--foreground)); }
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: .25; transform: translateZ(0) scale(1); }
+  50%      { opacity: .9;  transform: translateZ(0) scale(1.15); }
+}
+.animate-star-twinkle {
+  animation-name: star-twinkle;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
