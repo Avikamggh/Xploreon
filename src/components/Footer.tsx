@@ -90,15 +90,15 @@ export function Footer() {
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3 text-sm text-gray-400">
                 <Mail className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                <span>hello@xploreon.space</span>
+                <span>xploreonteam@gmail.com</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-gray-400">
                 <Phone className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                <span>+1 (555) 123-SPACE</span>
+                <span>+91 7906822047</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-gray-400">
                 <MapPin className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                <span>Cape Canaveral, FL</span>
+                <span>India</span>
               </div>
             </div>
 
