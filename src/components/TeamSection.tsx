@@ -7,6 +7,7 @@ import avikamImg from "../images/avikam.png";
 import chaitanyaImg from "../images/chaitanya.png";
 import omImg from "../images/om.png";
 import pImg from "../images/p.png";
+import priyanshImg from "../images/priyansh.png";
 // add the rest...
 
 
@@ -122,7 +123,7 @@ const teamMembers = [
     department: "Engineering",
     bio: "Contributing to the spacecraft design, propulsion systems, and structural engineering.",
     achievements: ["Satellite Design", "Propulsion Systems", "Structural Engineering"],
-    avatar: "https://xploreon.space/team/priyansh.jpg",
+    avatar: priyanshImg,
     social: {
       linkedin: "#",
       twitter: "#",
