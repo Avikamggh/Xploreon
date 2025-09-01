@@ -28,15 +28,19 @@ export function NewsSection() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchNews() {
-      try {
-        const all: Article[] = [];
+  async function fetchNews() {
+    setLoading(true);
+    try {
+      const all: Article[] = [];
+      const noStore: RequestInit = { cache: "no-store" };
 
-        // 1. Spaceflight News
-        const sfRes = await fetch("https://api.spaceflightnewsapi.net/v4/articles/?limit=20");
-        const sfData = await sfRes.json();
+      // 1) Spaceflight News (newest first)
+      {
+        const url = "https://api.spaceflightnewsapi.net/v4/articles/?limit=20&ordering=-published_at";
+        const res = await fetch(url, noStore);
+        const data = await res.json();
         all.push(
-          ...sfData.results.map((a: any) => ({
+          ...data.results.map((a: any) => ({
             id: `sf-${a.id}`,
             title: a.title,
             summary: a.summary,
@@ -46,12 +50,15 @@ export function NewsSection() {
             source: a.news_site,
           }))
         );
+      }
 
-        // 2. Launch Library
-        const launchRes = await fetch("https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=10");
-        const launchData = await launchRes.json();
+      // 2) Launch Library (newest first)
+      {
+        const url = "https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=10&ordering=-net";
+        const res = await fetch(url, noStore);
+        const data = await res.json();
         all.push(
-          ...launchData.results.map((l: any) => ({
+          ...data.results.map((l: any) => ({
             id: `ll-${l.id}`,
             title: `Upcoming Launch: ${l.name}`,
             summary: l.mission?.description || "Upcoming space mission.",
@@ -61,15 +68,18 @@ export function NewsSection() {
             source: "Launch Library",
           }))
         );
+      }
 
-        // 3. NASA RSS
-        const nasaRes = await fetch(
+      // 3) NASA RSS (cache-busted)
+      {
+        const url =
           "https://api.rss2json.com/v1/api.json?rss_url=https://www.nasa.gov/rss/dyn/breaking_news.rss"
-        );
-        const nasaData = await nasaRes.json();
+          + `&_=${Date.now()}`;
+        const res = await fetch(url, noStore);
+        const data = await res.json();
         all.push(
-          ...nasaData.items.slice(0, 10).map((n: any, i: number) => ({
-            id: `nasa-${i}`,
+          ...data.items.slice(0, 10).map((n: any, i: number) => ({
+            id: `nasa-${i}-${Date.now()}`, // avoid ID collisions
             title: n.title,
             summary: n.description || "NASA breaking news update.",
             url: n.link,
@@ -78,15 +88,18 @@ export function NewsSection() {
             source: "NASA",
           }))
         );
+      }
 
-        // 4. Phys.org Physics RSS
-        const physRes = await fetch(
+      // 4) Phys.org Physics RSS (cache-busted)
+      {
+        const url =
           "https://api.rss2json.com/v1/api.json?rss_url=https://phys.org/rss-feed/physics-news/"
-        );
-        const physData = await physRes.json();
+          + `&_=${Date.now()}`;
+        const res = await fetch(url, noStore);
+        const data = await res.json();
         all.push(
-          ...physData.items.slice(0, 10).map((p: any, i: number) => ({
-            id: `phys-${i}`,
+          ...data.items.slice(0, 10).map((p: any, i: number) => ({
+            id: `phys-${i}-${Date.now()}`,
             title: p.title,
             summary: p.description || "Physics news update.",
             url: p.link,
@@ -95,15 +108,18 @@ export function NewsSection() {
             source: "Phys.org",
           }))
         );
+      }
 
-        // 5. Scientific American (Space RSS)
-        const saRes = await fetch(
+      // 5) Scientific American Space (cache-busted)
+      {
+        const url =
           "https://api.rss2json.com/v1/api.json?rss_url=https://www.scientificamerican.com/feed/space/"
-        );
-        const saData = await saRes.json();
+          + `&_=${Date.now()}`;
+        const res = await fetch(url, noStore);
+        const data = await res.json();
         all.push(
-          ...saData.items.slice(0, 10).map((s: any, i: number) => ({
-            id: `sciam-${i}`,
+          ...data.items.slice(0, 10).map((s: any, i: number) => ({
+            id: `sciam-${i}-${Date.now()}`,
             title: s.title,
             summary: s.description || "Scientific American space update.",
             url: s.link,
@@ -112,31 +128,33 @@ export function NewsSection() {
             source: "Scientific American",
           }))
         );
-
-        // ✅ Filter: no empty image + no duplicates
-        const seen = new Set();
-        const filtered = all.filter((a) => {
-          if (!a.image_url) return false; // skip missing images
-          if (seen.has(a.image_url)) return false; // skip duplicates
-          seen.add(a.image_url);
-          return true;
-        });
-
-        // Sort by date
-        const sorted = filtered.sort(
-          (a, b) =>
-            new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
-        );
-
-        setArticles(sorted);
-      } catch (err) {
-        console.error("Error fetching space news:", err);
-      } finally {
-        setLoading(false);
       }
-    }
 
-    fetchNews();
+      // ✅ No empty image + no duplicate images
+      const seen = new Set<string>();
+      const filtered = all.filter(a => {
+        if (!a.image_url) return false;
+        if (seen.has(a.image_url)) return false;
+        seen.add(a.image_url);
+        return true;
+      });
+
+      // Final newest-first sort (safety)
+      filtered.sort(
+        (a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
+      );
+
+      setArticles(filtered);
+    } catch (e) {
+      console.error("Error fetching space news:", e);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  fetchNews();
+
+
   }, []);
 
   const handleLoadMore = () => setVisibleCount((prev) => prev + 6);
