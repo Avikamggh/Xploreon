@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Activity, Satellite, Clock, MapPin, Signal, Battery } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import StarfieldInline from "./Starfield"; // adjust path if needed
 
 const developmentMilestones = [
   {
@@ -69,6 +70,8 @@ export function MissionTracker() {
     <section className="py-20 relative overflow-hidden bg-gradient-to-b from-space-black to-deep-space">
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         {/* Hero section */}
+        {/* ⭐ Starfield background */}
+      <StarfieldInline density={400} />
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-32">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
