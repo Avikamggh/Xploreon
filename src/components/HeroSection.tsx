@@ -8,12 +8,15 @@ import { Link } from "react-router-dom";
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] md:min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0">
-        <img src={bg} alt="Rocket launch" className="w-full h-full object-cover object-top" />
-        
-      </div>
+    <section className="relative min-h-[90vh] md:min-h-screen flex items-center justify-center overflow-hidden -mt-[72px]">
+  {/* Background */}
+  <div className="absolute inset-0">
+    <img
+      src={bg}
+      alt="Rocket launch"
+      className="w-full h-full object-cover object-top"
+    />
+  </div>
 
       {/* Star specks */}
       <div className="absolute inset-0 pointer-events-none">
