@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Rocket, Mail, Phone, MapPin, Twitter, Linkedin, Youtube, Instagram } from 'lucide-react';
-import logo from "../public/images/x.webp"; // adjust path to your image
+import logo from "../images/x.webp"; // adjust path to your image
 
 const footerSections = [
   {
