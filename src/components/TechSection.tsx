@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Zap, Brain, Shield, Rocket, Satellite, Recycle, Gauge } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import StarfieldInline from "./Starfield"; // adjust path if needed
 
 const techFeatures = [
   {
@@ -55,6 +56,8 @@ export function TechSection() {
     <section className="py-20 relative overflow-hidden bg-gradient-to-b from-space-black to-deep-space">
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         {/* Hero section */}
+              <StarfieldInline density={800} />
+
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-32">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
