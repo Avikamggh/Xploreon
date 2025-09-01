@@ -41,7 +41,7 @@ export function AboutSection() {
   return (
     <section className="py-20 relative overflow-hidden bg-gradient-to-b from-space-black to-deep-space">      
       {/* ⭐ Starfield background */}
-      <StarfieldInline density={250} />
+      <StarfieldInline density={400} />
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         {/* Hero section */}
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-32">
