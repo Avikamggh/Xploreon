@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 
-export function CompetitionPage() {
+export function Competitions() {
   const [open, setOpen] = useState(false);
 
   const stripeLink = "https://buy.stripe.com/test_1234567890"; // 👉 replace with your real Stripe link
