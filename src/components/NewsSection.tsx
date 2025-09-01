@@ -14,7 +14,7 @@ type Article = {
 };
 
 /* ---------- Dense inline starfield (no extra files) ---------- */
-function StarfieldInline({ density = 260 }: { density?: number }) {
+function StarfieldInline({ density = 500 }: { density?: number }) {
   const stars = useMemo(
     () =>
       Array.from({ length: density }).map((_, i) => ({
