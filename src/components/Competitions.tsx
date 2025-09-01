@@ -1,7 +1,7 @@
 // src/components/Competitions.tsx
 import React, { useMemo, useState } from "react";
 import { motion } from "motion/react";
-import { CalendarDays, Users2, Medal, Clock, Trophy, Info } from "lucide-react";
+import { CalendarDays, Users2, Medal, Clock, Trophy, Info, X } from "lucide-react";
 
 type Competition = {
   id: string;
@@ -113,8 +113,12 @@ export default function Competitions() {
   const [filter, setFilter] = useState<TagFilter>("All");
   const [active, setActive] = useState<Competition | null>(null);
 
+  // premium modal state
+  const [showPremium, setShowPremium] = useState(false);
+  const STRIPE_LINK = "https://buy.stripe.com/4gM8wI1C333x1i3fdVc7u0b"; // ← replace with your Stripe checkout URL
+
   const list = useMemo(
-    () => (filter === "All" ? COMPETITIONS : COMPETITIONS.filter(c => c.tag === filter)),
+    () => (filter === "All" ? COMPETITIONS : COMPETITIONS.filter((c) => c.tag === filter)),
     [filter]
   );
 
@@ -137,13 +141,16 @@ export default function Competitions() {
 
           {/* Filter */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            {TAGS.map(t => (
+            {TAGS.map((t) => (
               <button
                 key={t}
                 onClick={() => setFilter(t)}
                 className={`px-4 py-2 rounded-full text-sm uppercase tracking-wide border transition-all
-                  ${filter === t ? "border-cyan-400 text-white bg-cyan-400/10"
-                                  : "border-white/15 text-gray-200 hover:border-cyan-400/60 hover:text-white"}`}
+                  ${
+                    filter === t
+                      ? "border-cyan-400 text-white bg-cyan-400/10"
+                      : "border-white/15 text-gray-200 hover:border-cyan-400/60 hover:text-white"
+                  }`}
               >
                 {t}
               </button>
@@ -155,7 +162,7 @@ export default function Competitions() {
       {/* Grid */}
       <section className="px-6 pb-16">
         <div className="max-w-7xl mx-auto grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {list.map(c => (
+          {list.map((c) => (
             <motion.div
               key={c.id}
               className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-5 hover:border-cyan-400/40 transition-all group"
@@ -176,9 +183,15 @@ export default function Competitions() {
               <p className="mt-2 text-gray-300">{c.short}</p>
 
               <div className="mt-4 grid grid-cols-3 gap-3 text-sm text-gray-300">
-                <div className="flex items-center gap-2"><Users2 className="w-4 h-4" /> {c.teamSize}</div>
-                <div className="flex items-center gap-2"><Clock className="w-4 h-4" /> Reg by {c.regDeadline}</div>
-                <div className="flex items-center gap-2"><Trophy className="w-4 h-4" /> Top prizes</div>
+                <div className="flex items-center gap-2">
+                  <Users2 className="w-4 h-4" /> {c.teamSize}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4" /> Reg by {c.regDeadline}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Trophy className="w-4 h-4" /> Top prizes
+                </div>
               </div>
 
               <div className="mt-5 flex items-center gap-3">
@@ -200,7 +213,75 @@ export default function Competitions() {
         </div>
       </section>
 
-      {/* Modal */}
+      {/* ===== Golden Premium Button (corner) ===== */}
+      <button
+        onClick={() => setShowPremium(true)}
+        className="fixed bottom-6 right-6 z-40 px-5 py-3 rounded-xl font-extrabold
+                   bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-600 text-black
+                   shadow-lg shadow-yellow-400/40 ring-1 ring-yellow-300/60
+                   hover:scale-105 active:scale-95 transition-transform"
+        aria-label="Open premium"
+        title="Premium"
+      >
+        Premium
+      </button>
+
+      {/* ===== Premium Modal ===== */}
+      {showPremium && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md px-4">
+          <div className="relative w-full max-w-md rounded-2xl border border-yellow-400/30 bg-[#0b0b16] p-7 shadow-2xl">
+            <button
+              className="absolute top-3 right-3 text-gray-400 hover:text-white"
+              onClick={() => setShowPremium(false)}
+              aria-label="Close premium"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            <div className="text-center">
+              <h3 className="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-amber-500">
+                Premium Access
+              </h3>
+              <p className="mt-2 text-gray-300">
+                Unlock exclusive rounds, early registration, and members-only competitions.
+              </p>
+
+              <div className="mt-5 rounded-xl bg-white/[0.04] border border-white/10 p-4 text-left space-y-2">
+                <div className="flex items-center gap-2">
+                  <Medal className="w-5 h-5 text-yellow-400" /> Priority leaderboard badges
+                </div>
+                <div className="flex items-center gap-2">
+                  <Trophy className="w-5 h-5 text-yellow-400" /> Extra prizes & invites
+                </div>
+                <div className="flex items-center gap-2">
+                  <CalendarDays className="w-5 h-5 text-yellow-400" /> Early access windows
+                </div>
+              </div>
+
+              {/* Stripe CTA */}
+              <a
+                href={STRIPE_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 inline-block w-full text-center px-6 py-3 rounded-xl font-semibold
+                           bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-600 text-black
+                           hover:scale-[1.02] active:scale-[0.98] transition-transform shadow-lg shadow-yellow-500/30"
+              >
+                $18 / month — Subscribe
+              </a>
+
+              <button
+                onClick={() => setShowPremium(false)}
+                className="mt-3 w-full px-6 py-3 rounded-xl border border-white/15 text-gray-200 hover:border-white/30"
+              >
+                Not now
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===== Details Modal (existing) ===== */}
       {active && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
           <div className="relative w-full max-w-3xl rounded-2xl border border-white/10 bg-[#0b0b16] p-6">
