@@ -11,6 +11,10 @@ import priyanshImg from "../images/priyansh.png";
 import mehulImg from "../images/mehul.png";
 import nImg from "../images/n.png";
 import neilImg from "../images/neil.png";
+import mansiImg from "../images/mansi.png";
+import divanshiImg from "../images/divanshi.png";
+import hemantImg from "../images/hemant.png";
+import harshilImg from "../images/harshil.png";
 // add the rest...
 
 
@@ -108,6 +112,19 @@ const teamMembers = [
     }
   },
   {
+    name: "Divanshi Manshani",
+    role: "Aerospace Engineer",
+    department: "Engineering",
+    bio: "Engineer working on propulsion, aerodynamics, and structural systems for reusable spacecraft.",
+    achievements: ["Aerospace Engineering", "Reusable Systems", "Propulsion Specialist"],
+    avatar: divanshiImg,
+    social: {
+      linkedin: "#",
+      twitter: "#",
+      email: "vishard.makwana@xploreon.space"
+    }
+  },
+  {
     name: "Vishard Makwana",
     role: "Aerospace Engineer",
     department: "Engineering",
@@ -139,7 +156,7 @@ const teamMembers = [
     department: "Engineering",
     bio: "Focused on satellite design, reusable launch systems, and orbital mechanics.",
     achievements: ["Reusable Launch Systems", "Satellite Engineering", "Orbital Mechanics"],
-    avatar: "https://xploreon.space/team/harshil.jpg",
+    avatar: harshilImg,
     social: {
       linkedin: "#",
       twitter: "#",
@@ -165,7 +182,7 @@ const teamMembers = [
     department: "Research & Development",
     bio: "Driving AI innovation for space systems, including control, analysis, and mission automation.",
     achievements: ["AI Systems for Space", "Research Leadership", "Control System Development"],
-    avatar: "https://xploreon.space/team/hemant.jpg",
+    avatar: hemantImg,
     social: {
       linkedin: "#",
       twitter: "#",
@@ -191,7 +208,7 @@ const teamMembers = [
     department: "Operations",
     bio: "Responsible for analyzing global space-tech market trends and supporting Xploreon’s growth strategy.",
     achievements: ["Market Analysis", "Growth Strategy", "Space-tech Research"],
-    avatar: "https://xploreon.space/team/mansi.jpg",
+    avatar: mansiImg,
     social: {
       linkedin: "#",
       twitter: "#",
