@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Satellite, Cpu, Zap, Target, Globe, Rocket } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import StarfieldInline from "./Starfield"; // adjust path if needed
 
 const features = [
   {
@@ -39,6 +40,8 @@ const features = [
 export function AboutSection() {
   return (
     <section className="py-20 relative overflow-hidden bg-gradient-to-b from-space-black to-deep-space">      
+      {/* ⭐ Starfield background */}
+      <StarfieldInline density={250} />
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         {/* Hero section */}
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-32">
