@@ -32,21 +32,24 @@ export function HeroSection() {
       <div className="relative z-10 w-full px-4 sm:px-6 md:px-8 max-w-7xl mx-auto flex flex-col items-center justify-center text-center">
         {/* Title */}
         <motion.h1
-          className="
-            font-futuristic font-extrabold
-            text-4xl sm:text-6xl md:text-7xl lg:text-8xl
-            leading-tight sm:leading-none tracking-tight
-            bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400
-            bg-clip-text text-transparent
-            drop-shadow-[0_6px_30px_rgba(59,130,246,0.35)]
-            sm:whitespace-nowrap
-          "
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.2 }}
-        >
-          Welcome To Xploreon
-        </motion.h1>
+  className="
+    font-extrabold leading-tight tracking-tight
+    text-4xl sm:text-6xl md:text-7xl lg:text-8xl
+    bg-gradient-to-r from-cyan-300 via-sky-400 to-fuchsia-500
+    bg-clip-text text-transparent
+    drop-shadow-[0_0_25px_rgba(56,189,248,0.45)]
+  "
+  initial={{ opacity: 0, y: 40 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 1, ease: "easeOut" }}
+  whileHover={{
+    scale: 1.05,
+    textShadow: "0px 0px 20px rgba(56,189,248,0.9)",
+  }}
+>
+  Welcome To Xploreon
+</motion.h1>
+
 
         {/* Subtitle */}
         <motion.p
