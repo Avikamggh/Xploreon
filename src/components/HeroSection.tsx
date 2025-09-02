@@ -4,13 +4,8 @@ import { ArrowRight } from 'lucide-react';
 import { Button } from './ui/button';
 import { Link } from "react-router-dom";
 
-// Import fallback image
+// Fallback image (this stays in src)
 import fallbackImg from '../images/xploreon.webp';
-
-// Import video files
-import bgVideoMp4 from '../videos/xploreon-bg.mp4';
-import bgVideoWebm from '../videos/xploreon-bg.webm';
-
 
 export function HeroSection() {
   return (
@@ -23,11 +18,11 @@ export function HeroSection() {
           muted
           loop
           playsInline
-          poster={fallbackImg}  // fallback image
+          poster={fallbackImg} // fallback image while video loads
           className="w-full h-full object-cover object-center"
         >
-          <source src={bgVideoWebm} type="video/webm" />
-          <source src={bgVideoMp4} type="video/mp4" />
+          <source src="/videos/xploreon-bg.webm" type="video/webm" />
+          <source src="/videos/xploreon-bg.mp4" type="video/mp4" />
           {/* Fallback for very old browsers */}
           <img src={fallbackImg} alt="Rocket launch" className="w-full h-full object-cover" />
         </video>
@@ -64,10 +59,10 @@ export function HeroSection() {
           "
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
+          transition={{ duration: 1, ease: 'easeOut' }}
           whileHover={{
             scale: 1.05,
-            textShadow: "0px 0px 20px rgba(56,189,248,0.9)",
+            textShadow: '0px 0px 20px rgba(56,189,248,0.9)',
           }}
         >
           Welcome To Xploreon
