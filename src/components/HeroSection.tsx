@@ -16,7 +16,7 @@ export function HeroSection() {
           <source src="/videos/xploreon-bg.mp4" type="video/mp4" />
         </video>
         {/* Overlay for cinematic effect */}
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-black/5" />
       </div>
 
       {/* Stars */}
