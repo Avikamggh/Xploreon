@@ -36,7 +36,7 @@ const COMPETITIONS: Competition[] = [
     slug: "ai-physics",
     tag: "Hackathon",
     short: "Build an AI model to solve a physics challenge.",
-    image: "/images/ai-physics.jpg",
+    image: "/images/hack.png",
   },
 ];
 
