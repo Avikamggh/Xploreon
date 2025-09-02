@@ -111,7 +111,7 @@ export default function Competitions() {
               transition={{ delay: i * 0.1 }}
             >
               {/* Image */}
-              <div className="h-40 w-full overflow-hidden">
+              <div className="h-80 w-full overflow-hidden">
                 <img
                   src={c.image}
                   alt={c.title}
