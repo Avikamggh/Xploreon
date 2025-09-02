@@ -1,8 +1,8 @@
 // src/components/Competitions.tsx
 import React, { useState, useMemo } from "react";
 import { motion } from "motion/react";
-import { X, Medal, Users2, CalendarDays, Trophy } from "lucide-react";
-import StarfieldInline from "./Starfield"; // starfield bg
+import { X, Medal, Users2, Trophy } from "lucide-react";
+import StarfieldInline from "./Starfield"; // stars background
 
 type Competition = {
   id: string;
@@ -10,6 +10,7 @@ type Competition = {
   slug: string;
   tag: "Quiz" | "Writing" | "Hackathon";
   short: string;
+  image: string; // image for card
 };
 
 const COMPETITIONS: Competition[] = [
@@ -19,6 +20,7 @@ const COMPETITIONS: Competition[] = [
     slug: "space-quiz",
     tag: "Quiz",
     short: "Fast-paced trivia on astronomy, rockets & missions.",
+    image: "/images/space-quiz.jpg", // replace with your image
   },
   {
     id: "c2",
@@ -26,6 +28,7 @@ const COMPETITIONS: Competition[] = [
     slug: "story",
     tag: "Writing",
     short: "Craft compelling sci-fi around human life beyond Earth.",
+    image: "/images/story.jpg",
   },
   {
     id: "c3",
@@ -33,6 +36,7 @@ const COMPETITIONS: Competition[] = [
     slug: "ai-physics",
     tag: "Hackathon",
     short: "Build an AI model to solve a physics challenge.",
+    image: "/images/ai-physics.jpg",
   },
 ];
 
@@ -42,6 +46,8 @@ type TagFilter = (typeof TAGS)[number];
 export default function Competitions() {
   const [filter, setFilter] = useState<TagFilter>("All");
   const [showPremium, setShowPremium] = useState(false);
+
+  const STRIPE_LINK = "https://buy.stripe.com/4gM8wI1C333x1i3fdVc7u0b";
 
   const list = useMemo(
     () =>
@@ -53,7 +59,7 @@ export default function Competitions() {
 
   return (
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
-      {/* Starfield */}
+      {/* Starfield Background */}
       <div className="absolute inset-0 -z-10">
         <StarfieldInline />
       </div>
@@ -98,35 +104,44 @@ export default function Competitions() {
           {list.map((c, i) => (
             <motion.div
               key={c.id}
-              className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-5 
-                         hover:border-cyan-400/40 transition-all group"
+              className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md overflow-hidden hover:border-cyan-400/40 transition-all group"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ delay: i * 0.1 }}
             >
-              <h3 className="text-xl font-bold">{c.title}</h3>
-              <p className="mt-2 text-gray-300">{c.short}</p>
-              <p className="mt-4 text-cyan-300 font-semibold">Coming Soon</p>
+              {/* Image */}
+              <div className="h-40 w-full overflow-hidden">
+                <img
+                  src={c.image}
+                  alt={c.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                />
+              </div>
+
+              {/* Content */}
+              <div className="p-5">
+                <h3 className="text-xl font-bold">{c.title}</h3>
+                <p className="mt-2 text-gray-300">{c.short}</p>
+                <p className="mt-4 text-cyan-300 font-semibold">Coming Soon</p>
+              </div>
             </motion.div>
           ))}
         </div>
       </section>
 
-      {/* ===== Golden Premium Button (corner) ===== */}
+      {/* Premium Button */}
       <button
         onClick={() => setShowPremium(true)}
         className="fixed bottom-6 right-6 z-40 px-5 py-3 rounded-xl font-extrabold
                    bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-600 text-black
                    shadow-lg shadow-yellow-400/40 ring-1 ring-yellow-300/60
                    hover:scale-105 active:scale-95 transition-transform"
-        aria-label="Open premium"
-        title="Premium"
       >
         Premium
       </button>
 
-      {/* ===== Premium Modal ===== */}
+      {/* Premium Modal */}
       {showPremium && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md px-4">
           <div className="relative w-full max-w-md rounded-2xl border border-yellow-400/30 bg-[#0b0b16] p-7 shadow-2xl">
@@ -158,13 +173,16 @@ export default function Competitions() {
                 </div>
               </div>
 
-              <button
-                onClick={() => setShowPremium(false)}
-                className="mt-6 w-full px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-600 text-black font-semibold
+              <a
+                href={STRIPE_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 inline-block w-full text-center px-6 py-3 rounded-xl font-semibold
+                           bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-600 text-black
                            hover:scale-[1.02] active:scale-[0.98] transition-transform shadow-lg shadow-yellow-500/30"
               >
-                Upgrade Coming Soon
-              </button>
+                $18 / month — Subscribe
+              </a>
 
               <button
                 onClick={() => setShowPremium(false)}
@@ -179,3 +197,4 @@ export default function Competitions() {
     </div>
   );
 }
+
