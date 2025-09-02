@@ -20,7 +20,7 @@ const COMPETITIONS: Competition[] = [
     slug: "space-quiz",
     tag: "Quiz",
     short: "Fast-paced trivia on astronomy, rockets & missions.",
-    image: "/images/space-quiz.jpg", // replace with your image
+    image: "/images/ChatGPT Image Sep 2, 2025, 06_39_23 PM.png", // replace with your image
   },
   {
     id: "c2",
