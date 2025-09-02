@@ -13,10 +13,9 @@ export function HeroSection() {
           playsInline
           className="w-full h-full object-cover object-center"
         >
-          <source src="/videos/xploreon-bg.webm" type="video/webm" />
           <source src="/videos/xploreon-bg.mp4" type="video/mp4" />
         </video>
-        {/* Dark overlay for better look */}
+        {/* Overlay for cinematic effect */}
         <div className="absolute inset-0 bg-black/40" />
       </div>
 
