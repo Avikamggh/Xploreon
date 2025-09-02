@@ -28,7 +28,7 @@ const COMPETITIONS: Competition[] = [
     slug: "story",
     tag: "Writing",
     short: "Craft compelling sci-fi around human life beyond Earth.",
-    image: "/images/story.jpg",
+    image: "/images/story.png",
   },
   {
     id: "c3",
