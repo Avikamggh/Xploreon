@@ -1,9 +1,8 @@
-import React from 'react';
+import React from "react";
 
 export function HeroSection() {
   return (
     <section className="relative min-h-[90vh] md:min-h-screen flex items-center justify-center overflow-hidden -mt-[72px]">
-      
       {/* Background Video */}
       <div className="absolute inset-0">
         <video
@@ -13,9 +12,11 @@ export function HeroSection() {
           playsInline
           className="w-full h-full object-cover object-center"
         >
-          <source src="/videos/xploreon-bg.mp4" type="video/mp4" />
+          {/* Desktop Video */}
+          <source src="/videos/xploreon-bg.mp4" type="video/mp4" media="(min-width: 768px)" />
+          {/* Mobile Video */}
+          <source src="/videos/xploreon-mobile.mp4" type="video/mp4" media="(max-width: 767px)" />
         </video>
-        {/* Overlay for cinematic effect */}
         <div className="absolute inset-0 bg-black/5" />
       </div>
 
