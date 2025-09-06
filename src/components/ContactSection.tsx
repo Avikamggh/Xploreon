@@ -357,7 +357,7 @@ export function ContactSection() {
               </div>
               
               <div className="relative h-64 lg:h-80 glass rounded-2xl overflow-hidden">
-                 <div className="relative h-64 lg:h-80 glass rounded-2xl overflow-hidden">
+               <div className="relative h-64 lg:h-80 glass rounded-2xl overflow-hidden">
   <iframe
     title="Roorkee Location"
     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3454.6139206215073!2d77.89198187462644!3d29.85426237501914!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390eb33d6fdb7d61%3A0x5a40cbbd81e0a32d!2sRoorkee%2C%20Uttarakhand%20247667!5e0!3m2!1sen!2sin!4v1693999928174!5m2!1sen!2sin"
@@ -369,6 +369,7 @@ export function ContactSection() {
     referrerPolicy="no-referrer-when-downgrade"
   ></iframe>
 </div>
+
 
                 <div className="w-full h-full bg-gradient-to-br from-deep-space to-nebula-blue/20 flex items-center justify-center">
                   <div className="text-center">
