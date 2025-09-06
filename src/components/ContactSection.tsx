@@ -7,19 +7,19 @@ const contactInfo = [
   {
     icon: <Mail className="w-6 h-6" />,
     title: "Email Us",
-    info: "hello@xploreon.space",
+    info: "xploreonteam@gmail.com",
     description: "Get in touch for partnerships, inquiries, or support"
   },
   {
     icon: <Phone className="w-6 h-6" />,
     title: "Call Us",
-    info: "+1 (555) 123-SPACE",
+    info: "+91 7906822047",
     description: "Speak directly with our mission specialists"
   },
   {
     icon: <MapPin className="w-6 h-6" />,
     title: "Visit Us",
-    info: "Cape Canaveral, FL 32920",
+    info: "India, Roorkee",
     description: "Tour our state-of-the-art facilities"
   }
 ];
