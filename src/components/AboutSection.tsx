@@ -193,7 +193,7 @@ export function AboutSection() {
             { number: "1st", label: "Reusable CubeSat Mission", prefix: "" },
             { number: "15+", label: "Engineers & Researchers", prefix: "" },
             { number: "5–8kg", label: "LEO Satellite Payload", prefix: "" },
-            { number: "2026", label: "First Orbital Launch Target", prefix: "" }
+            { number: "Coming Soon", label: "First Orbital Launch Target", prefix: "" }
           ].map((stat, index) => (
             <div key={index} className="text-center p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
               <div className="font-futuristic text-3xl lg:text-4xl mb-2 text-cyan-400">
