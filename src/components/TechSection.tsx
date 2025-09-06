@@ -44,11 +44,11 @@ const techFeatures = [
 
 const innovations = [
   { title: "Reusable Vehicle Design", progress: 72 },
-  { title: "Xplovis-1 Satellite Systems", progress: 80 },
-  { title: "AI Flight Software", progress: 65 },
-  { title: "Recovery & Landing", progress: 40 },
-  { title: "Eco-Friendly Propulsion", progress: 35 },
-  { title: "Mission Operations Control", progress: 70 }
+  { title: "Xplovis-1 Satellite Systems", progress: 10 },
+  { title: "AI Flight Software", progress: 5 },
+  { title: "Recovery & Landing", progress: 10 },
+  { title: "Eco-Friendly Propulsion", progress: 15 },
+  { title: "Mission Operations Control", progress:10 }
 ];
 
 export function TechSection() {
