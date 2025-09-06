@@ -10,7 +10,7 @@ const techFeatures = [
     title: "Reusable Launch Vehicle",
     description: "Xploreon is engineering a reusable small launch vehicle capable of carrying CubeSats and microsatellites into Low Earth Orbit (LEO). The design emphasizes reusability and low refurbishment costs.",
     specs: ["Target: 5–10 reuses", "Low Earth Orbit payload: 5–8 kg", "Cost-efficient design"],
-    image: "https://images.unsplash.com/photo-1523983303491-36c348b2ef11?ixlib=rb-4.0.3&w=1080&q=80"
+    image: "https://plus.unsplash.com/premium_photo-1733678582566-339d89b3e029?q=80&w=928&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
   },
   {
     icon: <Satellite className="w-12 h-12" />,
@@ -38,7 +38,7 @@ const techFeatures = [
     title: "Sustainable Propulsion",
     description: "Xploreon is committed to sustainability with carbon-neutral goals. We are exploring eco-friendly fuels and debris mitigation strategies to ensure responsible space access.",
     specs: ["Carbon-neutral operations", "Eco-friendly fuels", "Debris reduction"],
-    image: "https://images.unsplash.com/photo-1580428180121-cf6631fd988c?ixlib=rb-4.0.3&w=1080&q=80"
+    image: "https://images.unsplash.com/photo-1460186136353-977e9d6085a1?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
   }
 ];
 
