@@ -2,6 +2,19 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L, { Map as LeafletMap, TileLayer, Polyline, Marker } from "leaflet";
 import * as satellite from "satellite.js";
+import { Link } from "react-router-dom";  // add this import
+
+// inside return():
+<div style={{ position: "relative" }}>
+  {/* Back Button */}
+  <Link
+    to="/"
+    className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[1000]
+               px-4 py-2 rounded-lg bg-cyan-400 text-black font-semibold
+               shadow-lg hover:bg-cyan-300 transition"
+  >
+    ← Back to Home
+  </Link>
 
 // ---------------------- Config ----------------------
 const CONFIG = {
