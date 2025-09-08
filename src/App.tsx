@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navigation } from './components/Navigation';
 import { Footer } from './components/Footer';
 
-
 import Competitions from "./components/Competitions";  
 import { ScrollToTop } from './components/ScrollToTop';
 import { HomePage } from './pages/HomePage';
@@ -14,6 +13,9 @@ import { NewsPage } from './pages/NewsPage';
 import { TeamPage } from './pages/TeamPage';
 import { ContactPage } from './pages/ContactPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+
+// ✅ Import your tracker page
+import SatelliteTracker from "./components/SatelliteTracker";
 
 export default function App() {
   return (
@@ -29,9 +31,11 @@ export default function App() {
             <Route path="/technology" element={<TechnologyPage />} />
             <Route path="/missions" element={<MissionsPage />} />
             <Route path="/news" element={<NewsPage />} />
-            
-          
+
             <Route path="/competitions" element={<Competitions />} />
+
+            {/* ✅ New tracker route */}
+            <Route path="/tracker" element={<SatelliteTracker />} />
 
             <Route path="/team" element={<TeamPage />} />
             <Route path="/contact" element={<ContactPage />} />
