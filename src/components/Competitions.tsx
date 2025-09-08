@@ -218,15 +218,23 @@ export default function Competitions() {
       </section>
 
       {/* Premium Button */}
-      <button
-        onClick={() => setShowPremium(true)}
-        className="fixed bottom-6 right-6 z-20 px-5 py-3 rounded-xl font-extrabold
-                   bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-600 text-black
-                   shadow-lg shadow-yellow-400/40 ring-1 ring-yellow-300/60
-                   hover:scale-105 active:scale-95 transition-transform"
-      >
-        Premium
-      </button>
+      {/* Premium Button */}
+<button
+  onClick={() => setShowPremium(true)}
+  className="fixed bottom-6 right-6 z-20 group px-6 py-3 rounded-2xl font-extrabold
+             bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-600 text-black
+             shadow-[0_0_20px_rgba(255,200,0,0.5)] ring-2 ring-yellow-300/70
+             hover:scale-110 hover:shadow-[0_0_40px_rgba(255,200,0,0.8)]
+             active:scale-95 transition-transform transition-all duration-300"
+>
+  <span className="flex items-center gap-2">
+    🌟 Premium
+    <span className="hidden sm:inline text-xs font-medium bg-black/30 text-yellow-100 px-2 py-0.5 rounded-md group-hover:bg-black/60 transition">
+      $18 / month
+    </span>
+  </span>
+</button>
+
 
       {/* Register Modal */}
       {active && (
