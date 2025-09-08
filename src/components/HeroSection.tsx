@@ -3,19 +3,29 @@ import { Link } from "react-router-dom";
 import { Satellite } from "lucide-react";
 import Starfield from "./Starfield";
 
-
 export function HeroSection() {
   const [src, setSrc] = React.useState<string>("");
 
   React.useEffect(() => {
-    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-    setSrc(isMobile ? "/videos/xploreon-mobile.mp4" : "/videos/xploreon-bg.mp4");
+    const pick = () =>
+      (typeof window !== "undefined" && window.innerWidth < 768)
+        ? "/videos/xploreon-mobile.mp4"
+        : "/videos/xploreon-bg.mp4";
+    setSrc(pick());
+    // update on rotate / resize (optional but helpful)
+    const onResize = () => setSrc(pick());
+    window.addEventListener("orientationchange", onResize);
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("orientationchange", onResize);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
   return (
     <>
       {/* Hero with video */}
-      <section className="relative min-h-[90vh] md:min-h-screen flex items-center justify-center overflow-hidden -mt-[72px]">
+      <section className="relative min-h-[100svh] md:min-h-screen flex items-center justify-center overflow-hidden md:-mt-[72px]">
         {/* Background Video */}
         <div className="absolute inset-0 -z-10">
           <video
@@ -30,7 +40,7 @@ export function HeroSection() {
             preload="auto"
             poster="/images/hero-fallback.jpg"
             crossOrigin="anonymous"
-            className="w-full h-full object-cover object-center pointer-events-none"
+            className="absolute inset-0 w-full h-full object-cover object-center block pointer-events-none"
             onCanPlay={(e) => {
               const v = e.currentTarget;
               const p = v.play();
@@ -58,15 +68,14 @@ export function HeroSection() {
 
       {/* Tracker card section (now below video) */}
       <section className="relative z-10 py-20 px-6 bg-black text-white">
-        {/* Stars */}
-<Starfield className="absolute inset-0 -z-0" count={1900} />
+        <Starfield className="absolute inset-0 -z-0" count={1900} />
 
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
           {/* Info */}
           <div>
             <h2 className="text-3xl md:text-4xl font-bold mb-4">🛰️ Live Satellite Tracker</h2>
             <p className="text-gray-300 mb-6">
-              Explore real-time positions of satellites orbiting Earth.  
+              Explore real-time positions of satellites orbiting Earth.
               Powered by live TLE data from Celestrak and updated automatically.
             </p>
             <Link
@@ -81,13 +90,11 @@ export function HeroSection() {
 
           {/* Preview Image */}
           <div className="rounded-2xl overflow-hidden border border-cyan-400/30 shadow-lg">
-            
-<img
-    src="/images/tracker-preview.png"
-    alt="Satellite Tracker Preview"
-    className="w-full h-72 object-cover"
-  />
-
+            <img
+              src="/images/tracker-preview.png"
+              alt="Satellite Tracker Preview"
+              className="w-full h-72 object-cover"
+            />
           </div>
         </div>
       </section>
