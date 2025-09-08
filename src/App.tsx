@@ -13,9 +13,7 @@ import { NewsPage } from './pages/NewsPage';
 import { TeamPage } from './pages/TeamPage';
 import { ContactPage } from './pages/ContactPage';
 import { NotFoundPage } from './pages/NotFoundPage';
-
-// ✅ Import your tracker page
-import SatelliteTracker from "./components/SatelliteTracker";
+import SatelliteTracker from "./components/SatelliteTracker";  // ✅ Tracker import
 
 export default function App() {
   return (
@@ -31,12 +29,8 @@ export default function App() {
             <Route path="/technology" element={<TechnologyPage />} />
             <Route path="/missions" element={<MissionsPage />} />
             <Route path="/news" element={<NewsPage />} />
-
             <Route path="/competitions" element={<Competitions />} />
-
-            {/* ✅ New tracker route */}
-            <Route path="/tracker" element={<SatelliteTracker />} />
-
+            <Route path="/tracker" element={<SatelliteTracker />} /> {/* ✅ New route */}
             <Route path="/team" element={<TeamPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="*" element={<NotFoundPage />} />
