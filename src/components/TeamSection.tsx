@@ -33,9 +33,9 @@ const teamMembers = [
     bio:
       "Founder & CEO of Xploreon, driving a bold vision to make advanced space-tech accessible. Leads hands-on across simulation, education tools, and early R&D—building a community and culture of execution.",
     achievements: [
-      "Recognized Young Scientist at ISRO",
+      "Young Scientist",
       "Founded Xploreon & Space + Tech community",
-      "Semifinalist – Thiel Fellowship"
+      
     ],
     avatar: avikamImg,
     social: {
