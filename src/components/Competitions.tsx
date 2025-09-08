@@ -114,15 +114,21 @@ export default function Competitions() {
   );
 
   // Close modal on ESC
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setActive(null);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-        document.title = "Competitions | Xploreon-Space Innovation"; // ← set custom title
+ useEffect(() => {
+  const onKey = (e: KeyboardEvent) => {
+    if (e.key === "Escape") setActive(null);
+  };
 
-  }, []);
+  // set the title first
+  document.title = "Competitions | Xploreon-Space Innovation";
+
+  // then set up your listener
+  window.addEventListener("keydown", onKey);
+
+  // cleanup
+  return () => window.removeEventListener("keydown", onKey);
+}, []);
+
 
   const buildFormUrl = (title: string) => {
     const url = new URL(FORM_URL);
