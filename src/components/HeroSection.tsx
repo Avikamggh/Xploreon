@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { Satellite } from "lucide-react";
 
 export function HeroSection() {
   const [src, setSrc] = React.useState<string>("");
@@ -13,25 +15,24 @@ export function HeroSection() {
       {/* Background Video */}
       <div className="absolute inset-0 -z-10">
         <video
-          key={src}                 // forces reload if src changes
+          key={src}
           src={src}
           autoPlay
           muted
           loop
           playsInline
-          // @ts-ignore - help older iOS Safari
+          // @ts-ignore - iOS Safari fix
           webkit-playsinline="true"
           preload="auto"
-          poster="/images/hero-fallback.jpg"  // add a lightweight JPG/PNG
+          poster="/images/hero-fallback.jpg"
           crossOrigin="anonymous"
           className="w-full h-full object-cover object-center pointer-events-none"
           onCanPlay={(e) => {
             const v = e.currentTarget;
             const p = v.play();
-            if (p && typeof p.then === "function") p.catch(() => {/* ignore */});
+            if (p && typeof p.then === "function") p.catch(() => {});
           }}
         />
-        {/* subtle overlay */}
         <div className="absolute inset-0 bg-black/5" />
       </div>
 
@@ -50,38 +51,32 @@ export function HeroSection() {
         ))}
       </div>
 
-    <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
-          {/* Info */}
-          <div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              🛰️ Live Satellite Tracker
-            </h2>
-            <p className="text-gray-300 mb-6">
-              Explore real-time positions of satellites orbiting Earth.  
-              Powered by live TLE data from Celestrak and updated automatically.
-            </p>
-            {/* If using React Router */}
-            <Link
-              to="/tracker"
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold
-                         bg-gradient-to-r from-cyan-400 to-blue-500 text-black shadow-md
-                         hover:scale-105 transition-transform"
-            >
-              Open Tracker <Satellite className="w-5 h-5" />
-            </Link>
-            {/* If not using Router, just replace with <a href="/tracker">Open Tracker</a> */}
-          </div>
-
-          {/* Preview Image */}
-          <div className="rounded-2xl overflow-hidden border border-cyan-400/30 shadow-lg">
-            <img
-              src="/images/tracker-preview.jpg" // add a preview image of your tracker
-              alt="Satellite Tracker Preview"
-              className="w-full h-72 object-cover"
-            />
-          </div>
+      {/* Tracker Card */}
+      <div className="relative z-10 max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
+        <div>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">🛰️ Live Satellite Tracker</h2>
+          <p className="text-gray-300 mb-6">
+            Explore real-time positions of satellites orbiting Earth. Powered by live TLE data
+            from Celestrak and updated automatically.
+          </p>
+          <Link
+            to="/tracker"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold
+                       bg-gradient-to-r from-cyan-400 to-blue-500 text-black shadow-md
+                       hover:scale-105 transition-transform"
+          >
+            Open Tracker <Satellite className="w-5 h-5" />
+          </Link>
         </div>
-      
+
+        <div className="rounded-2xl overflow-hidden border border-cyan-400/30 shadow-lg">
+          <img
+            src="/images/tracker-preview.jpg"
+            alt="Satellite Tracker Preview"
+            className="w-full h-72 object-cover"
+          />
+        </div>
+      </div>
     </section>
   );
 }
