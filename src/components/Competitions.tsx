@@ -307,71 +307,86 @@ export default function Competitions() {
       )}
 
       {/* Premium Modal */}
-      {showPremium && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="premium-title"
-          className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/70 backdrop-blur-md px-4"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setShowPremium(false);
-          }}
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 18, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.22 }}
-            className="relative w-full max-w-lg rounded-2xl border border-yellow-400/40 bg-[#0b0f17] p-6 shadow-2xl"
-          >
-            <button
-              className="absolute top-3 right-3 text-gray-400 hover:text-white"
-              onClick={() => setShowPremium(false)}
-            >
-              <X className="w-6 h-6" />
-            </button>
-            <div className="flex items-start gap-3">
-              <div className="mt-1 rounded-lg bg-yellow-400/15 p-2 border border-yellow-400/30">
-                <Trophy className="w-5 h-5 text-yellow-300" />
-              </div>
-              <div className="flex-1">
-                <h3 id="premium-title" className="text-2xl font-bold text-white">
-                  Go Premium
-                </h3>
-                <p className="mt-2 text-gray-300">
-                  Unlock exclusive competitions, early access, certificates, and more.
-                </p>
-                <ul className="mt-4 space-y-2 text-sm text-gray-200">
-                  <li className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-yellow-300" /> Priority registration
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Medal className="w-4 h-4 text-yellow-300" /> Premium badges & certs
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Users2 className="w-4 h-4 text-yellow-300" /> Private community events
-                  </li>
-                </ul>
-                <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                  <a
-                    href={STRIPE_LINK}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex flex-1 items-center justify-center rounded-lg border border-yellow-400/60 bg-yellow-400/15 px-5 py-3 text-sm font-semibold text-yellow-200 hover:bg-yellow-400/25 transition-colors"
-                  >
-                    Upgrade with Stripe
-                  </a>
-                  <button
-                    onClick={() => setShowPremium(false)}
-                    className="inline-flex items-center justify-center rounded-lg border border-white/15 px-5 py-3 text-sm text-gray-200 hover:border-white/30"
-                  >
-                    Maybe later
-                  </button>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+     {showPremium && (
+  <div
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="premium-title"
+    className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/70 backdrop-blur-md px-4"
+    onClick={(e) => {
+      if (e.target === e.currentTarget) setShowPremium(false);
+    }}
+  >
+    <motion.div
+      initial={{ opacity: 0, y: 18, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.22 }}
+      className="relative w-full max-w-lg rounded-2xl border border-yellow-400/40 bg-[#0b0f17] p-6 shadow-2xl"
+    >
+      <button
+        className="absolute top-3 right-3 text-gray-400 hover:text-white"
+        onClick={() => setShowPremium(false)}
+        aria-label="Close premium modal"
+      >
+        <X className="w-6 h-6" />
+      </button>
+
+      {/* Header */}
+      <div className="mb-4">
+        <h3 id="premium-title" className="text-2xl font-extrabold text-white">
+          Xploreon Premium
+        </h3>
+        <p className="mt-1 text-sm text-gray-300">
+          Level up with live learning, a private community, and hands-on mentorship.
+        </p>
+      </div>
+
+      {/* Price Row */}
+      <div className="mb-5 flex items-center justify-between rounded-xl border border-yellow-400/30 bg-yellow-400/10 px-4 py-3">
+        <div className="text-sm text-yellow-200">Monthly plan</div>
+        <div className="text-right">
+          <div className="text-2xl font-extrabold text-yellow-300">$18</div>
+          <div className="text-[12px] text-yellow-200/80">per month • cancel anytime</div>
         </div>
-      )}
+      </div>
+
+      {/* What you get */}
+      <ul className="space-y-3 text-sm">
+        <li className="flex items-start gap-3">
+          <Sparkles className="mt-0.5 h-4 w-4 text-yellow-300" />
+          <span><span className="font-semibold text-white">4 live sessions</span> every month (interactive Q&A + recordings)</span>
+        </li>
+        <li className="flex items-start gap-3">
+          <Users2 className="mt-0.5 h-4 w-4 text-yellow-300" />
+          <span><span className="font-semibold text-white">Premium community access</span> with peers & experts</span>
+        </li>
+        <li className="flex items-start gap-3">
+          <Medal className="mt-0.5 h-4 w-4 text-yellow-300" />
+          <span><span className="font-semibold text-white">Mentorship</span> from the Xploreon team on projects & careers</span>
+        </li>
+      </ul>
+
+      {/* CTA */}
+      <div className="mt-6 flex flex-col sm:flex-row gap-3">
+        <a
+          href={STRIPE_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex flex-1 items-center justify-center rounded-lg border border-yellow-400/60 bg-yellow-400/15 px-5 py-3 text-sm font-semibold text-yellow-200 hover:bg-yellow-400/25 transition-colors"
+        >
+          Upgrade for $18/month
+        </a>
+        <button
+          onClick={() => setShowPremium(false)}
+          className="inline-flex items-center justify-center rounded-lg border border-white/15 px-5 py-3 text-sm text-gray-200 hover:border-white/30"
+        >
+          Maybe later
+        </button>
+      </div>
+    </motion.div>
+  </div>
+)}
+
     </div>
   );
 }
