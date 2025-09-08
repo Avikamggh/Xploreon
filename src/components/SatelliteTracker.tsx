@@ -6,32 +6,27 @@ import * as satellite from "satellite.js";
 import { Link } from "react-router-dom";
 
 const CONFIG = {
-  UPDATE_EVERY_MS: 1000,  // position refresh
-  ORBIT_POINTS: 90,       // ~90 minutes of future path (1/min)
+  UPDATE_EVERY_MS: 1000,
+  ORBIT_POINTS: 90,
 };
 
-// Netlify function (no CORS issues). Add the function named "tle-proxy".
+// Uses your Netlify function to avoid CORS
 const TLE_SOURCES: Record<string, string> = {
   stations: "/.netlify/functions/tle-proxy?group=stations",
   visual:   "/.netlify/functions/tle-proxy?group=visual",
 };
 
-type TLERow = {
-  name: string;
-  tle1: string;
-  tle2: string;
-  noradId: number;
-};
+type TLERow = { name: string; tle1: string; tle2: string; noradId: number };
 
 export default function SatelliteTracker() {
   const mapRef = useRef<LeafletMap | null>(null);
   const mapElRef = useRef<HTMLDivElement | null>(null);
   const markerRef = useRef<Marker | null>(null);
-  const orbitRef = useRef<Polyline | null>(null);
+  const orbitRef  = useRef<Polyline | null>(null);
 
   const [tleData, setTleData] = useState<TLERow[]>([]);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [infoHtml, setInfoHtml] = useState<string>("");
+  const [selectedId, setSelectedId] = useState<number | "">("");
+  const [panelHtml, setPanelHtml] = useState<string>("");
 
   useEffect(() => { document.title = "Xploreon | Live Satellite Tracker"; }, []);
 
@@ -46,7 +41,7 @@ export default function SatelliteTracker() {
     mapRef.current = map;
   }, []);
 
-  // Fetch TLE from Netlify function and auto-select ISS if present
+  // Fetch TLEs (server-side via Netlify function)
   useEffect(() => {
     const fetchAll = async () => {
       const all: TLERow[] = [];
@@ -56,39 +51,40 @@ export default function SatelliteTracker() {
           const text = await r.text();
           const lines = text.split("\n").map(s => s.trim()).filter(Boolean);
           for (let i = 0; i + 2 < lines.length; i += 3) {
-            const name = lines[i];
-            const tle1 = lines[i + 1];
-            const tle2 = lines[i + 2];
+            const name = lines[i], tle1 = lines[i+1], tle2 = lines[i+2];
             const m = tle1.match(/^1 (\d+)/);
             if (!m) continue;
             all.push({ name, tle1, tle2, noradId: parseInt(m[1], 10) });
           }
-        } catch (e) {
-          console.error("TLE fetch failed:", e);
-        }
+        } catch (e) { console.error("TLE fetch failed:", e); }
       }
-      // De-dupe by NORAD
       const uniq = all.filter((s, i, a) => a.findIndex(x => x.noradId === s.noradId) === i);
       setTleData(uniq);
-
-      // Auto-pick ISS so the info shows immediately
       const iss = uniq.find(s => /ISS/i.test(s.name));
       if (iss) setSelectedId(iss.noradId);
     };
     fetchAll();
   }, []);
 
-  // Tracking loop for the selected satellite
+  // Update loop for selected satellite
   useEffect(() => {
-    if (!selectedId || !mapRef.current) return;
+    if (!selectedId || !mapRef.current) {
+      // Clear marker/orbit and show placeholder in panel
+      if (markerRef.current) { mapRef.current?.removeLayer(markerRef.current); markerRef.current = null; }
+      if (orbitRef.current)  { mapRef.current?.removeLayer(orbitRef.current);  orbitRef.current  = null; }
+      setPanelHtml(`<div class="panel-heading">Satellite</div>
+        <div class="panel-placeholder">Select a satellite to see live details.</div>`);
+      return;
+    }
+
     const row = tleData.find(s => s.noradId === selectedId);
     if (!row) return;
 
-    const map = mapRef.current;
+    const map = mapRef.current!;
+    const satrec = satellite.twoline2satrec(row.tle1, row.tle2);
 
-    const update = () => {
+    const tick = () => {
       const now = new Date();
-      const satrec = satellite.twoline2satrec(row.tle1, row.tle2);
       const p = satellite.propagate(satrec, now);
       if (!p.position) return;
 
@@ -99,7 +95,7 @@ export default function SatelliteTracker() {
       const speedKmh = calcSpeedKmh(satrec, now);
       const orbitType = altKm > 35000 ? "Geostationary" : "Low Earth Orbit";
 
-      // 🛰️ emoji marker
+      // marker 🛰️
       if (markerRef.current) {
         markerRef.current.setLatLng([lat, lon]);
       } else {
@@ -114,22 +110,19 @@ export default function SatelliteTracker() {
         }).addTo(map);
       }
 
-      // Orbit preview
+      // orbit preview
       const pts = getOrbitPoints(satrec);
       if (orbitRef.current) {
         orbitRef.current.setLatLngs(pts);
       } else {
         orbitRef.current = L.polyline(pts, {
-          color: "#00ffe0",
-          weight: 2,
-          opacity: 0.7,
-          dashArray: "5,5",
+          color: "#00ffe0", weight: 2, opacity: 0.7, dashArray: "5,5",
         }).addTo(map);
       }
 
-      // Info card (top-right)
-      setInfoHtml(`
-        <div class="info-title">${row.name}</div>
+      // info inside same panel (top-right)
+      setPanelHtml(`
+        <div class="panel-heading">${escapeHtml(row.name)}</div>
         <div class="kv"><span>Latitude</span><b>${lat.toFixed(2)}°</b></div>
         <div class="kv"><span>Longitude</span><b>${lon.toFixed(2)}°</b></div>
         <div class="kv"><span>Altitude</span><b>${altKm.toFixed(2)} km</b></div>
@@ -138,13 +131,14 @@ export default function SatelliteTracker() {
       `);
     };
 
-    update();
-    const t = window.setInterval(update, CONFIG.UPDATE_EVERY_MS);
+    tick();
+    const t = window.setInterval(tick, CONFIG.UPDATE_EVERY_MS);
     return () => clearInterval(t);
   }, [selectedId, tleData]);
 
   const options = useMemo(
     () => tleData
+      .slice()
       .sort((a, b) => a.name.localeCompare(b.name))
       .map(s => <option key={s.noradId} value={s.noradId}>{s.name}</option>),
     [tleData]
@@ -152,6 +146,21 @@ export default function SatelliteTracker() {
 
   return (
     <div className="relative">
+      {/* unified panel (selector + live stats) */}
+      <div className="fixed top-4 right-4 z-[1000] w-80 bg-black/80 backdrop-blur rounded-xl border border-cyan-400/30 p-4 text-sm text-cyan-100 shadow-xl">
+        <label className="block text-cyan-300 mb-2 text-xs tracking-wide">Select Satellite</label>
+        <select
+          className="w-full mb-3 px-3 py-2 rounded bg-gray-900 text-cyan-300 outline-none border border-cyan-500/30"
+          value={selectedId}
+          onChange={(e) => setSelectedId(e.target.value ? parseInt(e.target.value, 10) : "")}
+        >
+          <option value="">-- Select --</option>
+          {options}
+        </select>
+
+        <div dangerouslySetInnerHTML={{ __html: panelHtml }} />
+      </div>
+
       {/* back button bottom center */}
       <Link
         to="/"
@@ -161,51 +170,19 @@ export default function SatelliteTracker() {
         ← Back to Home
       </Link>
 
-      {/* selector (top center) */}
-      <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[1000] bg-black/70 backdrop-blur px-3 py-2 rounded-lg">
-        <select
-          className="px-3 py-2 rounded bg-gray-900 text-cyan-400 outline-none"
-          value={selectedId ?? ""}
-          onChange={(e) => setSelectedId(e.target.value ? parseInt(e.target.value, 10) : null)}
-        >
-          <option value="">-- Select Satellite --</option>
-          {options}
-        </select>
-      </div>
-
-      {/* info card (TOP RIGHT) */}
-      {infoHtml && (
-        <div
-          className="fixed top-4 right-4 z-[1000] w-72 bg-black/80 backdrop-blur rounded-xl border border-cyan-400/30 p-4 text-sm text-cyan-100 shadow-xl"
-          dangerouslySetInnerHTML={{ __html: infoHtml }}
-        />
-      )}
-
       {/* map */}
       <div ref={mapElRef} style={{ height: "100vh", width: "100%" }} />
 
       <style>{`
-        .sat-emoji {
-          font-size: 24px;
-          text-align: center;
-          filter: drop-shadow(0 0 8px #00ffe0);
+        .sat-emoji { font-size: 24px; text-align:center; filter: drop-shadow(0 0 8px #00ffe0); }
+        .panel-heading {
+          color:#00ffe0; font-weight:700; margin:8px 0 4px; font-size:14px; text-shadow:0 0 8px #00ffe0;
         }
-        .info-title {
-          color: #00ffe0;
-          font-weight: 700;
-          margin-bottom: 8px;
-          font-size: 14px;
-          text-shadow: 0 0 8px #00ffe0;
-        }
-        .kv {
-          display: flex;
-          justify-content: space-between;
-          padding: 6px 0;
-          border-bottom: 1px dashed rgba(0,255,224,0.25);
-        }
-        .kv:last-child { border-bottom: 0; }
-        .kv span { color: #8fd9e6; }
-        .kv b { color: #ffffff; font-weight: 600; }
+        .panel-placeholder { color:#9adff0; font-size:12px; padding:6px 0 2px; }
+        .kv { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed rgba(0,255,224,0.25); }
+        .kv:last-child { border-bottom:0; }
+        .kv span { color:#8fd9e6; }
+        .kv b { color:#ffffff; font-weight:600; }
       `}</style>
     </div>
   );
@@ -233,9 +210,13 @@ function calcSpeedKmh(satrec: any, time: Date) {
       const dx = p2.position.x - p1.position.x;
       const dy = p2.position.y - p1.position.y;
       const dz = p2.position.z - p1.position.z;
-      const d = Math.sqrt(dx*dx + dy*dy + dz*dz); // km per second
+      const d  = Math.sqrt(dx*dx + dy*dy + dz*dz); // km per second
       return (d * 3600).toFixed(2); // km/h
     }
   } catch {}
   return "0";
+}
+
+function escapeHtml(s: string) {
+  return s.replace(/[&<>"']/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]!));
 }
