@@ -228,7 +228,7 @@ const departments = [
   { name: "Engineering", icon: <Rocket className="w-5 h-5" />, count: teamMembers.filter(m => m.department === "Engineering").length },
   { name: "Research & Development", icon: <Users className="w-5 h-5" />, count: teamMembers.filter(m => m.department === "Research & Development").length },
   { name: "Operations", icon: <Users className="w-5 h-5" />, count: teamMembers.filter(m => m.department === "Operations").length },
-  { name: "Intern", icon: <Users className="w-5 h-5" />, count: teamMembers.filter(m => m.department === "Intern").length }
+  
 
 ];
 
