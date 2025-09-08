@@ -30,7 +30,15 @@ export default function App() {
             <Route path="/missions" element={<MissionsPage />} />
             <Route path="/news" element={<NewsPage />} />
             <Route path="/competitions" element={<Competitions />} />
-            <Route path="/tracker" element={<SatelliteTracker />} /> {/* ✅ New route */}
+            <Route
+  path="/tracker"
+  element={
+    <div className="bg-black text-white min-h-screen">
+      <SatelliteTracker />
+    </div>
+  }
+/>
+
             <Route path="/team" element={<TeamPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="*" element={<NotFoundPage />} />
