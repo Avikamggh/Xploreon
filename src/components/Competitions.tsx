@@ -138,7 +138,7 @@ export default function Competitions() {
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
       {/* Starfield */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-80">
-        <StarfieldInline density={900} />
+        <StarfieldInline density={1800} />
       </div>
 
       {/* Hero */}
