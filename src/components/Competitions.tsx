@@ -49,7 +49,7 @@ const COMPETITIONS: Competition[] = [
     title: "AI Physics Hackathon",
     slug: "ai-physics",
     tag: "Hackathon",
-    short: "Build an AI model to solve a physics challenge.",
+    short: "Build an AI model to solve a physics challenge and try to overcome the problem given to you and solve it in 2 hours.",
     image: "/images/hack.jpg",
     imageWebp: "/images/hack.webp",
     width: 1200,
