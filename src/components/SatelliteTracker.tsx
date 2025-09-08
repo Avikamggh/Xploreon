@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L, { Map as LeafletMap, TileLayer, Polyline, Marker } from "leaflet";
+import * as satellite from "satellite.js";
 
 // ---------------------- Config ----------------------
 const CONFIG = {
@@ -46,7 +47,7 @@ const FEATURED_SATELLITES: Record<number, { name: string; icon: string }> = {
 
 // satellite.js is ESM in modern bundlers
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const satellite = require("satellite.js");
+
 
 // ---------------------- Types ----------------------
 type TLERow = {
