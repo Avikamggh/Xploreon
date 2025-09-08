@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Satellite } from "lucide-react";
+import Starfield from "./Starfield";
+
 
 export function HeroSection() {
   const [src, setSrc] = React.useState<string>("");
@@ -37,6 +39,8 @@ export function HeroSection() {
           />
           <div className="absolute inset-0 bg-black/5" />
         </div>
+{/* Stars */}
+<Starfield className="absolute inset-0 -z-0" count={800} />
 
         {/* Stars */}
         <div className="absolute inset-0 pointer-events-none">
