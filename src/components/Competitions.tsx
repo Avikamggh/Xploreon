@@ -120,7 +120,7 @@ export default function Competitions() {
   };
 
   // set the title first
-  document.title = "Competitions | Xploreon-Space Innovation";
+  document.title = "Competitions | Xploreon - Space Innovation";
 
   // then set up your listener
   window.addEventListener("keydown", onKey);
