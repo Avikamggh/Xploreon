@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";  // add this import
   >
     ← Back to Home
   </Link>
-
+</div>
 // ---------------------- Config ----------------------
 const CONFIG = {
   TLE_UPDATE_INTERVAL: 6 * 60 * 60 * 1000, // 6h
