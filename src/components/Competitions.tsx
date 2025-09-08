@@ -11,13 +11,14 @@ type Competition = {
   tag: "Quiz" | "Writing" | "Hackathon";
   short: string;
   image: string;
-  status: "open" | "closed"; // ✅ open vs closed
+  status: "open" | "closed";
   imageWebp?: string;
   width?: number;
   height?: number;
 };
 
-const FORM_URL = "https://forms.gle/your-form-id"; // ⬅️ replace with your real Google Form link
+const FORM_URL = "https://forms.gle/your-form-id"; // replace with Google Form
+const STRIPE_LINK = "https://buy.stripe.com/4gM8wI1C333x1i3fdVc7u0b";
 
 const COMPETITIONS: Competition[] = [
   {
@@ -30,7 +31,7 @@ const COMPETITIONS: Competition[] = [
     imageWebp: "/images/space.webp",
     width: 1200,
     height: 800,
-    status: "closed", // ✅ marked closed
+    status: "closed",
   },
   {
     id: "c2",
@@ -49,7 +50,7 @@ const COMPETITIONS: Competition[] = [
     title: "AI Physics Hackathon",
     slug: "ai-physics",
     tag: "Hackathon",
-    short: "Build an AI model to solve a physics challenge and try to overcome the problem given to you and solve it in 2 hours.",
+    short: "Build an AI model to solve a physics challenge in 2 hours.",
     image: "/images/hack.jpg",
     imageWebp: "/images/hack.webp",
     width: 1200,
@@ -61,7 +62,7 @@ const COMPETITIONS: Competition[] = [
 const TAGS = ["All", "Quiz", "Writing", "Hackathon"] as const;
 type TagFilter = (typeof TAGS)[number];
 
-/** Image with WebP fallback + blur skeleton */
+/** Image with WebP fallback */
 function FastImage({ comp, eager = false }: { comp: Competition; eager?: boolean }) {
   const [loaded, setLoaded] = useState(false);
   const id = useId();
@@ -69,14 +70,12 @@ function FastImage({ comp, eager = false }: { comp: Competition; eager?: boolean
 
   return (
     <div className="relative h-80 w-full overflow-hidden">
-      {/* Blur skeleton */}
       <div
         aria-hidden
         className={`absolute inset-0 animate-pulse bg-[linear-gradient(110deg,rgba(255,255,255,0.06),rgba(255,255,255,0.12),rgba(255,255,255,0.06))] bg-[length:200%_100%] transition-opacity duration-500 ${
           loaded ? "opacity-0" : "opacity-100"
         }`}
       />
-
       <picture>
         {comp.imageWebp && <source srcSet={comp.imageWebp} type="image/webp" />}
         <img
@@ -88,14 +87,12 @@ function FastImage({ comp, eager = false }: { comp: Competition; eager?: boolean
           fetchpriority={fetchpriority as any}
           width={comp.width ?? 1200}
           height={comp.height ?? 800}
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className={`w-full h-full object-cover transition-transform duration-500 will-change-transform ${
+          className={`w-full h-full object-cover transition-transform duration-500 ${
             loaded ? "group-hover:scale-105" : "scale-100"
           }`}
           onLoad={() => setLoaded(true)}
         />
       </picture>
-
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
     </div>
   );
@@ -106,29 +103,30 @@ export default function Competitions() {
   const [showPremium, setShowPremium] = useState(false);
   const [active, setActive] = useState<Competition | null>(null);
 
-  const STRIPE_LINK = "https://buy.stripe.com/4gM8wI1C333x1i3fdVc7u0b";
-
   const list = useMemo(
     () => (filter === "All" ? COMPETITIONS : COMPETITIONS.filter((c) => c.tag === filter)),
     [filter]
   );
 
-  // Close modal on ESC
- useEffect(() => {
-  const onKey = (e: KeyboardEvent) => {
-    if (e.key === "Escape") setActive(null);
-  };
+  // ESC closes modals
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setActive(null);
+        setShowPremium(false);
+      }
+    };
+    document.title = "Competitions | Xploreon - Space Innovation";
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
-  // set the title first
-  document.title = "Competitions | Xploreon - Space Innovation";
-
-  // then set up your listener
-  window.addEventListener("keydown", onKey);
-
-  // cleanup
-  return () => window.removeEventListener("keydown", onKey);
-}, []);
-
+  // lock scroll when premium open
+  useEffect(() => {
+    if (showPremium) document.body.classList.add("overflow-hidden");
+    else document.body.classList.remove("overflow-hidden");
+    return () => document.body.classList.remove("overflow-hidden");
+  }, [showPremium]);
 
   const buildFormUrl = (title: string) => {
     const url = new URL(FORM_URL);
@@ -154,12 +152,9 @@ export default function Competitions() {
         >
           Xploreon Competitions
         </motion.h1>
-
         <p className="mt-4 text-gray-300/90 max-w-2xl mx-auto">
           Compete, learn, and showcase your talent — full details coming soon!
         </p>
-
-        {/* Filter Buttons */}
         <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
           {TAGS.map((t) => (
             <button
@@ -190,22 +185,15 @@ export default function Competitions() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ delay: i * 0.06, duration: 0.5 }}
-              style={{ contentVisibility: "auto", containIntrinsicSize: "320px" }}
             >
-              {/* Image */}
               <FastImage comp={c} eager={i < 3} />
-
-              {/* Tag badge */}
               <div className="absolute left-3 top-3 z-10 flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-black/40 px-2.5 py-1 text-[11px] uppercase tracking-wider text-cyan-300">
                 <Sparkles className="w-3.5 h-3.5" />
                 {c.tag}
               </div>
-
-              {/* Content */}
               <div className="p-5">
                 <h3 className="text-lg md:text-xl font-bold">{c.title}</h3>
                 <p className="mt-2 text-gray-300">{c.short}</p>
-
                 <div className="mt-5 flex gap-3">
                   {c.status === "open" ? (
                     <button
@@ -260,11 +248,9 @@ export default function Competitions() {
             <button
               className="absolute top-3 right-3 text-gray-400 hover:text-white"
               onClick={() => setActive(null)}
-              aria-label="Close registration"
             >
               <X className="w-6 h-6" />
             </button>
-
             <div className="flex items-start gap-3">
               <div className="mt-1 rounded-lg bg-cyan-400/15 p-2 border border-cyan-400/30">
                 <Info className="w-5 h-5 text-cyan-300" />
@@ -277,25 +263,19 @@ export default function Competitions() {
                   {active.tag}
                 </p>
                 <p className="mt-3 text-gray-300">{active.short}</p>
-
-                {/* Instructions */}
                 <div className="mt-5 rounded-xl bg-white/[0.04] border border-white/10 p-4">
                   <h4 className="text-sm font-semibold text-cyan-200">Instructions</h4>
                   {active.status === "open" ? (
                     <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1 text-sm">
                       <li>Use your real name and email (for results & certificates).</li>
                       <li>If applicable, add your school/college/organization.</li>
-                      <li>Join our Discord/Telegram community after registering.</li>
+                      <li>Join our Discord/Telegram after registering.</li>
                       <li>You’ll receive event dates & rules by email.</li>
                     </ul>
                   ) : (
-                    <p className="mt-2 text-red-300 text-sm">
-                      Registration for this competition is closed.
-                    </p>
+                    <p className="mt-2 text-red-300 text-sm">Registration closed.</p>
                   )}
                 </div>
-
-                {/* Actions */}
                 <div className="mt-6 flex flex-col sm:flex-row gap-3">
                   {active.status === "open" ? (
                     <>
@@ -319,6 +299,73 @@ export default function Competitions() {
                       Registration Closed
                     </div>
                   )}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Premium Modal */}
+      {showPremium && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="premium-title"
+          className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/70 backdrop-blur-md px-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowPremium(false);
+          }}
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 18, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.22 }}
+            className="relative w-full max-w-lg rounded-2xl border border-yellow-400/40 bg-[#0b0f17] p-6 shadow-2xl"
+          >
+            <button
+              className="absolute top-3 right-3 text-gray-400 hover:text-white"
+              onClick={() => setShowPremium(false)}
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <div className="flex items-start gap-3">
+              <div className="mt-1 rounded-lg bg-yellow-400/15 p-2 border border-yellow-400/30">
+                <Trophy className="w-5 h-5 text-yellow-300" />
+              </div>
+              <div className="flex-1">
+                <h3 id="premium-title" className="text-2xl font-bold text-white">
+                  Go Premium
+                </h3>
+                <p className="mt-2 text-gray-300">
+                  Unlock exclusive competitions, early access, certificates, and more.
+                </p>
+                <ul className="mt-4 space-y-2 text-sm text-gray-200">
+                  <li className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-yellow-300" /> Priority registration
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Medal className="w-4 h-4 text-yellow-300" /> Premium badges & certs
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Users2 className="w-4 h-4 text-yellow-300" /> Private community events
+                  </li>
+                </ul>
+                <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                  <a
+                    href={STRIPE_LINK}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex flex-1 items-center justify-center rounded-lg border border-yellow-400/60 bg-yellow-400/15 px-5 py-3 text-sm font-semibold text-yellow-200 hover:bg-yellow-400/25 transition-colors"
+                  >
+                    Upgrade with Stripe
+                  </a>
+                  <button
+                    onClick={() => setShowPremium(false)}
+                    className="inline-flex items-center justify-center rounded-lg border border-white/15 px-5 py-3 text-sm text-gray-200 hover:border-white/30"
+                  >
+                    Maybe later
+                  </button>
                 </div>
               </div>
             </div>
