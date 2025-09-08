@@ -39,8 +39,6 @@ export function HeroSection() {
           />
           <div className="absolute inset-0 bg-black/5" />
         </div>
-{/* Stars */}
-<Starfield className="absolute inset-0 -z-0" count={800} />
 
         {/* Stars */}
         <div className="absolute inset-0 pointer-events-none">
@@ -60,6 +58,9 @@ export function HeroSection() {
 
       {/* Tracker card section (now below video) */}
       <section className="relative z-10 py-20 px-6 bg-black text-white">
+        {/* Stars */}
+<Starfield className="absolute inset-0 -z-0" count={800} />
+
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
           {/* Info */}
           <div>
