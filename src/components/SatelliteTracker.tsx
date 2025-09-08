@@ -183,10 +183,11 @@ export default function SatelliteTracker() {
         .kv:last-child { border-bottom:0; }
         .kv span { color:#8fd9e6; }
         .kv b { color:#ffffff; font-weight:600; }
-      `}
         .leaflet-control-attribution {
-         display: none !important;
+          display: none !important;
        }
+      `}
+        
 
       </style>
     </div>
