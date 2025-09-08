@@ -120,6 +120,8 @@ export default function Competitions() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+        document.title = "Competitions | Xploreon-Space Innovation"; // ← set custom title
+
   }, []);
 
   const buildFormUrl = (title: string) => {
