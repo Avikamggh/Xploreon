@@ -1,3 +1,4 @@
+// src/components/SatelliteTracker.tsx
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L, { Map as LeafletMap, Marker, Polyline } from "leaflet";
@@ -5,13 +6,14 @@ import * as satellite from "satellite.js";
 import { Link } from "react-router-dom";
 
 const CONFIG = {
-  UPDATE_INTERVAL: 1000, // 1 second
-  ORBIT_POINTS: 90,      // 90 minutes of orbit path
+  UPDATE_EVERY_MS: 1000,  // position refresh
+  ORBIT_POINTS: 90,       // ~90 minutes of future path (1/min)
 };
 
+// Netlify function (no CORS issues). Add the function named "tle-proxy".
 const TLE_SOURCES: Record<string, string> = {
   stations: "/.netlify/functions/tle-proxy?group=stations",
-  visual: "/.netlify/functions/tle-proxy?group=visual",
+  visual:   "/.netlify/functions/tle-proxy?group=visual",
 };
 
 type TLERow = {
@@ -23,22 +25,20 @@ type TLERow = {
 
 export default function SatelliteTracker() {
   const mapRef = useRef<LeafletMap | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const mapElRef = useRef<HTMLDivElement | null>(null);
   const markerRef = useRef<Marker | null>(null);
   const orbitRef = useRef<Polyline | null>(null);
 
   const [tleData, setTleData] = useState<TLERow[]>([]);
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [info, setInfo] = useState<string>("Select a satellite to begin tracking...");
+  const [infoHtml, setInfoHtml] = useState<string>("");
 
-  useEffect(() => {
-    document.title = "Xploreon | Live Satellite Tracker";
-  }, []);
+  useEffect(() => { document.title = "Xploreon | Live Satellite Tracker"; }, []);
 
   // Init map once
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) return;
-    const map = L.map(containerRef.current, { worldCopyJump: true }).setView([0, 0], 2);
+    if (!mapElRef.current || mapRef.current) return;
+    const map = L.map(mapElRef.current, { worldCopyJump: true }).setView([0, 0], 2);
     L.tileLayer(
       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
       { attribution: "© Esri" }
@@ -46,149 +46,183 @@ export default function SatelliteTracker() {
     mapRef.current = map;
   }, []);
 
-  // Fetch TLE
+  // Fetch TLE from Netlify function and auto-select ISS if present
   useEffect(() => {
-    const fetchTLE = async () => {
+    const fetchAll = async () => {
       const all: TLERow[] = [];
       for (const key of Object.keys(TLE_SOURCES) as (keyof typeof TLE_SOURCES)[]) {
         try {
-          const resp = await fetch(TLE_SOURCES[key]);
-          const text = await resp.text();
-          const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
-          for (let i = 0; i < lines.length; i += 3) {
-            if (i + 2 >= lines.length) break;
+          const r = await fetch(TLE_SOURCES[key]);
+          const text = await r.text();
+          const lines = text.split("\n").map(s => s.trim()).filter(Boolean);
+          for (let i = 0; i + 2 < lines.length; i += 3) {
             const name = lines[i];
             const tle1 = lines[i + 1];
             const tle2 = lines[i + 2];
-            const match = tle1.match(/^1 (\d+)/);
-            if (!match) continue;
-            all.push({ name, tle1, tle2, noradId: parseInt(match[1], 10) });
+            const m = tle1.match(/^1 (\d+)/);
+            if (!m) continue;
+            all.push({ name, tle1, tle2, noradId: parseInt(m[1], 10) });
           }
         } catch (e) {
-          console.error("TLE fetch failed", e);
+          console.error("TLE fetch failed:", e);
         }
       }
-      setTleData(all);
+      // De-dupe by NORAD
+      const uniq = all.filter((s, i, a) => a.findIndex(x => x.noradId === s.noradId) === i);
+      setTleData(uniq);
+
+      // Auto-pick ISS so the info shows immediately
+      const iss = uniq.find(s => /ISS/i.test(s.name));
+      if (iss) setSelectedId(iss.noradId);
     };
-    fetchTLE();
+    fetchAll();
   }, []);
 
-  // Update position of selected satellite
+  // Tracking loop for the selected satellite
   useEffect(() => {
     if (!selectedId || !mapRef.current) return;
-
-    const row = tleData.find((s) => s.noradId === selectedId);
+    const row = tleData.find(s => s.noradId === selectedId);
     if (!row) return;
+
+    const map = mapRef.current;
 
     const update = () => {
       const now = new Date();
       const satrec = satellite.twoline2satrec(row.tle1, row.tle2);
-      const pos = satellite.propagate(satrec, now);
-      if (!pos.position) return;
-      const geo = satellite.eciToGeodetic(pos.position, satellite.gstime(now));
+      const p = satellite.propagate(satrec, now);
+      if (!p.position) return;
+
+      const geo = satellite.eciToGeodetic(p.position, satellite.gstime(now));
       const lat = satellite.degreesLat(geo.latitude);
       const lon = satellite.degreesLong(geo.longitude);
-      const alt = geo.height;
-      const speed = calcSpeedKmh(satrec, now);
-      const orbitType = alt > 35000 ? "Geostationary" : "Low Earth Orbit";
+      const altKm = geo.height;
+      const speedKmh = calcSpeedKmh(satrec, now);
+      const orbitType = altKm > 35000 ? "Geostationary" : "Low Earth Orbit";
 
-      // Marker (🛰️ emoji)
+      // 🛰️ emoji marker
       if (markerRef.current) {
         markerRef.current.setLatLng([lat, lon]);
       } else {
         markerRef.current = L.marker([lat, lon], {
           icon: L.divIcon({
-            className: "satellite-icon",
+            className: "sat-emoji",
             html: "🛰️",
             iconSize: [30, 30],
             iconAnchor: [15, 15],
           }),
-        }).addTo(mapRef.current!);
+          interactive: false,
+        }).addTo(map);
       }
 
-      // Orbit path
-      const orbit = getOrbit(satrec);
+      // Orbit preview
+      const pts = getOrbitPoints(satrec);
       if (orbitRef.current) {
-        orbitRef.current.setLatLngs(orbit);
+        orbitRef.current.setLatLngs(pts);
       } else {
-        orbitRef.current = L.polyline(orbit, { color: "#00ffe0", weight: 2 }).addTo(mapRef.current!);
+        orbitRef.current = L.polyline(pts, {
+          color: "#00ffe0",
+          weight: 2,
+          opacity: 0.7,
+          dashArray: "5,5",
+        }).addTo(map);
       }
 
-      // Info panel
-      setInfo(`
-        <b>${row.name}</b><br/>
-        Latitude: ${lat.toFixed(2)}°<br/>
-        Longitude: ${lon.toFixed(2)}°<br/>
-        Altitude: ${alt.toFixed(2)} km<br/>
-        Speed: ${speed} km/h<br/>
-        Orbit: ${orbitType}
+      // Info card (top-right)
+      setInfoHtml(`
+        <div class="info-title">${row.name}</div>
+        <div class="kv"><span>Latitude</span><b>${lat.toFixed(2)}°</b></div>
+        <div class="kv"><span>Longitude</span><b>${lon.toFixed(2)}°</b></div>
+        <div class="kv"><span>Altitude</span><b>${altKm.toFixed(2)} km</b></div>
+        <div class="kv"><span>Speed</span><b>${speedKmh} km/h</b></div>
+        <div class="kv"><span>Orbit</span><b>${orbitType}</b></div>
       `);
     };
 
     update();
-    const timer = setInterval(update, CONFIG.UPDATE_INTERVAL);
-    return () => clearInterval(timer);
+    const t = window.setInterval(update, CONFIG.UPDATE_EVERY_MS);
+    return () => clearInterval(t);
   }, [selectedId, tleData]);
 
   const options = useMemo(
-    () => tleData.map((s) => <option key={s.noradId} value={s.noradId}>{s.name}</option>),
+    () => tleData
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(s => <option key={s.noradId} value={s.noradId}>{s.name}</option>),
     [tleData]
   );
 
   return (
     <div className="relative">
-      {/* Back Button */}
+      {/* back button bottom center */}
       <Link
         to="/"
-        className="fixed bottom-6 left-1/2 transform -translate-x-1/2 
-                   px-4 py-2 rounded-lg bg-cyan-400 text-black font-semibold shadow-lg z-[1000]"
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[1000] px-4 py-2 rounded-lg
+                   bg-cyan-400 text-black font-semibold shadow-lg hover:bg-cyan-300 transition"
       >
         ← Back to Home
       </Link>
 
-      {/* Dropdown */}
-      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-black/70 p-3 rounded-lg z-[1000]">
+      {/* selector (top center) */}
+      <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[1000] bg-black/70 backdrop-blur px-3 py-2 rounded-lg">
         <select
-          className="px-3 py-2 rounded bg-gray-800 text-cyan-400"
-          onChange={(e) => setSelectedId(parseInt(e.target.value))}
+          className="px-3 py-2 rounded bg-gray-900 text-cyan-400 outline-none"
+          value={selectedId ?? ""}
+          onChange={(e) => setSelectedId(e.target.value ? parseInt(e.target.value, 10) : null)}
         >
           <option value="">-- Select Satellite --</option>
           {options}
         </select>
       </div>
 
-      {/* Info Panel */}
-      <div
-        className="absolute top-20 right-4 bg-black/80 text-cyan-300 p-4 rounded-lg w-64 text-sm shadow-lg"
-        dangerouslySetInnerHTML={{ __html: info }}
-      />
+      {/* info card (TOP RIGHT) */}
+      {infoHtml && (
+        <div
+          className="fixed top-4 right-4 z-[1000] w-72 bg-black/80 backdrop-blur rounded-xl border border-cyan-400/30 p-4 text-sm text-cyan-100 shadow-xl"
+          dangerouslySetInnerHTML={{ __html: infoHtml }}
+        />
+      )}
 
-      {/* Map */}
-      <div ref={containerRef} style={{ height: "100vh", width: "100%" }} />
+      {/* map */}
+      <div ref={mapElRef} style={{ height: "100vh", width: "100%" }} />
 
       <style>{`
-        .satellite-icon {
-          font-size: 22px;
+        .sat-emoji {
+          font-size: 24px;
           text-align: center;
           filter: drop-shadow(0 0 8px #00ffe0);
         }
+        .info-title {
+          color: #00ffe0;
+          font-weight: 700;
+          margin-bottom: 8px;
+          font-size: 14px;
+          text-shadow: 0 0 8px #00ffe0;
+        }
+        .kv {
+          display: flex;
+          justify-content: space-between;
+          padding: 6px 0;
+          border-bottom: 1px dashed rgba(0,255,224,0.25);
+        }
+        .kv:last-child { border-bottom: 0; }
+        .kv span { color: #8fd9e6; }
+        .kv b { color: #ffffff; font-weight: 600; }
       `}</style>
     </div>
   );
 }
 
-// Helpers
-function getOrbit(satrec: any) {
-  const points: [number, number][] = [];
+/* ---------- helpers ---------- */
+function getOrbitPoints(satrec: any) {
+  const pts: [number, number][] = [];
   const now = new Date();
   for (let i = 0; i < CONFIG.ORBIT_POINTS; i++) {
     const t = new Date(now.getTime() + i * 60 * 1000);
-    const pos = satellite.propagate(satrec, t);
-    if (!pos.position) continue;
-    const geo = satellite.eciToGeodetic(pos.position, satellite.gstime(t));
-    points.push([satellite.degreesLat(geo.latitude), satellite.degreesLong(geo.longitude)]);
+    const p = satellite.propagate(satrec, t);
+    if (!p.position) continue;
+    const g = satellite.eciToGeodetic(p.position, satellite.gstime(t));
+    pts.push([satellite.degreesLat(g.latitude), satellite.degreesLong(g.longitude)]);
   }
-  return points;
+  return pts;
 }
 
 function calcSpeedKmh(satrec: any, time: Date) {
@@ -199,8 +233,8 @@ function calcSpeedKmh(satrec: any, time: Date) {
       const dx = p2.position.x - p1.position.x;
       const dy = p2.position.y - p1.position.y;
       const dz = p2.position.z - p1.position.z;
-      const d = Math.sqrt(dx * dx + dy * dy + dz * dz);
-      return (d * 3600).toFixed(2);
+      const d = Math.sqrt(dx*dx + dy*dy + dz*dz); // km per second
+      return (d * 3600).toFixed(2); // km/h
     }
   } catch {}
   return "0";
