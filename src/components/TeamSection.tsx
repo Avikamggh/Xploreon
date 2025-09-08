@@ -16,7 +16,6 @@ import divanshiImg from "../images/divanshi.png";
 import hemantImg from "../images/hemant.png";
 import harshilImg from "../images/harshil.png";
 import rishitaImg from "../images/rishita.png";
-import riyaImg from "../images/riya.png";
 import uImg from "../images/u.png";
 import vishardImg from "../images/vishard.png";
 
@@ -207,19 +206,7 @@ const teamMembers = [
       email: "utkarsh.tripathi@xploreon.space"
     }
   },
-  {
-    name: "Riya",
-    role: "CI-CD Pipeline",
-    department: "Intern",
-    bio: "Mathematical modeling expert for trajectory optimization, orbital mechanics, and mission safety.",
-    achievements: ["Trajectory Optimization", "Mathematical Modeling", "Orbital Mechanics"],
-    avatar: riyaImg,
-    social: {
-      linkedin: "#",
-      twitter: "#",
-      email: "utkarsh.tripathi@xploreon.space"
-    }
-  },
+  
   {
     name: "Mansi Pradyuman Shah",
     role: "Market Researcher",
