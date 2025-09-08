@@ -1,8 +1,10 @@
 // src/components/Competitions.tsx
-import React, { useState, useMemo, useId } from "react";
+import React, { useState, useMemo, useId, useEffect } from "react";
 import { motion } from "motion/react";
-import { X, Medal, Users2, Trophy, Sparkles } from "lucide-react";
-import StarfieldInline from "./Starfield"; // make sure this renders on a transparent canvas
+import { X, Medal, Users2, Trophy, Sparkles, Info } from "lucide-react";
+import StarfieldInline from "./Starfield";
+
+
 
 type Competition = {
   id: string;
@@ -10,11 +12,14 @@ type Competition = {
   slug: string;
   tag: "Quiz" | "Writing" | "Hackathon";
   short: string;
-  image: string;      // jpg/png fallback
-  imageWebp?: string; // optional webp for speed
-  width?: number;     // intrinsic dims prevent CLS
+  image: string;
+  status: "open" | "closed"; // ✅ new field
+  imageWebp?: string;
+  width?: number;
   height?: number;
 };
+
+const FORM_URL = "https://forms.gle/your-form-id"; // ⬅️ replace this
 
 const COMPETITIONS: Competition[] = [
   {
@@ -27,6 +32,7 @@ const COMPETITIONS: Competition[] = [
     imageWebp: "/images/space.webp",
     width: 1200,
     height: 800,
+    status: "closed", // ✅ mark as closed
   },
   {
     id: "c2",
@@ -38,6 +44,7 @@ const COMPETITIONS: Competition[] = [
     imageWebp: "/images/story.webp",
     width: 1200,
     height: 800,
+    status: "open",
   },
   {
     id: "c3",
@@ -49,19 +56,21 @@ const COMPETITIONS: Competition[] = [
     imageWebp: "/images/hack.webp",
     width: 1200,
     height: 800,
+    status: "open",
   },
 ];
+
 
 const TAGS = ["All", "Quiz", "Writing", "Hackathon"] as const;
 type TagFilter = (typeof TAGS)[number];
 
-/** Small image card with blur-skeleton + fast loading hints */
+/** Image with WebP fallback + blur skeleton for speed */
 function FastImage({
   comp,
   eager = false,
 }: {
   comp: Competition;
-  eager?: boolean; // true for first row/above the fold
+  eager?: boolean;
 }) {
   const [loaded, setLoaded] = useState(false);
   const id = useId();
@@ -77,11 +86,8 @@ function FastImage({
         }`}
       />
 
-      {/* Real image with webp + jpeg fallback */}
       <picture>
-        {comp.imageWebp && (
-          <source srcSet={comp.imageWebp} type="image/webp" />
-        )}
+        {comp.imageWebp && <source srcSet={comp.imageWebp} type="image/webp" />}
         <img
           id={`img-${id}`}
           src={comp.image}
@@ -99,7 +105,6 @@ function FastImage({
         />
       </picture>
 
-      {/* soft vignette for text legibility */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
     </div>
   );
@@ -108,6 +113,7 @@ function FastImage({
 export default function Competitions() {
   const [filter, setFilter] = useState<TagFilter>("All");
   const [showPremium, setShowPremium] = useState(false);
+  const [active, setActive] = useState<Competition | null>(null);
 
   const STRIPE_LINK = "https://buy.stripe.com/4gM8wI1C333x1i3fdVc7u0b";
 
@@ -116,15 +122,27 @@ export default function Competitions() {
     [filter]
   );
 
+  // Close modal on ESC
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActive(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  const buildFormUrl = (title: string) => {
+    // Optional: change "comp" to your Google Form prefill field query if needed
+    const url = new URL(FORM_URL);
+    url.searchParams.set("comp", title);
+    return url.toString();
+  };
+
   return (
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
-      {/* === Starfield: make it visible ===
-          1) render behind with a slightly lighter background (bg-black is OK)
-          2) ensure the canvas has pointer-events-none and sits at z-0 or below
-          3) parent must be relative; we already have it
-      */}
+      {/* Starfield layer */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-80">
-        <StarfieldInline density={900} /> 
+        <StarfieldInline density={900} />
       </div>
 
       {/* Hero */}
@@ -174,12 +192,12 @@ export default function Competitions() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ delay: i * 0.06, duration: 0.5 }}
-              style={{ contentVisibility: "auto", containIntrinsicSize: "320px" }} // speed hint
+              style={{ contentVisibility: "auto", containIntrinsicSize: "320px" }}
             >
-              {/* Image (first three get priority) */}
+              {/* Image */}
               <FastImage comp={c} eager={i < 3} />
 
-              {/* Badge */}
+              {/* Tag badge */}
               <div className="absolute left-3 top-3 z-10 flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-black/40 px-2.5 py-1 text-[11px] uppercase tracking-wider text-cyan-300">
                 <Sparkles className="w-3.5 h-3.5" />
                 {c.tag}
@@ -189,9 +207,18 @@ export default function Competitions() {
               <div className="p-5">
                 <h3 className="text-lg md:text-xl font-bold">{c.title}</h3>
                 <p className="mt-2 text-gray-300">{c.short}</p>
-                <p className="mt-4 inline-block rounded-md border border-white/15 px-2 py-1 text-[12px] text-cyan-300">
-                  Coming Soon
-                </p>
+
+                <div className="mt-5 flex gap-3">
+                  <button
+                    onClick={() => setActive(c)}
+                    className="inline-flex items-center justify-center rounded-lg border border-cyan-400/40 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-200 hover:bg-cyan-400/15 hover:border-cyan-400/60 transition-colors"
+                  >
+                    Register
+                  </button>
+                  <span className="inline-flex items-center rounded-md border border-white/15 px-2 py-1 text-[12px] text-gray-300">
+                    Coming Soon
+                  </span>
+                </div>
               </div>
             </motion.article>
           ))}
@@ -211,7 +238,12 @@ export default function Competitions() {
 
       {/* Premium Modal */}
       {showPremium && (
-        <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/70 backdrop-blur-md px-4">
+        <div
+          className="fixed inset-0 z-30 flex items-center justify-center bg-black/70 backdrop-blur-md px-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowPremium(false);
+          }}
+        >
           <div className="relative w-full max-w-md rounded-2xl border border-yellow-400/30 bg-[#0b0b16] p-7 shadow-2xl">
             <button
               className="absolute top-3 right-3 text-gray-400 hover:text-white"
@@ -225,9 +257,7 @@ export default function Competitions() {
               <h3 className="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-amber-500">
                 Premium Access
               </h3>
-              <p className="mt-2 text-gray-300">
-                Unlock exclusive perks designed to boost your journey.
-              </p>
+              <p className="mt-2 text-gray-300">Unlock exclusive perks designed to boost your journey.</p>
 
               <div className="mt-5 rounded-xl bg-white/[0.04] border border-white/10 p-4 text-left space-y-2">
                 <div className="flex items-center gap-2">
@@ -260,6 +290,83 @@ export default function Competitions() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Register Modal (competition info + instructions) */}
+      {active && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="register-title"
+          className="fixed inset-0 z-40 flex items-center justify-center bg-black/70 backdrop-blur-md px-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setActive(null);
+          }}
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 18, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.25 }}
+            className="relative w-full max-w-lg rounded-2xl border border-cyan-400/30 bg-[#0b0f17] p-6 shadow-2xl"
+          >
+            <button
+              className="absolute top-3 right-3 text-gray-400 hover:text-white"
+              onClick={() => setActive(null)}
+              aria-label="Close registration"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            <div className="flex items-start gap-3">
+              <div className="mt-1 rounded-lg bg-cyan-400/15 p-2 border border-cyan-400/30">
+                <Info className="w-5 h-5 text-cyan-300" />
+              </div>
+              <div className="flex-1">
+                <h3 id="register-title" className="text-2xl font-bold text-white">
+                  {active.title}
+                </h3>
+                <p className="text-sm text-cyan-300 mt-1 uppercase tracking-wider">
+                  {active.tag}
+                </p>
+                <p className="mt-3 text-gray-300">{active.short}</p>
+
+                {/* Instructions */}
+                <div className="mt-5 rounded-xl bg-white/[0.04] border border-white/10 p-4">
+                  <h4 className="text-sm font-semibold text-cyan-200">Instructions</h4>
+                  <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1 text-sm">
+                    <li>Use your real name and email (for results & certificates).</li>
+                    <li>If applicable, add your school/college/organization.</li>
+                    <li>Join our Discord/Telegram community after registering.</li>
+                    <li>You’ll receive event dates & rules by email.</li>
+                  </ul>
+                </div>
+
+                {/* Actions */}
+                <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                  <a
+                    href={buildFormUrl(active.title)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex flex-1 items-center justify-center rounded-lg border border-cyan-400/40 bg-cyan-400/15 px-5 py-3 text-sm font-semibold text-cyan-100 hover:bg-cyan-400/25 hover:border-cyan-400/60 transition-colors"
+                  >
+                    Proceed to Registration
+                  </a>
+                  <button
+                    onClick={() => setActive(null)}
+                    className="inline-flex items-center justify-center rounded-lg border border-white/15 px-5 py-3 text-sm text-gray-200 hover:border-white/30"
+                  >
+                    Cancel
+                  </button>
+                </div>
+
+                {/* Optional: policy note */}
+                <p className="mt-3 text-xs text-gray-500">
+                  By registering, you agree to receive competition updates via email.
+                </p>
+              </div>
+            </div>
+          </motion.div>
         </div>
       )}
     </div>
