@@ -77,11 +77,10 @@ export function HeroSection() {
           {/* Preview Image */}
           <div className="rounded-2xl overflow-hidden border border-cyan-400/30 shadow-lg">
             
-  <iframe
-    src="https://trialx.netlify.app/tracker" // Example: ISS live tracker
-    title="Satellite Tracker Preview"
-    className="w-full h-72"
-    style={{ border: "0" }}
+<img
+    src="/images/tracker-preview.png"
+    alt="Satellite Tracker Preview"
+    className="w-full h-72 object-cover"
   />
 
           </div>
