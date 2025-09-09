@@ -312,7 +312,6 @@ export default function Competitions() {
                     <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1 text-sm">
                       <li>Use your real name and email (for results & certificates).</li>
                       <li>If applicable, add your school/college/organization.</li>
-                      <li>Join our Discord/Telegram after registering.</li>
                       <li>You’ll receive event dates & rules by email.</li>
                     </ul>
                   ) : (
