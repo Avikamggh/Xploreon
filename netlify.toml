@@ -11,3 +11,17 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "no-cache"
+    Accept-Ranges = "none"
+
+[[headers]]
+  for = "/images/x.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Accept-Ranges = "none"
+    Content-Type = "image/jpeg"
