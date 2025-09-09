@@ -15,10 +15,33 @@ type Competition = {
   imageWebp?: string;
   width?: number;
   height?: number;
+  /** NEW: per-competition registration link */
+  formUrl?: string;
 };
 
-const FORM_URL = "https://forms.gle/your-form-id"; // replace with Google Form
 const STRIPE_LINK = "https://buy.stripe.com/4gM8wI1C333x1i3fdVc7u0b";
+
+/** 
+ * Optional helper to prefill Google Forms (use when you know entry IDs).
+ * Example:
+ *   prefillGoogleForm(
+ *     "https://docs.google.com/forms/d/e/....../viewform",
+ *     { "entry.111111": comp.title, "entry.222222": comp.tag }
+ *   )
+ */
+function prefillGoogleForm(base: string, params?: Record<string, string>) {
+  const url = new URL(base);
+  // If it's a Google Form, use pp_url (keeps the form in prefill mode)
+  if (url.hostname.includes("docs.google.com")) {
+    url.searchParams.set("usp", "pp_url");
+  }
+  if (params) {
+    for (const [k, v] of Object.entries(params)) {
+      url.searchParams.set(k, v);
+    }
+  }
+  return url.toString();
+}
 
 const COMPETITIONS: Competition[] = [
   {
@@ -32,6 +55,7 @@ const COMPETITIONS: Competition[] = [
     width: 1200,
     height: 800,
     status: "closed",
+    // formUrl: "https://forms.gle/your-space-quiz-form", // add when open
   },
   {
     id: "c2",
@@ -44,6 +68,8 @@ const COMPETITIONS: Competition[] = [
     width: 1200,
     height: 800,
     status: "open",
+    formUrl:
+      "https://docs.google.com/forms/d/e/1FAIpQLScd9rYSxESxwKvhs0WVjXBiHiDCc4U5LSQN4Rp3Evr60i6HKQ/viewform?usp=dialog",
   },
   {
     id: "c3",
@@ -56,6 +82,7 @@ const COMPETITIONS: Competition[] = [
     width: 1200,
     height: 800,
     status: "open",
+    // formUrl: "https://forms.gle/your-hackathon-form",
   },
 ];
 
@@ -128,10 +155,15 @@ export default function Competitions() {
     return () => document.body.classList.remove("overflow-hidden");
   }, [showPremium]);
 
-  const buildFormUrl = (title: string) => {
-    const url = new URL(FORM_URL);
-    url.searchParams.set("comp", title);
-    return url.toString();
+  /** Build the final registration link for a competition */
+  const buildRegistrationHref = (comp: Competition) => {
+    if (!comp.formUrl) return "";
+    // If you know Google Form entry IDs, pass them here:
+    // return prefillGoogleForm(comp.formUrl, {
+    //   "entry.111111": comp.title,
+    //   "entry.222222": comp.tag,
+    // });
+    return comp.formUrl;
   };
 
   return (
@@ -195,16 +227,24 @@ export default function Competitions() {
                 <h3 className="text-lg md:text-xl font-bold">{c.title}</h3>
                 <p className="mt-2 text-gray-300">{c.short}</p>
                 <div className="mt-5 flex gap-3">
-                  {c.status === "open" ? (
+                  {c.status === "open" && c.formUrl ? (
                     <button
                       onClick={() => setActive(c)}
                       className="inline-flex items-center justify-center rounded-lg border border-cyan-400/40 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-200 hover:bg-cyan-400/15 hover:border-cyan-400/60 transition-colors"
                     >
                       Register
                     </button>
+                  ) : c.status === "open" && !c.formUrl ? (
+                    <button
+                      disabled
+                      className="inline-flex items-center justify-center rounded-lg border border-yellow-400/40 bg-yellow-400/10 px-4 py-2 text-sm font-semibold text-yellow-200 cursor-not-allowed"
+                      title="Registration link coming soon"
+                    >
+                      Coming Soon
+                    </button>
                   ) : (
                     <button
-                      onClick={() => setActive(c)}
+                      disabled
                       className="inline-flex items-center justify-center rounded-lg border border-red-400/40 bg-red-400/10 px-4 py-2 text-sm font-semibold text-red-300 cursor-not-allowed"
                     >
                       Closed
@@ -217,19 +257,18 @@ export default function Competitions() {
         </div>
       </section>
 
-{/* Premium Button */}
-<button
-  onClick={() => setShowPremium(true)}
-  className="fixed bottom-6 right-6 z-20 px-6 py-3 rounded-2xl font-extrabold
+      {/* Premium Button */}
+      <button
+        onClick={() => setShowPremium(true)}
+        className="fixed bottom-6 right-6 z-20 px-6 py-3 rounded-2xl font-extrabold
              bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-600 text-black
              shadow-[0_0_20px_rgba(255,200,0,0.5)] ring-2 ring-yellow-300/70
              hover:scale-110 hover:shadow-[0_0_40px_rgba(255,200,0,0.8)]
              active:scale-95 transition-transform duration-300"
->
-  🌟 Premium
-</button>
-
-
+        aria-label="Open Xploreon Premium"
+      >
+        🌟 Premium
+      </button>
 
       {/* Register Modal */}
       {active && (
@@ -251,6 +290,7 @@ export default function Competitions() {
             <button
               className="absolute top-3 right-3 text-gray-400 hover:text-white"
               onClick={() => setActive(null)}
+              aria-label="Close registration modal"
             >
               <X className="w-6 h-6" />
             </button>
@@ -280,10 +320,10 @@ export default function Competitions() {
                   )}
                 </div>
                 <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                  {active.status === "open" ? (
+                  {active.status === "open" && active.formUrl ? (
                     <>
                       <a
-                        href={buildFormUrl(active.title)}
+                        href={buildRegistrationHref(active)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex flex-1 items-center justify-center rounded-lg border border-cyan-400/40 bg-cyan-400/15 px-5 py-3 text-sm font-semibold text-cyan-100 hover:bg-cyan-400/25 hover:border-cyan-400/60 transition-colors"
@@ -310,86 +350,81 @@ export default function Competitions() {
       )}
 
       {/* Premium Modal */}
-     {showPremium && (
-  <div
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="premium-title"
-    className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/70 backdrop-blur-md px-4"
-    onClick={(e) => {
-      if (e.target === e.currentTarget) setShowPremium(false);
-    }}
-  >
-    <motion.div
-      initial={{ opacity: 0, y: 18, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.22 }}
-      className="relative w-full max-w-lg rounded-2xl border border-yellow-400/40 bg-[#0b0f17] p-6 shadow-2xl"
-    >
-      <button
-        className="absolute top-3 right-3 text-gray-400 hover:text-white"
-        onClick={() => setShowPremium(false)}
-        aria-label="Close premium modal"
-      >
-        <X className="w-6 h-6" />
-      </button>
+      {showPremium && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="premium-title"
+          className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/70 backdrop-blur-md px-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowPremium(false);
+          }}
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 18, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.22 }}
+            className="relative w-full max-w-lg rounded-2xl border border-yellow-400/40 bg-[#0b0f17] p-6 shadow-2xl"
+          >
+            <button
+              className="absolute top-3 right-3 text-gray-400 hover:text-white"
+              onClick={() => setShowPremium(false)}
+              aria-label="Close premium modal"
+            >
+              <X className="w-6 h-6" />
+            </button>
 
-      {/* Header */}
-      <div className="mb-4">
-        <h3 id="premium-title" className="text-2xl font-extrabold text-white">
-          Xploreon Premium
-        </h3>
-        <p className="mt-1 text-sm text-gray-300">
-          Level up with live learning, a private community, and hands-on mentorship.
-        </p>
-      </div>
+            <div className="mb-4">
+              <h3 id="premium-title" className="text-2xl font-extrabold text-white">
+                Xploreon Premium
+              </h3>
+              <p className="mt-1 text-sm text-gray-300">
+                Level up with live learning, a private community, and hands-on mentorship.
+              </p>
+            </div>
 
-      {/* Price Row */}
-      <div className="mb-5 flex items-center justify-between rounded-xl border border-yellow-400/30 bg-yellow-400/10 px-4 py-3">
-        <div className="text-sm text-yellow-200">Monthly plan</div>
-        <div className="text-right">
-          <div className="text-2xl font-extrabold text-yellow-300">$18</div>
-          <div className="text-[12px] text-yellow-200/80">per month • cancel anytime</div>
+            <div className="mb-5 flex items-center justify-between rounded-xl border border-yellow-400/30 bg-yellow-400/10 px-4 py-3">
+              <div className="text-sm text-yellow-200">Monthly plan</div>
+              <div className="text-right">
+                <div className="text-2xl font-extrabold text-yellow-300">$18</div>
+                <div className="text-[12px] text-yellow-200/80">per month • cancel anytime</div>
+              </div>
+            </div>
+
+            <ul className="space-y-3 text-sm">
+              <li className="flex items-start gap-3">
+                <Sparkles className="mt-0.5 h-4 w-4 text-yellow-300" />
+                <span><span className="font-semibold text-white">4 live sessions</span> every month (interactive Q&A + recordings)</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Users2 className="mt-0.5 h-4 w-4 text-yellow-300" />
+                <span><span className="font-semibold text-white">Premium community access</span> with peers & experts</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Medal className="mt-0.5 h-4 w-4 text-yellow-300" />
+                <span><span className="font-semibold text-white">Mentorship</span> from the Xploreon team on projects & careers</span>
+              </li>
+            </ul>
+
+            <div className="mt-6 flex flex-col sm:flex-row gap-3">
+              <a
+                href={STRIPE_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex flex-1 items-center justify-center rounded-lg border border-yellow-400/60 bg-yellow-400/15 px-5 py-3 text-sm font-semibold text-yellow-200 hover:bg-yellow-400/25 transition-colors"
+              >
+                Upgrade for $18/month
+              </a>
+              <button
+                onClick={() => setShowPremium(false)}
+                className="inline-flex items-center justify-center rounded-lg border border-white/15 px-5 py-3 text-sm text-gray-200 hover:border-white/30"
+              >
+                Maybe later
+              </button>
+            </div>
+          </motion.div>
         </div>
-      </div>
-
-      {/* What you get */}
-      <ul className="space-y-3 text-sm">
-        <li className="flex items-start gap-3">
-          <Sparkles className="mt-0.5 h-4 w-4 text-yellow-300" />
-          <span><span className="font-semibold text-white">4 live sessions</span> every month (interactive Q&A + recordings)</span>
-        </li>
-        <li className="flex items-start gap-3">
-          <Users2 className="mt-0.5 h-4 w-4 text-yellow-300" />
-          <span><span className="font-semibold text-white">Premium community access</span> with peers & experts</span>
-        </li>
-        <li className="flex items-start gap-3">
-          <Medal className="mt-0.5 h-4 w-4 text-yellow-300" />
-          <span><span className="font-semibold text-white">Mentorship</span> from the Xploreon team on projects & careers</span>
-        </li>
-      </ul>
-
-      {/* CTA */}
-      <div className="mt-6 flex flex-col sm:flex-row gap-3">
-        <a
-          href={STRIPE_LINK}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex flex-1 items-center justify-center rounded-lg border border-yellow-400/60 bg-yellow-400/15 px-5 py-3 text-sm font-semibold text-yellow-200 hover:bg-yellow-400/25 transition-colors"
-        >
-          Upgrade for $18/month
-        </a>
-        <button
-          onClick={() => setShowPremium(false)}
-          className="inline-flex items-center justify-center rounded-lg border border-white/15 px-5 py-3 text-sm text-gray-200 hover:border-white/30"
-        >
-          Maybe later
-        </button>
-      </div>
-    </motion.div>
-  </div>
-)}
-
+      )}
     </div>
   );
 }
