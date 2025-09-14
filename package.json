@@ -19,7 +19,8 @@
   "react-router-dom": "^6.23.1",
   "leaflet": "^1.9.4",
   "react-leaflet": "^4.2.1",
-  "satellite.js": "^4.0.0"
+  "satellite.js": "^4.0.0",
+  "@emailjs/browser": "^4.4.1"
 
 },
 
