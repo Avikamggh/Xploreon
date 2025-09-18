@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ContactSection } from '../components/ContactSection';
+import  ContactSection  from '../components/ContactSection';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 export function ContactPage() {
