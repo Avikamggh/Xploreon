@@ -13,7 +13,7 @@ import { NewsPage } from './pages/NewsPage';
 import { TeamPage } from './pages/TeamPage';
 import { ContactPage } from './pages/ContactPage';
 import { NotFoundPage } from './pages/NotFoundPage';
-import { LearningPage } from './pages/LearningPage';
+import { LearningPage } from './pages/Learning';  // Correct import for Learning.tsx
 import SatelliteTracker from './components/SatelliteTracker'; // import tracker
 
 // A wrapper to check current path
