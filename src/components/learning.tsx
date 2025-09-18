@@ -36,7 +36,7 @@ const courses: Course[] = [
 ];
 
 // ---------- Course Listing Page ----------
-export const LearningPage: React.FC = () => {
+const LearningPage: React.FC = () => {
   return (
     <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-[#F4F6FA] min-h-screen">
       {courses.map((course) => (
@@ -55,7 +55,7 @@ export const LearningPage: React.FC = () => {
 };
 
 // ---------- Course Details Page ----------
-export const CourseDetailsPage: React.FC = () => {
+const CourseDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();  // Explicitly typing the id as string
   const course = courses.find((c) => c.id === Number(id)); // Handle conversion to number
   
@@ -128,3 +128,4 @@ export const CourseDetailsPage: React.FC = () => {
   );
 };
 
+export default LearningPage;  // Ensure this is a default export
