@@ -31,7 +31,7 @@ const inquiryTypes = [
   { value: "other", label: "Other", icon: <MapPin className="w-4 h-4" /> }
 ];
 
-export default function ContactSection() {
+export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
