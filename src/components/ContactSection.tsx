@@ -72,6 +72,17 @@ export default function ContactPage() {
 
   return (
     <section className="py-24 relative overflow-hidden">
+      {/* Custom styles for star animation */}
+      <style>{`
+        @keyframes twinkle {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 1; }
+        }
+        .star {
+          animation: twinkle 2s infinite;
+        }
+      `}</style>
+
       {/* Starfield background */}
       <div className="absolute inset-0 bg-black">
         {/* Animated stars */}
