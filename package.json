@@ -21,8 +21,7 @@
   "react-leaflet": "^4.2.1",
   "satellite.js": "^4.0.0",
   "@emailjs/browser": "^4.4.1",
-  "framer-motion": "^11.11.6",  // <-- Corrected
-  "react-router-dom": "^6.23.1"
+  "framer-motion": "^11.11.6"
 
 },
 
