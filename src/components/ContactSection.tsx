@@ -42,26 +42,38 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async () => {
-    // Basic validation
-    if (!formData.name || !formData.email || !formData.inquiryType || !formData.message) {
-      alert("Please fill in all required fields.");
-      return;
-    }
+  // Basic validation
+  if (!formData.name || !formData.email || !formData.inquiryType || !formData.message) {
+    alert("Please fill in all required fields.");
+    return;
+  }
 
-    setIsSubmitting(true);
+  setIsSubmitting(true);
 
-    try {
-      // Simulate form submission
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      alert("✅ Message sent successfully! We'll get back to you soon.");
-      setFormData({ name: '', email: '', company: '', inquiryType: '', message: '' });
-    } catch (error) {
-      console.error("Error:", error);
-      alert("❌ Failed to send message. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  try {
+    await emailjs.send(
+      "service_6reoxud",
+      "template_4rcdksk", 
+      {
+        user_name: formData.name,
+        user_email: formData.email,
+        company: formData.company,
+        inquiry_type: formData.inquiryType,
+        message: formData.message,
+        reply_to: formData.email,
+      },
+      "VzjIdSQ7MiqFI1T1A"
+    );
+
+    alert("✅ Message sent successfully! We'll get back to you soon.");
+    setFormData({ name: '', email: '', company: '', inquiryType: '', message: '' });
+  } catch (error) {
+    console.error("EmailJS Error:", error);
+    alert("❌ Failed to send message. Please try again.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const handleChange = (e) => {
     setFormData(prev => ({
