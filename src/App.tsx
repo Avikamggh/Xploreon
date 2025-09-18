@@ -13,7 +13,7 @@ import { NewsPage } from './pages/NewsPage';
 import { TeamPage } from './pages/TeamPage';
 import { ContactPage } from './pages/ContactPage';
 import { NotFoundPage } from './pages/NotFoundPage';
-import { LearningPage } from './pages/Learning';  // Correct import for Learning.tsx
+import { Learning } from './pages/learning';  // Correct import for Learning.tsx
 import SatelliteTracker from './components/SatelliteTracker'; // import tracker
 
 // A wrapper to check current path
@@ -44,7 +44,7 @@ export default function App() {
             <Route path="/technology" element={<TechnologyPage />} />
             <Route path="/missions" element={<MissionsPage />} />
             <Route path="/news" element={<NewsPage />} />
-            <Route path="/learning" element={<LearningPage />} />
+            <Route path="/learning" element={<Learning />} />
             <Route path="/competitions" element={<Competitions />} />
             <Route path="/team" element={<TeamPage />} />
             <Route path="/contact" element={<ContactPage />} />
