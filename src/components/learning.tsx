@@ -1,4 +1,3 @@
-// src/pages/Learning.tsx
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 
@@ -57,8 +56,9 @@ export const LearningPage: React.FC = () => {
 
 // ---------- Course Details Page ----------
 export const CourseDetailsPage: React.FC = () => {
-  const { id } = useParams();
-  const course = courses.find((c) => c.id === Number(id));
+  const { id } = useParams<{ id: string }>();  // Explicitly typing the id as string
+  const course = courses.find((c) => c.id === Number(id)); // Handle conversion to number
+  
   const [completed, setCompleted] = useState<number[]>([]);
   const [currentVideo, setCurrentVideo] = useState<number | null>(null);
 
@@ -127,3 +127,4 @@ export const CourseDetailsPage: React.FC = () => {
     </div>
   );
 };
+
