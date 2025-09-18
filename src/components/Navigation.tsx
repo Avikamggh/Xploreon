@@ -9,7 +9,7 @@ const navItems = [
   { name: "About", href: "/about" },
   { name: "Technology", href: "/technology" },
   { name: "Missions", href: "/missions" },
-  
+  { name: "Learning", href: "/learning" },
   { name: "Competitions", href: "/competitions" },
   { name: "News", href: "/news" },
   { name: "Team", href: "/team" },
