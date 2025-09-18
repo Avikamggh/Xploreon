@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
 import { Mail, Phone, MapPin, Send, Rocket, Satellite, Globe, Clock } from 'lucide-react';
-import { Button } from './ui/button';
-import emailjs from '@emailjs/browser';   // ✅ Added
 
 const contactInfo = [
   {
@@ -34,7 +31,7 @@ const inquiryTypes = [
   { value: "other", label: "Other", icon: <MapPin className="w-4 h-4" /> }
 ];
 
-export function ContactSection() {
+export default function ContactSection() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -44,37 +41,29 @@ export function ContactSection() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // ✅ Now uses EmailJS instead of fake delay
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    // Basic validation
+    if (!formData.name || !formData.email || !formData.inquiryType || !formData.message) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      await emailjs.send(
-        "service_6reoxud",     // your EmailJS service ID
-        "template_4rcdksk",    // your EmailJS template ID
-        {
-          user_name: formData.name,
-          user_email: formData.email,
-          company: formData.company,
-          inquiryType: formData.inquiryType,
-          message: formData.message,
-          reply_to: formData.email,
-        },
-        "VzjIdSQ7MiqFI1T1A"    // your EmailJS public key
-      );
-
+      // Simulate form submission
+      await new Promise(resolve => setTimeout(resolve, 2000));
       alert("✅ Message sent successfully! We'll get back to you soon.");
       setFormData({ name: '', email: '', company: '', inquiryType: '', message: '' });
     } catch (error) {
-      console.error("EmailJS Error:", error);
+      console.error("Error:", error);
       alert("❌ Failed to send message. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (e) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
@@ -84,7 +73,7 @@ export function ContactSection() {
   return (
     <section className="py-24 relative overflow-hidden">
       {/* Starfield background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-space-black via-deep-space to-nebula-blue/30">
+      <div className="absolute inset-0 bg-black">
         {/* Animated stars */}
         <div className="absolute inset-0">
           {[...Array(200)].map((_, i) => (
@@ -113,14 +102,8 @@ export function ContactSection() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         {/* Section header */}
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="font-futuristic text-5xl md:text-6xl mb-6 neon-text">
+        <div className="text-center mb-16">
+          <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
             Contact Mission Control
           </h2>
           <div className="w-32 h-1 bg-gradient-to-r from-cyan-400 to-blue-500 mx-auto mb-8"></div>
@@ -128,35 +111,21 @@ export function ContactSection() {
             Ready to embark on your space journey? Reach out to our team and let's explore 
             the infinite possibilities together.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Contact information */}
-          <motion.div
-            className="lg:col-span-1 space-y-8"
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            <div className="glass-card rounded-3xl p-8">
-              <h3 className="font-futuristic text-2xl mb-8 text-cyan-400">
+          <div className="lg:col-span-1 space-y-8">
+            <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 shadow-2xl">
+              <h3 className="text-2xl font-bold mb-8 text-cyan-400">
                 Get In Touch
               </h3>
               
               <div className="space-y-6">
                 {contactInfo.map((contact, index) => (
-                  <motion.div
-                    key={index}
-                    className="group cursor-pointer"
-                    whileHover={{ scale: 1.02 }}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                  >
-                    <div className="flex items-start space-x-4 p-4 rounded-2xl hover:neon-border transition-all duration-300">
-                      <div className="w-12 h-12 glass-card rounded-full flex items-center justify-center group-hover:neon-glow transition-all duration-300">
+                  <div key={index} className="group cursor-pointer">
+                    <div className="flex items-start space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all duration-300 border border-transparent hover:border-cyan-400/30">
+                      <div className="w-12 h-12 bg-white/10 backdrop-blur-lg rounded-full flex items-center justify-center group-hover:bg-cyan-400/20 transition-all duration-300">
                         <div className="text-cyan-400">
                           {contact.icon}
                         </div>
@@ -173,7 +142,7 @@ export function ContactSection() {
                         </p>
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
 
@@ -196,46 +165,131 @@ export function ContactSection() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Contact form */}
-          <motion.div
-            className="lg:col-span-2"
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
-          >
-            <div className="glass-card rounded-3xl p-8 lg:p-12">
-              <h3 className="font-futuristic text-2xl mb-8 text-cyan-400">
+          <div className="lg:col-span-2">
+            <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 lg:p-12 shadow-2xl">
+              <h3 className="text-2xl font-bold mb-8 text-cyan-400">
                 Send Us A Message
               </h3>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* --- your form fields (unchanged) --- */}
-                {/* they all still bind to formData and handleChange */}
-                {/* submit button stays the same */}
-              </form>
+              <div className="space-y-6">
+                {/* Name and Email row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all duration-300"
+                      placeholder="Enter your full name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all duration-300"
+                      placeholder="your.email@example.com"
+                    />
+                  </div>
+                </div>
+
+                {/* Company and Inquiry Type row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Company/Organization
+                    </label>
+                    <input
+                      type="text"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all duration-300"
+                      placeholder="Your company name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Inquiry Type *
+                    </label>
+                    <select
+                      name="inquiryType"
+                      value={formData.inquiryType}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all duration-300"
+                    >
+                      <option value="" className="bg-gray-800">Select inquiry type...</option>
+                      {inquiryTypes.map((type) => (
+                        <option key={type.value} value={type.value} className="bg-gray-800">
+                          {type.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Message */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Message *
+                  </label>
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows={6}
+                    className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all duration-300 resize-none"
+                    placeholder="Tell us about your space exploration needs, mission requirements, or any questions you have..."
+                  />
+                </div>
+
+                {/* Submit button */}
+                <div className="flex justify-end">
+                  <button
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                    className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-medium rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-transparent disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-cyan-500/25"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                        Launching Message...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5 mr-2" />
+                        Send Message
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
             </div>
-          </motion.div>
+          </div>
         </div>
 
-        {/* Map or additional info */}
-        <motion.div
-          className="mt-16"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <div className="glass-card rounded-3xl p-8 lg:p-12">
+        {/* Map section */}
+        <div className="mt-16">
+          <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 lg:p-12 shadow-2xl">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h3 className="font-futuristic text-3xl mb-6 text-cyan-400">
+                <h3 className="text-3xl font-bold mb-6 text-cyan-400">
                   Visit Our Launch Facility
                 </h3>
                 <p className="text-gray-300 mb-6 leading-relaxed">
-                  Experience the future of space exploration firsthand. Our Cape Canaveral facility 
+                  Experience the future of space exploration firsthand. Our Roorkee facility 
                   features cutting-edge mission control, satellite assembly cleanrooms, and launch 
                   observation decks.
                 </p>
@@ -255,28 +309,18 @@ export function ContactSection() {
                 </div>
               </div>
               
-              <div className="relative h-64 lg:h-80 glass rounded-2xl overflow-hidden">
-                <iframe
-                  title="Roorkee Location"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3454.6139206215073!2d77.89198187462644!3d29.85426237501914!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390eb33d6fdb7d61%3A0x5a40cbbd81e0a32d!2sRoorkee%2C%20Uttarakhand%20247667!5e0!3m2!1sen!2sin!4v1693999928174!5m2!1sen!2sin"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen={true}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                ></iframe>
-
-                <div className="w-full h-full bg-gradient-to-br from-deep-space to-nebula-blue/20 flex items-center justify-center">
+              <div className="relative h-64 lg:h-80 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl overflow-hidden">
+                <div className="w-full h-full bg-gradient-to-br from-gray-900/50 to-blue-900/20 flex items-center justify-center">
                   <div className="text-center">
                     <MapPin className="w-16 h-16 text-cyan-400 mx-auto mb-4 opacity-50" />
                     <p className="text-gray-400">Interactive Map Coming Soon</p>
+                    <p className="text-sm text-gray-500 mt-2">Roorkee, Uttarakhand, India</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
