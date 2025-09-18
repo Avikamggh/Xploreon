@@ -25,7 +25,7 @@ const courses: Course[] = [
     duration: "8 hours",
     level: "Beginner",
     videos: [
-      { id: 1, title: "Introduction to Web Development", url: "https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4", duration: "15:30" },
+      { id: 1, title: "Introduction to Space Exploration", url: "https://youtu.be/EiTpNvksK3k", duration: "5:46" },
       { id: 2, title: "HTML Fundamentals", url: "https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4", duration: "25:45" },
       { id: 3, title: "CSS Basics and Styling", url: "", duration: "30:20" },
       { id: 4, title: "CSS Flexbox and Grid", url: "", duration: "35:10" },
