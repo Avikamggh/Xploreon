@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Navigation } from './components/Navigation';
 import { Footer } from './components/Footer';
-
 import Competitions from "./components/Competitions";  
 import { ScrollToTop } from './components/ScrollToTop';
 import { HomePage } from './pages/HomePage';
@@ -13,8 +12,8 @@ import { NewsPage } from './pages/NewsPage';
 import { TeamPage } from './pages/TeamPage';
 import { ContactPage } from './pages/ContactPage';
 import { NotFoundPage } from './pages/NotFoundPage';
-import { Learning } from './pages/learning';  // Correct import for Learning.tsx
-import SatelliteTracker from './components/SatelliteTracker'; // import tracker
+import LearningPage from './components/learning';  // Importing Learning from components folder
+import SatelliteTracker from './components/SatelliteTracker'; // Import tracker
 
 // A wrapper to check current path
 function Layout({ children }: { children: React.ReactNode }) {
@@ -44,7 +43,7 @@ export default function App() {
             <Route path="/technology" element={<TechnologyPage />} />
             <Route path="/missions" element={<MissionsPage />} />
             <Route path="/news" element={<NewsPage />} />
-            <Route path="/learning" element={<Learning />} />
+            <Route path="/learning" element={<LearningPage />} /> {/* Correct route for Learning page */}
             <Route path="/competitions" element={<Competitions />} />
             <Route path="/team" element={<TeamPage />} />
             <Route path="/contact" element={<ContactPage />} />
