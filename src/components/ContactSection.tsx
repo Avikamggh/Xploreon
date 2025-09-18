@@ -334,11 +334,16 @@ export default function ContactPage() {
               
               <div className="relative h-64 lg:h-80 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl overflow-hidden">
                 <div className="w-full h-full bg-gradient-to-br from-gray-900/50 to-blue-900/20 flex items-center justify-center">
-                  <div className="text-center">
-                    <MapPin className="w-16 h-16 text-cyan-400 mx-auto mb-4 opacity-50" />
-                    <p className="text-gray-400">Interactive Map Coming Soon</p>
-                    <p className="text-sm text-gray-500 mt-2">Roorkee, Uttarakhand, India</p>
-                  </div>
+                  <iframe
+                      title="Roorkee Location"
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3454.6139206215073!2d77.89198187462644!3d29.85426237501914!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390eb33d6fdb7d61%3A0x5a40cbbd81e0a32d!2sRoorkee%2C%20Uttarakhand%20247667!5e0!3m2!1sen!2sin!4v1693999928174!5m2!1sen!2sin"
+                      width="100%"
+                      height="100%"
+                      style="border: 0;"
+                      allowfullscreen=""
+                      loading="lazy"
+                      referrerpolicy="no-referrer-when-downgrade">
+                  </iframe>
                 </div>
               </div>
             </div>
